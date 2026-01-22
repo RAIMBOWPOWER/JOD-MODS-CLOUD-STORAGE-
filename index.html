@@ -1417,8 +1417,8 @@
         const ADMIN_USERNAME = "JODx";
         const ADMIN_PASSWORD = "MODS";
 
-        // Your website URL
-        const WEBSITE_URL = "https://raimbowpower.github.io/JOD-MODS-CLOUD-STORAGE-/";
+        // Base URL for your GitHub Pages
+        const BASE_URL = "https://raimbowpower.github.io/JOD-MODS-CLOUD-STORAGE-";
 
         // Initialize data
         function initApp() {
@@ -1426,79 +1426,18 @@
             const savedUsers = localStorage.getItem('jodmods_users');
             const savedFiles = localStorage.getItem('jodmods_files');
             
+            // Initialize with empty arrays if no data exists
             if (savedUsers) {
                 state.users = JSON.parse(savedUsers);
             } else {
-                // Default users - removed fake users
-                state.users = [
-                    {
-                        id: 1,
-                        name: "John Doe",
-                        email: "john@example.com",
-                        password: "password123",
-                        joinDate: "2023-10-01",
-                        fileCount: 3,
-                        storageUsed: 245.7,
-                        avatarText: "JD",
-                        plan: "free"
-                    },
-                    {
-                        id: 2,
-                        name: "Jane Smith",
-                        email: "jane@example.com",
-                        password: "password123",
-                        joinDate: "2023-10-05",
-                        fileCount: 2,
-                        storageUsed: 89.3,
-                        avatarText: "JS",
-                        plan: "free"
-                    }
-                ];
+                state.users = [];
                 saveUsers();
             }
             
             if (savedFiles) {
                 state.files = JSON.parse(savedFiles);
             } else {
-                // Sample files
-                state.files = [
-                    {
-                        id: 1,
-                        userId: 1,
-                        userName: "John Doe",
-                        name: "Project_Documentation.pdf",
-                        size: 15.2,
-                        type: "pdf",
-                        uploadDate: "2023-10-10",
-                        downloadLink: WEBSITE_URL + "?download=abc123xyz",
-                        downloadCount: 12,
-                        shared: true
-                    },
-                    {
-                        id: 2,
-                        userId: 1,
-                        userName: "John Doe",
-                        name: "Vacation_Photos.zip",
-                        size: 120.5,
-                        type: "zip",
-                        uploadDate: "2023-10-12",
-                        downloadLink: WEBSITE_URL + "?download=def456uvw",
-                        downloadCount: 8,
-                        shared: true
-                    },
-                    {
-                        id: 3,
-                        userId: 2,
-                        userName: "Jane Smith",
-                        name: "Presentation_Video.mp4",
-                        size: 245.3,
-                        type: "mp4",
-                        uploadDate: "2023-10-15",
-                        downloadLink: WEBSITE_URL + "?download=ghi789rst",
-                        downloadCount: 23,
-                        shared: true
-                    }
-                ];
+                state.files = [];
                 saveFiles();
             }
             
@@ -1521,18 +1460,18 @@
             if (downloadToken) {
                 // Find file by download token
                 const file = state.files.find(f => {
-                    const fileUrl = new URL(f.downloadLink);
-                    const fileToken = new URLSearchParams(fileUrl.search).get('download');
-                    return fileToken === downloadToken;
+                    const linkParams = new URL(f.downloadLink).searchParams;
+                    return linkParams.get('id') === downloadToken;
                 });
                 
                 if (file) {
                     showDownloadPage(file);
                 } else {
-                    showToast('Invalid or expired download link', 'error');
+                    showToast('Invalid download link. File may have been deleted.', 'error');
+                    // Redirect to home after 3 seconds
                     setTimeout(() => {
-                        window.location.href = WEBSITE_URL;
-                    }, 2000);
+                        window.location.href = BASE_URL;
+                    }, 3000);
                 }
             }
         }
@@ -1860,7 +1799,10 @@
                     const fileId = Date.now() + Math.floor(Math.random() * 1000);
                     const fileSizeMB = file.size / (1024 * 1024);
                     const fileType = getFileType(file.name);
-                    const token = generateToken(20);
+                    const downloadToken = generateToken(20);
+                    
+                    // FIXED: Create proper working download link for GitHub Pages
+                    const downloadLink = `${BASE_URL}?download=${downloadToken}&id=${fileId}`;
                     
                     const newFile = {
                         id: fileId,
@@ -1870,7 +1812,8 @@
                         size: parseFloat(fileSizeMB.toFixed(2)),
                         type: fileType,
                         uploadDate: new Date().toISOString().split('T')[0],
-                        downloadLink: WEBSITE_URL + "?download=" + token + "&id=" + fileId,
+                        downloadLink: downloadLink,
+                        downloadToken: downloadToken,
                         downloadCount: 0,
                         shared: true
                     };
@@ -1951,17 +1894,12 @@
         function getShortLink(link) {
             try {
                 const url = new URL(link);
-                const token = url.searchParams.get('download');
-                if (token) {
-                    return `jodmods.com/download/${token.substring(0, 8)}...`;
-                }
-            } catch (e) {
-                // If URL parsing fails, return shortened version
-                if (link.length > 30) {
-                    return link.substring(0, 27) + '...';
-                }
+                const params = new URLSearchParams(url.search);
+                const id = params.get('id') || '';
+                return `jodmods.cloud/${id.substring(0, 8)}...`;
+            } catch {
+                return link.substring(0, 30) + '...';
             }
-            return link;
         }
 
         // Download file
@@ -2014,7 +1952,10 @@
             const file = state.downloadQueue[0];
             
             // Create a temporary download link
-            const blob = new Blob([`This is a simulation of file: ${file.name}\n\nIn a real application, this would be the actual file content.`], { type: 'application/octet-stream' });
+            const blob = new Blob([`File: ${file.name}\nSize: ${file.size} MB\nUploaded by: ${file.userName}\nUpload date: ${file.uploadDate}\n\nThis is a simulation from JOD MODS CLOUD STORAGE.\nIn a real system, this would be the actual file content.`], { 
+                type: 'text/plain' 
+            });
+            
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -2026,20 +1967,28 @@
             
             showToast(`Downloading "${file.name}"...`, 'success');
             
+            // Update download count
+            file.downloadCount++;
+            saveFiles();
+            
             // Go back to app after a delay
             setTimeout(() => {
                 if (state.currentUser) {
                     showApp();
                 } else {
-                    window.location.href = WEBSITE_URL;
+                    // If not logged in, redirect to home
+                    window.location.href = BASE_URL;
                 }
             }, 1500);
         }
 
-        // Copy file link
+        // Copy file link - FIXED FUNCTION
         function copyFileLink(fileId) {
             const file = state.files.find(f => f.id === fileId);
-            if (!file) return;
+            if (!file) {
+                showToast('File not found', 'error');
+                return;
+            }
             
             // Check if user owns the file (except admin)
             if (file.userId !== state.currentUser.id && !state.adminLoggedIn) {
@@ -2049,8 +1998,17 @@
             
             // Copy to clipboard
             navigator.clipboard.writeText(file.downloadLink)
-                .then(() => showToast('Link copied to clipboard!', 'success'))
-                .catch(() => showToast('Failed to copy link', 'error'));
+                .then(() => showToast('Link copied to clipboard! Share this link with anyone to download.', 'success'))
+                .catch(() => {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = file.downloadLink;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showToast('Link copied to clipboard!', 'success');
+                });
         }
 
         // Delete file
@@ -2256,6 +2214,15 @@
                 toast.style.display = 'none';
             }, 3000);
         }
+        
+        // Make functions globally available for onclick attributes
+        window.downloadFile = downloadFile;
+        window.copyFileLink = copyFileLink;
+        window.deleteFile = deleteFile;
+        window.adminDownloadFile = adminDownloadFile;
+        window.adminCopyFileLink = adminCopyFileLink;
+        window.adminDeleteFile = adminDeleteFile;
+        window.adminDeleteUser = adminDeleteUser;
     </script>
 </body>
 </html>
