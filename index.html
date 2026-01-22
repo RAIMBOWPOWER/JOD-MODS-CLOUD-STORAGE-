@@ -1417,8 +1417,10 @@
         const ADMIN_USERNAME = "JODx";
         const ADMIN_PASSWORD = "MODS";
 
-        // Base URL for your GitHub Pages
-        const BASE_URL = "https://raimbowpower.github.io/JOD-MODS-CLOUD-STORAGE-";
+        // Get current URL
+        const getBaseUrl = () => {
+            return window.location.origin + window.location.pathname;
+        };
 
         // Initialize data
         function initApp() {
@@ -1455,14 +1457,11 @@
         // Check URL for download token
         function checkDownloadToken() {
             const urlParams = new URLSearchParams(window.location.search);
-            const downloadToken = urlParams.get('download');
+            const downloadToken = urlParams.get('file');
             
             if (downloadToken) {
                 // Find file by download token
-                const file = state.files.find(f => {
-                    const linkParams = new URL(f.downloadLink).searchParams;
-                    return linkParams.get('id') === downloadToken;
-                });
+                const file = state.files.find(f => f.downloadToken === downloadToken);
                 
                 if (file) {
                     showDownloadPage(file);
@@ -1470,7 +1469,7 @@
                     showToast('Invalid download link. File may have been deleted.', 'error');
                     // Redirect to home after 3 seconds
                     setTimeout(() => {
-                        window.location.href = BASE_URL;
+                        window.location.href = getBaseUrl();
                     }, 3000);
                 }
             }
@@ -1802,7 +1801,8 @@
                     const downloadToken = generateToken(20);
                     
                     // FIXED: Create proper working download link for GitHub Pages
-                    const downloadLink = `${BASE_URL}?download=${downloadToken}&id=${fileId}`;
+                    const baseUrl = getBaseUrl();
+                    const downloadLink = `${baseUrl}?file=${downloadToken}`;
                     
                     const newFile = {
                         id: fileId,
@@ -1895,8 +1895,8 @@
             try {
                 const url = new URL(link);
                 const params = new URLSearchParams(url.search);
-                const id = params.get('id') || '';
-                return `jodmods.cloud/${id.substring(0, 8)}...`;
+                const token = params.get('file') || '';
+                return `${url.hostname}/download/${token.substring(0, 8)}...`;
             } catch {
                 return link.substring(0, 30) + '...';
             }
@@ -1951,11 +1951,39 @@
             
             const file = state.downloadQueue[0];
             
-            // Create a temporary download link
-            const blob = new Blob([`File: ${file.name}\nSize: ${file.size} MB\nUploaded by: ${file.userName}\nUpload date: ${file.uploadDate}\n\nThis is a simulation from JOD MODS CLOUD STORAGE.\nIn a real system, this would be the actual file content.`], { 
-                type: 'text/plain' 
-            });
+            // Create a temporary download link with actual file simulation
+            let fileContent = '';
+            let mimeType = 'application/octet-stream';
             
+            // Create realistic file content based on file type
+            if (file.type === 'image') {
+                // Simulate image file
+                fileContent = `This is a simulation of image file: ${file.name}\n\n`;
+                fileContent += `Image Details:\n`;
+                fileContent += `- Size: ${file.size} MB\n`;
+                fileContent += `- Type: Image file\n`;
+                fileContent += `- Uploaded by: ${file.userName}\n`;
+                fileContent += `- Upload date: ${file.uploadDate}\n\n`;
+                fileContent += `In a real JOD MODS CLOUD STORAGE system, this would be the actual image file.`;
+                mimeType = 'image/jpeg';
+            } else if (file.type === 'pdf') {
+                fileContent = `PDF File: ${file.name}\n`;
+                fileContent += `Size: ${file.size} MB\n`;
+                fileContent += `Uploaded by: ${file.userName}\n\n`;
+                fileContent += `JOD MODS CLOUD STORAGE - Secure File Sharing\n`;
+                mimeType = 'application/pdf';
+            } else {
+                fileContent = `File: ${file.name}\n`;
+                fileContent += `Size: ${file.size} MB\n`;
+                fileContent += `Type: ${file.type}\n`;
+                fileContent += `Uploaded by: ${file.userName}\n`;
+                fileContent += `Upload date: ${file.uploadDate}\n`;
+                fileContent += `Downloads: ${file.downloadCount}\n\n`;
+                fileContent += `This file is securely stored on JOD MODS CLOUD STORAGE.\n`;
+                fileContent += `In a real system, this would be the actual file content.`;
+            }
+            
+            const blob = new Blob([fileContent], { type: mimeType });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -1977,7 +2005,7 @@
                     showApp();
                 } else {
                     // If not logged in, redirect to home
-                    window.location.href = BASE_URL;
+                    window.location.href = getBaseUrl();
                 }
             }, 1500);
         }
