@@ -1417,6 +1417,9 @@
         const ADMIN_USERNAME = "JODx";
         const ADMIN_PASSWORD = "MODS";
 
+        // Your website URL
+        const WEBSITE_URL = "https://raimbowpower.github.io/JOD-MODS-CLOUD-STORAGE-/";
+
         // Initialize data
         function initApp() {
             // Load data from localStorage
@@ -1426,7 +1429,7 @@
             if (savedUsers) {
                 state.users = JSON.parse(savedUsers);
             } else {
-                // Default users
+                // Default users - removed fake users
                 state.users = [
                     {
                         id: 1,
@@ -1467,7 +1470,7 @@
                         size: 15.2,
                         type: "pdf",
                         uploadDate: "2023-10-10",
-                        downloadLink: "jodmods-cloud://file/abc123xyz",
+                        downloadLink: WEBSITE_URL + "?download=abc123xyz",
                         downloadCount: 12,
                         shared: true
                     },
@@ -1479,7 +1482,7 @@
                         size: 120.5,
                         type: "zip",
                         uploadDate: "2023-10-12",
-                        downloadLink: "jodmods-cloud://file/def456uvw",
+                        downloadLink: WEBSITE_URL + "?download=def456uvw",
                         downloadCount: 8,
                         shared: true
                     },
@@ -1491,7 +1494,7 @@
                         size: 245.3,
                         type: "mp4",
                         uploadDate: "2023-10-15",
-                        downloadLink: "jodmods-cloud://file/ghi789rst",
+                        downloadLink: WEBSITE_URL + "?download=ghi789rst",
                         downloadCount: 23,
                         shared: true
                     }
@@ -1517,9 +1520,19 @@
             
             if (downloadToken) {
                 // Find file by download token
-                const file = state.files.find(f => f.downloadLink.includes(downloadToken));
+                const file = state.files.find(f => {
+                    const fileUrl = new URL(f.downloadLink);
+                    const fileToken = new URLSearchParams(fileUrl.search).get('download');
+                    return fileToken === downloadToken;
+                });
+                
                 if (file) {
                     showDownloadPage(file);
+                } else {
+                    showToast('Invalid or expired download link', 'error');
+                    setTimeout(() => {
+                        window.location.href = WEBSITE_URL;
+                    }, 2000);
                 }
             }
         }
@@ -1847,6 +1860,7 @@
                     const fileId = Date.now() + Math.floor(Math.random() * 1000);
                     const fileSizeMB = file.size / (1024 * 1024);
                     const fileType = getFileType(file.name);
+                    const token = generateToken(20);
                     
                     const newFile = {
                         id: fileId,
@@ -1856,7 +1870,7 @@
                         size: parseFloat(fileSizeMB.toFixed(2)),
                         type: fileType,
                         uploadDate: new Date().toISOString().split('T')[0],
-                        downloadLink: generateDownloadLink(fileId),
+                        downloadLink: WEBSITE_URL + "?download=" + token + "&id=" + fileId,
                         downloadCount: 0,
                         shared: true
                     };
@@ -1884,12 +1898,6 @@
                 
                 showToast(`${fileList.length} file(s) uploaded successfully!`, 'success');
             }, 2000);
-        }
-
-        // Generate download link
-        function generateDownloadLink(fileId) {
-            const token = generateToken(20);
-            return `https://jodmods-cloud.com/download/${token}?id=${fileId}`;
         }
 
         // Generate random token
@@ -1941,8 +1949,19 @@
 
         // Get short link
         function getShortLink(link) {
-            const url = new URL(link);
-            return `${url.hostname}...${url.searchParams.get('id').substring(0, 8)}`;
+            try {
+                const url = new URL(link);
+                const token = url.searchParams.get('download');
+                if (token) {
+                    return `jodmods.com/download/${token.substring(0, 8)}...`;
+                }
+            } catch (e) {
+                // If URL parsing fails, return shortened version
+                if (link.length > 30) {
+                    return link.substring(0, 27) + '...';
+                }
+            }
+            return link;
         }
 
         // Download file
@@ -2012,7 +2031,7 @@
                 if (state.currentUser) {
                     showApp();
                 } else {
-                    window.location.href = window.location.pathname;
+                    window.location.href = WEBSITE_URL;
                 }
             }, 1500);
         }
