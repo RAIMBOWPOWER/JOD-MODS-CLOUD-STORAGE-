@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOD MODS - File Sharing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .logo i {
+            color: #1a2a6c;
+            font-size: 2.8rem;
+        }
+        
+        .logo-text h1 {
+            color: #1a2a6c;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-text p {
+            color: #b21f1f;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            color: #555;
+            margin-top: 10px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .upload-section, .recent-files {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-title {
+            color: #1a2a6c;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #fdbb2d;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #1a2a6c;
+            border-radius: 15px;
+            padding: 60px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: rgba(26, 42, 108, 0.05);
+            margin-bottom: 25px;
+        }
+        
+        .upload-area:hover {
+            background-color: rgba(26, 42, 108, 0.1);
+            border-color: #b21f1f;
+        }
+        
+        .upload-area i {
+            font-size: 4rem;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+        }
+        
+        .upload-area h3 {
+            font-size: 1.8rem;
+            color: #1a2a6c;
+            margin-bottom: 10px;
+        }
+        
+        .upload-area p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .upload-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .file-card {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #1a2a6c;
+            transition: all 0.3s;
+        }
+        
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .file-icon {
+            font-size: 2.5rem;
+            color: #1a2a6c;
+            margin-bottom: 15px;
+        }
+        
+        .file-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 5px;
+            word-break: break-all;
+        }
+        
+        .file-size {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .file-link {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            word-break: break-all;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .copy-btn {
+            background-color: #1a2a6c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: #b21f1f;
+        }
+        
+        .share-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .share-btn, .delete-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .share-btn {
+            background-color: #fdbb2d;
+            color: #333;
+        }
+        
+        .delete-btn {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        
+        .share-btn:hover, .delete-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .instructions {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .instructions h3 {
+            color: #1a2a6c;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #1a2a6c;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .file-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .logo-text h1 {
+                font-size: 2.2rem;
+            }
+            
+            .upload-area {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <div class="logo-text">
+                    <h1>JOD MODS</h1>
+                    <p>File Sharing Platform</p>
+                </div>
+            </div>
+            <p class="tagline">Upload any file and get a shareable link to download</p>
+        </header>
+        
+        <div class="main-content">
+            <section class="upload-section">
+                <h2 class="section-title"><i class="fas fa-upload"></i> Upload File</h2>
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Drag & Drop Your Files Here</h3>
+                    <p>Or click to browse files (Photos, Videos, Documents, etc.)</p>
+                    <p>Maximum file size: 100MB</p>
+                    <input type="file" id="fileInput">
+                </div>
+                <button class="upload-btn" id="uploadBtn">
+                    <i class="fas fa-upload"></i> Upload File
+                </button>
+            </section>
+            
+            <section class="recent-files">
+                <h2 class="section-title"><i class="fas fa-file-alt"></i> Recently Uploaded Files</h2>
+                <div class="file-list" id="fileList">
+                    <!-- Files will be dynamically added here -->
+                </div>
+            </section>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> How to Use JOD MODS File Sharing</h3>
+                <ol>
+                    <li>Click on the upload area or the "Upload File" button to select a file</li>
+                    <li>Click upload to generate a shareable download link</li>
+                    <li>Copy the link and share it with anyone</li>
+                    <li>Anyone with the link can download the file</li>
+                    <li>You can also delete files if you no longer want to share them</li>
+                </ol>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Created with ❤️ for <strong>JOD MODS</strong> - Simple File Sharing Platform</p>
+            <p>© 2023 JOD MODS File Sharing. All rights reserved.</p>
+        </footer>
+        
+        <div class="toast" id="toast">Link copied to clipboard!</div>
+    </div>
+
+    <script>
+        // Sample data for recent files
+        const sampleFiles = [
+            {
+                id: 1,
+                name: "vacation_photos.zip",
+                size: "45.2 MB",
+                type: "archive",
+                date: "2023-10-15",
+                link: "https://jodmods.com/share/abc123"
+            },
+            {
+                id: 2,
+                name: "project_presentation.pptx",
+                size: "12.7 MB",
+                type: "document",
+                date: "2023-10-14",
+                link: "https://jodmods.com/share/xyz789"
+            },
+            {
+                id: 3,
+                name: "birthday_video.mp4",
+                size: "89.3 MB",
+                type: "video",
+                date: "2023-10-12",
+                link: "https://jodmods.com/share/def456"
+            }
+        ];
+
+        // DOM elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileList = document.getElementById('fileList');
+        const toast = document.getElementById('toast');
+
+        // Initialize with sample files
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFileList();
+        });
+
+        // Upload area click event
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Upload button click event
+        uploadBtn.addEventListener('click', () => {
+            if (fileInput.files.length === 0) {
+                alert("Please select a file first!");
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            uploadFile(file);
+        });
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#b21f1f';
+            uploadArea.style.backgroundColor = 'rgba(178, 31, 31, 0.1)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#1a2a6c';
+            uploadArea.style.backgroundColor = 'rgba(26, 42, 108, 0.05)';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#1a2a6c';
+            uploadArea.style.backgroundColor = 'rgba(26, 42, 108, 0.05)';
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                uploadFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        // Upload file function (simulated)
+        function uploadFile(file) {
+            if (file.size > 100 * 1024 * 1024) { // 100MB limit
+                alert("File is too large! Maximum file size is 100MB.");
+                return;
+            }
+            
+            // Show uploading animation
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            uploadBtn.disabled = true;
+            
+            // Simulate upload delay
+            setTimeout(() => {
+                // Generate a mock file object
+                const newFile = {
+                    id: Date.now(),
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    type: getFileType(file.name),
+                    date: new Date().toISOString().split('T')[0],
+                    link: `https://jodmods.com/share/${generateRandomString(8)}`
+                };
+                
+                // Add to beginning of files array
+                sampleFiles.unshift(newFile);
+                
+                // Re-render file list
+                renderFileList();
+                
+                // Reset upload button
+                uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload File';
+                uploadBtn.disabled = false;
+                fileInput.value = '';
+                
+                // Show success message
+                showToast(`File "${file.name}" uploaded successfully!`);
+            }, 1500);
+        }
+
+        // Render file list
+        function renderFileList() {
+            fileList.innerHTML = '';
+            
+            sampleFiles.forEach(file => {
+                const fileCard = document.createElement('div');
+                fileCard.className = 'file-card';
+                
+                const fileIcon = getFileIcon(file.type);
+                const fileName = file.name.length > 30 ? file.name.substring(0, 30) + '...' : file.name;
+                
+                fileCard.innerHTML = `
+                    <div class="file-icon">
+                        <i class="${fileIcon}"></i>
+                    </div>
+                    <div class="file-name">${fileName}</div>
+                    <div class="file-size">${file.size} • Uploaded on ${file.date}</div>
+                    <div class="file-link">
+                        <span>${file.link}</span>
+                        <button class="copy-btn" onclick="copyToClipboard('${file.link}')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="share-actions">
+                        <button class="share-btn" onclick="shareFile('${file.link}', '${file.name}')">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                        <button class="delete-btn" onclick="deleteFile(${file.id})">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </div>
+                `;
+                
+                fileList.appendChild(fileCard);
+            });
+        }
+
+        // Copy link to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    showToast("Link copied to clipboard!");
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    showToast("Failed to copy link. Please try again.");
+                });
+        }
+
+        // Share file (simulated)
+        function shareFile(link, fileName) {
+            if (navigator.share) {
+                navigator.share({
+                    title: `Check out ${fileName} on JOD MODS`,
+                    text: `Download ${fileName} from JOD MODS File Sharing`,
+                    url: link,
+                })
+                .catch(error => console.log('Error sharing:', error));
+            } else {
+                copyToClipboard(link);
+            }
+        }
+
+        // Delete file
+        function deleteFile(id) {
+            if (confirm("Are you sure you want to delete this file? The shareable link will no longer work.")) {
+                const index = sampleFiles.findIndex(file => file.id === id);
+                if (index !== -1) {
+                    const deletedFile = sampleFiles.splice(index, 1)[0];
+                    renderFileList();
+                    showToast(`File "${deletedFile.name}" deleted successfully!`);
+                }
+            }
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Helper functions
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) {
+                return 'image';
+            } else if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv'].includes(ext)) {
+                return 'video';
+            } else if (['mp3', 'wav', 'ogg', 'flac'].includes(ext)) {
+                return 'audio';
+            } else if (['pdf', 'doc', 'docx', 'txt', 'ppt', 'pptx'].includes(ext)) {
+                return 'document';
+            } else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) {
+                return 'archive';
+            } else {
+                return 'other';
+            }
+        }
+
+        function getFileIcon(fileType) {
+            switch (fileType) {
+                case 'image': return 'fas fa-file-image';
+                case 'video': return 'fas fa-file-video';
+                case 'audio': return 'fas fa-file-audio';
+                case 'document': return 'fas fa-file-alt';
+                case 'archive': return 'fas fa-file-archive';
+                default: return 'fas fa-file';
+            }
+        }
+
+        function generateRandomString(length) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
