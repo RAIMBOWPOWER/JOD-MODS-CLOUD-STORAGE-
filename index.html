@@ -291,6 +291,49 @@
             box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
         }
         
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .social-link.instagram {
+            background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+        }
+        
+        .social-link.youtube {
+            background: linear-gradient(45deg, #FF0000, #FF3333);
+        }
+        
+        .social-link.telegram {
+            background: linear-gradient(45deg, #0088cc, #00aced);
+        }
+        
+        .social-link.admin {
+            background: linear-gradient(45deg, var(--warning), #fbbf24);
+        }
+        
         /* Main App */
         .app-container {
             display: none;
@@ -901,6 +944,56 @@
             box-shadow: 0 12px 25px rgba(37, 99, 235, 0.3);
         }
         
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: var(--gray-light);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
         /* Toast */
         .toast {
             position: fixed;
@@ -1040,6 +1133,11 @@
             
             .auth-form {
                 padding: 30px 20px;
+            }
+            
+            .social-links {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
@@ -1184,6 +1282,21 @@
             <p style="margin-top: 25px; color: var(--gray); font-size: 0.95rem;">
                 <i class="fas fa-shield-alt"></i> This file is securely stored and scanned for viruses
             </p>
+            
+            <div class="social-links" style="margin-top: 30px;">
+                <a href="https://www.instagram.com/jodxgamers?igsh=MmsweHdlNm1vbHQ4" target="_blank" class="social-link instagram">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+                <a href="https://youtube.com/@jodxcheats_12?si=8PfMQNaYQ2-7qONW" target="_blank" class="social-link youtube">
+                    <i class="fab fa-youtube"></i> YouTube
+                </a>
+                <a href="https://t.me/+BQ8St9_BKcUwMmJl" target="_blank" class="social-link telegram">
+                    <i class="fab fa-telegram"></i> Telegram
+                </a>
+                <a href="https://t.me/JODxCHEATS" target="_blank" class="social-link admin">
+                    <i class="fas fa-headset"></i> Admin Contact
+                </a>
+            </div>
         </div>
     </div>
     
@@ -1241,6 +1354,24 @@
                     <button class="auth-btn" id="registerBtn">
                         <i class="fas fa-user-plus"></i> Create Free Account
                     </button>
+                </div>
+                
+                <div class="social-links" style="padding: 20px 30px; background: var(--light);">
+                    <h3 style="text-align: center; margin-bottom: 15px; color: var(--dark);">Connect with us:</h3>
+                    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <a href="https://www.instagram.com/jodxgamers?igsh=MmsweHdlNm1vbHQ4" target="_blank" class="social-link instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://youtube.com/@jodxcheats_12?si=8PfMQNaYQ2-7qONW" target="_blank" class="social-link youtube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://t.me/+BQ8St9_BKcUwMmJl" target="_blank" class="social-link telegram">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="https://t.me/JODxCHEATS" target="_blank" class="social-link admin">
+                            <i class="fas fa-headset"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1398,6 +1529,64 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>JOD MODS CLOUD</h3>
+                        <p>Secure file sharing and storage platform for gamers and developers. Unlimited storage, fast downloads, and secure sharing.</p>
+                        <div class="social-links" style="margin-top: 20px; justify-content: flex-start;">
+                            <a href="https://www.instagram.com/jodxgamers?igsh=MmsweHdlNm1vbHQ4" target="_blank" class="social-link instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="https://youtube.com/@jodxcheats_12?si=8PfMQNaYQ2-7qONW" target="_blank" class="social-link youtube">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            <a href="https://t.me/+BQ8St9_BKcUwMmJl" target="_blank" class="social-link telegram">
+                                <i class="fab fa-telegram"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Quick Links</h3>
+                        <ul class="footer-links">
+                            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                            <li><a href="#"><i class="fas fa-upload"></i> Upload Files</a></li>
+                            <li><a href="#"><i class="fas fa-download"></i> My Downloads</a></li>
+                            <li><a href="#"><i class="fas fa-share-alt"></i> Shared Files</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Support</h3>
+                        <ul class="footer-links">
+                            <li><a href="https://t.me/JODxCHEATS" target="_blank"><i class="fas fa-headset"></i> Admin Contact</a></li>
+                            <li><a href="#"><i class="fas fa-question-circle"></i> Help Center</a></li>
+                            <li><a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
+                            <li><a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Contact Info</h3>
+                        <ul class="footer-links">
+                            <li><a href="https://www.instagram.com/jodxgamers" target="_blank"><i class="fab fa-instagram"></i> @jodxgamers</a></li>
+                            <li><a href="https://youtube.com/@jodxcheats_12" target="_blank"><i class="fab fa-youtube"></i> @jodxcheats_12</a></li>
+                            <li><a href="https://t.me/+BQ8St9_BKcUwMmJl" target="_blank"><i class="fab fa-telegram"></i> JOD MODS Group</a></li>
+                            <li><a href="https://t.me/JODxCHEATS" target="_blank"><i class="fas fa-user-shield"></i> Admin Telegram</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>© 2023 JOD MODS CLOUD STORAGE. All rights reserved. | Secure File Sharing Platform</p>
+                    <p style="margin-top: 10px; font-size: 0.8rem;">Upload, share, and download files securely. Registration required for uploading only.</p>
+                </div>
+            </div>
+        </footer>
     </div>
     
     <!-- Toast Notification -->
@@ -1780,7 +1969,7 @@
             uploadFiles(fileInput.files);
         }
 
-        // Upload files
+        // Upload files - FIXED VERSION
         function uploadFiles(fileList) {
             if (!state.currentUser) return;
             
@@ -1794,13 +1983,13 @@
             // Simulate upload
             setTimeout(() => {
                 Array.from(fileList).forEach(file => {
-                    // Generate file object
+                    // Generate file object with PROPER SIZE
                     const fileId = Date.now() + Math.floor(Math.random() * 1000);
                     const fileSizeMB = file.size / (1024 * 1024);
                     const fileType = getFileType(file.name);
                     const downloadToken = generateToken(20);
                     
-                    // FIXED: Create proper working download link for GitHub Pages
+                    // Create working download link
                     const baseUrl = getBaseUrl();
                     const downloadLink = `${baseUrl}?file=${downloadToken}`;
                     
@@ -1824,6 +2013,8 @@
                     // Update user stats
                     state.currentUser.fileCount++;
                     state.currentUser.storageUsed += fileSizeMB;
+                    
+                    console.log(`Uploaded: ${file.name}, Size: ${fileSizeMB.toFixed(2)}MB, Token: ${downloadToken}`);
                 });
                 
                 // Save data
@@ -1945,44 +2136,84 @@
             state.downloadQueue = [file];
         }
 
-        // Handle direct download
+        // Handle direct download - FIXED VERSION
         function handleDirectDownload() {
             if (state.downloadQueue.length === 0) return;
             
             const file = state.downloadQueue[0];
             
-            // Create a temporary download link with actual file simulation
+            // Create REALISTIC file simulation with proper size
             let fileContent = '';
             let mimeType = 'application/octet-stream';
             
-            // Create realistic file content based on file type
+            // Calculate approximate file size in bytes
+            const targetSize = file.size * 1024 * 1024; // Convert MB to bytes
+            
+            // Create realistic content based on file type and size
             if (file.type === 'image') {
-                // Simulate image file
-                fileContent = `This is a simulation of image file: ${file.name}\n\n`;
-                fileContent += `Image Details:\n`;
-                fileContent += `- Size: ${file.size} MB\n`;
-                fileContent += `- Type: Image file\n`;
-                fileContent += `- Uploaded by: ${file.userName}\n`;
-                fileContent += `- Upload date: ${file.uploadDate}\n\n`;
-                fileContent += `In a real JOD MODS CLOUD STORAGE system, this would be the actual image file.`;
+                // For images, create a simulated JPEG structure
+                fileContent = `Simulated JPEG Image: ${file.name}\n`;
+                fileContent += `Dimensions: 1920x1080\n`;
+                fileContent += `Size: ${file.size} MB\n`;
+                fileContent += `Uploaded by: ${file.userName}\n`;
+                fileContent += `Upload date: ${file.uploadDate}\n`;
+                fileContent += `\n`;
+                fileContent += `This is a simulation of the actual image file.\n`;
+                fileContent += `In JOD MODS CLOUD STORAGE, this would be the real image.\n`;
+                
+                // Add padding to reach approximate file size
+                const paddingSize = Math.max(0, targetSize - fileContent.length);
+                fileContent += '█'.repeat(Math.floor(paddingSize / 2));
+                
                 mimeType = 'image/jpeg';
             } else if (file.type === 'pdf') {
-                fileContent = `PDF File: ${file.name}\n`;
-                fileContent += `Size: ${file.size} MB\n`;
-                fileContent += `Uploaded by: ${file.userName}\n\n`;
+                fileContent = `PDF Document: ${file.name}\n`;
+                fileContent += `Author: ${file.userName}\n`;
+                fileContent += `File Size: ${file.size} MB\n`;
+                fileContent += `Pages: 10\n`;
+                fileContent += `\n`;
                 fileContent += `JOD MODS CLOUD STORAGE - Secure File Sharing\n`;
+                fileContent += `\n`;
+                fileContent += `This is a simulated PDF file.\n`;
+                fileContent += `Actual file would contain document content.\n`;
+                
+                const paddingSize = Math.max(0, targetSize - fileContent.length);
+                fileContent += '█'.repeat(Math.floor(paddingSize / 2));
+                
                 mimeType = 'application/pdf';
+            } else if (file.type === 'video') {
+                fileContent = `Video File: ${file.name}\n`;
+                fileContent += `Duration: 05:30\n`;
+                fileContent += `Resolution: 1080p\n`;
+                fileContent += `Size: ${file.size} MB\n`;
+                fileContent += `Codec: H.264\n`;
+                fileContent += `\n`;
+                fileContent += `JOD MODS CLOUD STORAGE\n`;
+                fileContent += `\n`;
+                fileContent += `This simulates a video file download.\n`;
+                
+                const paddingSize = Math.max(0, targetSize - fileContent.length);
+                fileContent += '█'.repeat(Math.floor(paddingSize / 2));
+                
+                mimeType = 'video/mp4';
             } else {
                 fileContent = `File: ${file.name}\n`;
                 fileContent += `Size: ${file.size} MB\n`;
                 fileContent += `Type: ${file.type}\n`;
                 fileContent += `Uploaded by: ${file.userName}\n`;
                 fileContent += `Upload date: ${file.uploadDate}\n`;
-                fileContent += `Downloads: ${file.downloadCount}\n\n`;
+                fileContent += `Downloads: ${file.downloadCount}\n`;
+                fileContent += `\n`;
+                fileContent += `JOD MODS CLOUD STORAGE - Secure File Sharing\n`;
+                fileContent += `\n`;
                 fileContent += `This file is securely stored on JOD MODS CLOUD STORAGE.\n`;
-                fileContent += `In a real system, this would be the actual file content.`;
+                fileContent += `In production, this would be the actual file content.\n`;
+                
+                const paddingSize = Math.max(0, targetSize - fileContent.length);
+                fileContent += '█'.repeat(Math.floor(paddingSize / 2));
             }
             
+            // Create Blob with approximate size
             const blob = new Blob([fileContent], { type: mimeType });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1993,13 +2224,18 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            showToast(`Downloading "${file.name}"...`, 'success');
-            
             // Update download count
             file.downloadCount++;
             saveFiles();
             
-            // Go back to app after a delay
+            showToast(`Downloading "${file.name}" (${file.size} MB)...`, 'success');
+            
+            // Update stats in real-time
+            if (state.currentUser) {
+                loadUserFiles();
+            }
+            
+            // Show success message after download
             setTimeout(() => {
                 if (state.currentUser) {
                     showApp();
@@ -2010,7 +2246,7 @@
             }, 1500);
         }
 
-        // Copy file link - FIXED FUNCTION
+        // Copy file link
         function copyFileLink(fileId) {
             const file = state.files.find(f => f.id === fileId);
             if (!file) {
