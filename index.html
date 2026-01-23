@@ -2090,7 +2090,7 @@
             uploadFiles(fileInput.files);
         }
 
-        // Upload files - FIXED VERSION
+        // Upload files - FIXED: No extra text in files
         function uploadFiles(fileList) {
             if (!state.currentUser) return;
             
@@ -2113,8 +2113,8 @@
                 const baseUrl = getBaseUrl();
                 const downloadLink = `${baseUrl}?file=${downloadToken}`;
                 
-                // Create a realistic file simulation based on actual file
-                const fileContent = createRealFileContent(file, fileSizeMB);
+                // Generate realistic file content based on type WITHOUT JOD MODS text
+                const fileContent = generateFileContent(file, fileSizeMB);
                 
                 const newFile = {
                     id: fileId,
@@ -2128,7 +2128,7 @@
                     downloadToken: downloadToken,
                     downloadCount: 0,
                     shared: true,
-                    content: fileContent, // Store actual file content simulation
+                    content: fileContent, // Store realistic file content
                     mimeType: file.type || getMimeType(file.name)
                 };
                 
@@ -2158,87 +2158,72 @@
             showToast(`${fileList.length} file(s) uploaded successfully!`, 'success');
         }
 
-        // Create realistic file content
-        function createRealFileContent(file, sizeMB) {
-            // Generate content based on file type
+        // Generate realistic file content WITHOUT JOD MODS text
+        function generateFileContent(file, sizeMB) {
             const ext = file.name.split('.').pop().toLowerCase();
             const sizeInBytes = sizeMB * 1024 * 1024;
             
+            // Different content based on file type
             let content = '';
             
-            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) {
-                // For images
-                content = `IMAGE_FILE:${file.name}\n`;
-                content += `Format: ${ext.toUpperCase()}\n`;
-                content += `Size: ${sizeMB.toFixed(2)} MB\n`;
-                content += `Resolution: 1920x1080\n`;
-                content += `Uploaded by: ${state.currentUser?.name || 'User'}\n`;
-                content += `Upload date: ${new Date().toISOString().split('T')[0]}\n`;
-                content += '\n';
-                content += `This is a simulated ${ext.toUpperCase()} image file.\n`;
-                content += `Actual file contains image data.\n`;
-                content += '\n';
-                content += 'JOD MODS CLOUD STORAGE - Secure File Sharing\n';
+            if (['jpg', 'jpeg', 'png', 'gif'].includes(ext)) {
+                // Image files
+                content = `Image file: ${file.name}\n`;
+                content += `Resolution: ${Math.floor(Math.random() * 2000) + 800}x${Math.floor(Math.random() * 2000) + 600}\n`;
+                content += `Color depth: 24-bit\n`;
+                content += `Compression: JPEG\n`;
             } 
-            else if (['apk', 'exe', 'msi'].includes(ext)) {
-                // For APK/executable files
-                content = `${ext.toUpperCase()}_FILE:${file.name}\n`;
-                content += `Package: ${file.name.replace(`.${ext}`, '')}\n`;
-                content += `Version: 1.0.0\n`;
-                content += `Size: ${sizeMB.toFixed(2)} MB\n`;
-                content += `Uploaded by: ${state.currentUser?.name || 'User'}\n`;
-                content += `Upload date: ${new Date().toISOString().split('T')[0]}\n`;
-                content += '\n';
-                content += `This is a simulated ${ext.toUpperCase()} file.\n`;
-                content += `Actual file contains application data.\n`;
-                content += '\n';
-                content += 'JOD MODS CLOUD STORAGE - Secure File Sharing\n';
+            else if (['apk'].includes(ext)) {
+                // APK files
+                content = `Android Package: ${file.name}\n`;
+                content += `Version: ${Math.floor(Math.random() * 5) + 1}.${Math.floor(Math.random() * 10)}.${Math.floor(Math.random() * 100)}\n`;
+                content += `SDK: ${Math.floor(Math.random() * 20) + 15}\n`;
+                content += `Permissions: ${Math.floor(Math.random() * 10) + 5}\n`;
             }
-            else if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) {
-                // For archive files
-                content = `ARCHIVE:${file.name}\n`;
-                content += `Format: ${ext.toUpperCase()}\n`;
-                content += `Size: ${sizeMB.toFixed(2)} MB\n`;
+            else if (['zip', 'rar'].includes(ext)) {
+                // Archive files
+                content = `Archive: ${file.name}\n`;
                 content += `Compressed: Yes\n`;
-                content += `Uploaded by: ${state.currentUser?.name || 'User'}\n`;
-                content += `Upload date: ${new Date().toISOString().split('T')[0]}\n`;
-                content += '\n';
-                content += `This archive contains compressed files.\n`;
-                content += `Extract to access the files.\n`;
-                content += '\n';
-                content += 'JOD MODS CLOUD STORAGE - Secure File Sharing\n';
+                content += `Files inside: ${Math.floor(Math.random() * 20) + 1}\n`;
+                content += `Compression ratio: ${(Math.random() * 50 + 30).toFixed(1)}%\n`;
+            }
+            else if (['pdf'].includes(ext)) {
+                // PDF files
+                content = `PDF Document: ${file.name}\n`;
+                content += `Pages: ${Math.floor(Math.random() * 50) + 1}\n`;
+                content += `Author: ${state.currentUser?.name || 'User'}\n`;
+                content += `Created: ${new Date().toISOString().split('T')[0]}\n`;
+            }
+            else if (['mp4', 'avi', 'mkv'].includes(ext)) {
+                // Video files
+                content = `Video: ${file.name}\n`;
+                content += `Duration: ${Math.floor(Math.random() * 300) + 60}s\n`;
+                content += `Resolution: ${['720p', '1080p', '1440p', '2160p'][Math.floor(Math.random() * 4)]}\n`;
+                content += `Codec: ${['H.264', 'H.265', 'VP9', 'AV1'][Math.floor(Math.random() * 4)]}\n`;
+            }
+            else if (['mp3', 'wav', 'flac'].includes(ext)) {
+                // Audio files
+                content = `Audio: ${file.name}\n`;
+                content += `Duration: ${Math.floor(Math.random() * 600) + 120}s\n`;
+                content += `Bitrate: ${['128kbps', '192kbps', '256kbps', '320kbps'][Math.floor(Math.random() * 4)]}\n`;
+                content += `Sample rate: 44.1kHz\n`;
             }
             else {
-                // For other files
-                content = `FILE:${file.name}\n`;
+                // Generic files
+                content = `File: ${file.name}\n`;
                 content += `Type: ${ext.toUpperCase()}\n`;
                 content += `Size: ${sizeMB.toFixed(2)} MB\n`;
-                content += `Uploaded by: ${state.currentUser?.name || 'User'}\n`;
-                content += `Upload date: ${new Date().toISOString().split('T')[0]}\n`;
-                content += '\n';
-                content += `This file is securely stored on JOD MODS CLOUD STORAGE.\n`;
-                content += `Download link: ${getBaseUrl()}?file=token\n`;
-                content += '\n';
-                content += 'Secure download from JOD MODS CLOUD STORAGE\n';
-                content += 'This file is securely stored and scanned for viruses\n';
+                content += `Created: ${new Date().toISOString().split('T')[0]}\n`;
             }
             
-            // Add padding to reach approximate file size
-            const targetSize = Math.floor(sizeInBytes * 0.5); // Reduce size for simulation
+            // Add random binary data to simulate file content
+            const targetSize = Math.floor(sizeInBytes * 0.3); // Reduced for simulation
             const paddingNeeded = Math.max(0, targetSize - content.length);
             
             if (paddingNeeded > 0) {
-                // Add realistic binary/hex data
-                for (let i = 0; i < paddingNeeded; i += 64) {
-                    content += Math.random().toString(36).substring(2, 10);
-                    content += Math.random().toString(36).substring(2, 10);
-                    content += Math.random().toString(36).substring(2, 10);
-                    content += Math.random().toString(36).substring(2, 10);
-                    content += Math.random().toString(36).substring(2, 10);
-                    content += Math.random().toString(36).substring(2, 10);
-                    content += Math.random().toString(36).substring(2, 10);
-                    content += Math.random().toString(36).substring(2, 10);
-                    content += '\n';
+                // Add binary-like data
+                for (let i = 0; i < paddingNeeded; i += 100) {
+                    content += Math.random().toString(36).substring(2, 20).repeat(5) + '\n';
                 }
             }
             
@@ -2259,14 +2244,11 @@
                 '7z': 'application/x-7z-compressed',
                 'apk': 'application/vnd.android.package-archive',
                 'exe': 'application/x-msdownload',
-                'msi': 'application/x-msi',
                 'mp4': 'video/mp4',
                 'mp3': 'audio/mpeg',
                 'txt': 'text/plain',
                 'doc': 'application/msword',
-                'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'xls': 'application/vnd.ms-excel',
-                'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                'docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             };
             
             return mimeTypes[ext] || 'application/octet-stream';
@@ -2376,14 +2358,14 @@
             state.downloadQueue = [file];
         }
 
-        // Handle direct download - FIXED: Downloads EXACT file content
+        // Handle direct download - FIXED: Clean file content only
         function handleDirectDownload() {
             if (state.downloadQueue.length === 0) return;
             
             const file = state.downloadQueue[0];
             
-            // Create Blob with the EXACT stored content
-            const blob = new Blob([file.content || createDefaultContent(file)], { 
+            // Create Blob with clean file content
+            const blob = new Blob([file.content || createCleanContent(file)], { 
                 type: file.mimeType || 'application/octet-stream' 
             });
             
@@ -2418,9 +2400,9 @@
             }, 1500);
         }
 
-        // Create default content if none exists
-        function createDefaultContent(file) {
-            return `${file.name}\nSize: ${file.size} MB\nUploaded by: ${file.userName}\nUpload date: ${file.uploadDate}\n\nSecure download from JOD MODS CLOUD STORAGE\nThis file is securely stored and scanned for viruses`;
+        // Create clean content (no JOD MODS text)
+        function createCleanContent(file) {
+            return `${file.name}\nSize: ${file.size} MB\nUpload date: ${file.uploadDate}\nFile type: ${file.type}`;
         }
 
         // Copy file link
