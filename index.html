@@ -15,14 +15,11 @@
             --danger: #ef4444;
             --warning: #f59e0b;
             --dark: #1f2937;
-            --light: #ffffff;
+            --light: #f9fafb;
             --gray: #6b7280;
-            --gray-light: #f3f4f6;
-            --gray-dark: #374151;
-            --body-bg: #f9fafb;
-            --card-bg: #ffffff;
-            --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 5px 20px rgba(0, 0, 0, 0.1);
+            --gray-light: #e5e7eb;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
             --radius: 12px;
             --radius-sm: 8px;
         }
@@ -34,87 +31,1043 @@
         }
         
         body {
-            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
-            background: var(--body-bg);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f7ff 100%);
             color: var(--dark);
             min-height: 100vh;
             line-height: 1.6;
-            font-size: 15px;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
         }
         
-        /* Professional Design Improvements */
-        .navbar {
-            background: linear-gradient(135deg, var(--dark) 0%, #111827 100%);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        /* Hidden Admin Panel */
+        .admin-access {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
         }
         
+        .admin-btn {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        /* Admin Panel */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            padding: 20px;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+        }
+        
+        .admin-content {
+            background: white;
+            max-width: 1300px;
+            margin: 30px auto;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, var(--dark), #374151);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .admin-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+        
+        .admin-body {
+            padding: 30px;
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+        
+        .close-admin {
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .close-admin:hover {
+            background: #dc2626;
+            transform: rotate(90deg);
+        }
+        
+        /* Auth Screens */
         .auth-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
         
         .auth-card {
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
         }
         
-        .stat-card {
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            background: linear-gradient(145deg, #ffffff, #f8fafc);
+        .auth-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
         }
         
-        .upload-section, .files-section, .quick-stats, .storage-info {
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            background: linear-gradient(145deg, #ffffff, #f8fafc);
+        .auth-header .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
         }
         
-        /* Previous CSS remains the same, just updated color scheme */
-        /* Full CSS remains but with improved colors */
+        .auth-header .logo i {
+            font-size: 3rem;
+        }
         
-        /* Add some subtle animations */
+        .auth-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .auth-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            background: var(--light);
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 20px;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .auth-tab.active {
+            color: var(--primary);
+        }
+        
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .auth-form {
+            padding: 40px 30px;
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .auth-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 1.1rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .auth-btn:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+        }
+        
+        /* Main App */
+        .app-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .app-container.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .nav-brand i {
+            color: var(--primary);
+            font-size: 2.2rem;
+        }
+        
+        .nav-brand h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .nav-brand span {
+            color: var(--primary);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .user-details h3 {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--dark);
+        }
+        
+        .user-details p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .logout-btn {
+            background: var(--light);
+            color: var(--danger);
+            border: 2px solid var(--gray-light);
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 40px 0;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+        
+        /* Dashboard Stats */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+        }
+        
+        .stat-icon.storage {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+        
+        .stat-icon.files {
+            background: linear-gradient(135deg, var(--secondary), #34d399);
+        }
+        
+        .stat-icon.downloads {
+            background: linear-gradient(135deg, var(--warning), #fbbf24);
+        }
+        
+        .stat-icon.share {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+        }
+        
+        .stat-info h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* Upload Section */
+        .upload-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 35px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .upload-area {
+            border: 3px dashed var(--primary);
+            border-radius: var(--radius);
+            padding: 60px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(to bottom, rgba(37, 99, 235, 0.02), rgba(37, 99, 235, 0.05));
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-area:hover {
+            background: linear-gradient(to bottom, rgba(37, 99, 235, 0.05), rgba(37, 99, 235, 0.1));
+            border-color: var(--primary-dark);
+        }
+        
+        .upload-area i {
+            font-size: 4.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .upload-area h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .upload-area p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .upload-features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, var(--secondary), #34d399);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.2rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 0 auto;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.2);
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(16, 185, 129, 0.3);
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        /* Files Section */
+        .files-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 35px;
+            box-shadow: var(--shadow);
+        }
+        
+        .files-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .files-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-light);
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            background: var(--light);
+        }
+        
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .action-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Files Grid */
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
         .file-card {
-            animation: fadeIn 0.3s ease;
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            border: 1px solid var(--gray-light);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         
-        /* Professional scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        .file-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-light);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
         }
         
-        ::-webkit-scrollbar-track {
+        .file-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .file-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .file-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .file-action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-light);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--gray);
+        }
+        
+        .file-action-btn:hover {
+            background: var(--light);
+            color: var(--dark);
+        }
+        
+        .file-action-btn.download:hover {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .file-action-btn.copy:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .file-action-btn.delete:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+        
+        .file-info h4 {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+        
+        .file-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        
+        .file-link {
+            background: var(--light);
+            border-radius: var(--radius-sm);
+            padding: 12px 15px;
+            font-size: 0.85rem;
+            word-break: break-all;
+            color: var(--dark);
+            border: 1px solid var(--gray-light);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .copy-link-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+        
+        .copy-link-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .quick-stats, .storage-info {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .storage-bar {
+            height: 12px;
             background: var(--gray-light);
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
         }
         
-        ::-webkit-scrollbar-thumb {
-            background: var(--gray);
-            border-radius: 4px;
+        .storage-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 6px;
+            width: 0%;
+            transition: width 1s ease;
         }
         
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gray-dark);
+        .storage-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: var(--gray);
+        }
+        
+        .premium-ad {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            border-radius: var(--radius);
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+        
+        .premium-ad h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .premium-btn {
+            background: white;
+            color: var(--warning);
+            border: none;
+            padding: 12px 25px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+        
+        .premium-btn:hover {
+            background: var(--dark);
+            color: white;
+        }
+        
+        /* Download Page */
+        .download-container {
+            display: none;
+            min-height: 100vh;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f7ff 100%);
+        }
+        
+        .download-card {
+            background: white;
+            max-width: 600px;
+            margin: 0 auto;
+            border-radius: var(--radius);
+            padding: 50px 40px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+        
+        .download-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--secondary), #34d399);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .download-card h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .download-info {
+            background: var(--light);
+            border-radius: var(--radius-sm);
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .download-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .download-info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 0 auto;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.3);
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--dark);
+            color: white;
+            padding: 18px 25px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            display: none;
+            z-index: 10000;
+            font-weight: 500;
+            max-width: 350px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .toast.success {
+            background: var(--secondary);
+        }
+        
+        .toast.error {
+            background: var(--danger);
+        }
+        
+        .toast.warning {
+            background: var(--warning);
+        }
+        
+        /* Admin Table */
+        .admin-table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        .admin-table th {
+            background: var(--light);
+            color: var(--dark);
+            font-weight: 600;
+            text-align: left;
+            padding: 15px;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        
+        .admin-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .admin-table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-btn-small {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .admin-download {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .admin-download:hover {
+            background: #0da271;
+        }
+        
+        .admin-copy {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .admin-copy:hover {
+            background: var(--primary-dark);
+        }
+        
+        .admin-delete {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .admin-delete:hover {
+            background: #dc2626;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .user-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .files-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-area {
+                padding: 40px 20px;
+            }
+            
+            .auth-header {
+                padding: 30px 20px;
+            }
+            
+            .auth-form {
+                padding: 30px 20px;
+            }
+            
+            .files-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Admin Access Button -->
+    <!-- Hidden Admin Access -->
     <div class="admin-access">
         <button class="admin-btn" id="adminAccessBtn" title="Admin Panel">
             <i class="fas fa-user-shield"></i>
         </button>
     </div>
     
-    <!-- Admin Modal -->
+    <!-- Admin Panel -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-content">
             <div class="admin-header">
@@ -207,7 +1160,7 @@
         </div>
     </div>
     
-    <!-- Download Page -->
+    <!-- Download Page (Hidden by default) -->
     <div class="download-container" id="downloadPage">
         <div class="download-card">
             <div class="download-icon">
@@ -244,23 +1197,8 @@
             </button>
             
             <p style="margin-top: 25px; color: var(--gray); font-size: 0.95rem;">
-                <i class="fas fa-shield-alt"></i> This file is securely stored
+                <i class="fas fa-shield-alt"></i> This file is securely stored and scanned for viruses
             </p>
-            
-            <div class="social-links" style="margin-top: 30px;">
-                <a href="https://www.instagram.com/jodxgamers?igsh=MmsweHdlNm1vbHQ4" target="_blank" class="social-link instagram">
-                    <i class="fab fa-instagram"></i> Instagram
-                </a>
-                <a href="https://youtube.com/@jodxcheats_12?si=8PfMQNaYQ2-7qONW" target="_blank" class="social-link youtube">
-                    <i class="fab fa-youtube"></i> YouTube
-                </a>
-                <a href="https://t.me/+BQ8St9_BKcUwMmJl" target="_blank" class="social-link telegram">
-                    <i class="fab fa-telegram"></i> Telegram
-                </a>
-                <a href="https://t.me/JODxCHEATS" target="_blank" class="social-link admin">
-                    <i class="fas fa-headset"></i> Admin Contact
-                </a>
-            </div>
         </div>
     </div>
     
@@ -318,24 +1256,6 @@
                     <button class="auth-btn" id="registerBtn">
                         <i class="fas fa-user-plus"></i> Create Free Account
                     </button>
-                </div>
-                
-                <div style="padding: 25px; background: var(--body-bg);">
-                    <h3 style="text-align: center; margin-bottom: 15px; color: var(--dark); font-size: 1.1rem;">Connect with us:</h3>
-                    <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-                        <a href="https://www.instagram.com/jodxgamers?igsh=MmsweHdlNm1vbHQ4" target="_blank" class="social-link instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://youtube.com/@jodxcheats_12?si=8PfMQNaYQ2-7qONW" target="_blank" class="social-link youtube">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                        <a href="https://t.me/+BQ8St9_BKcUwMmJl" target="_blank" class="social-link telegram">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                        <a href="https://t.me/JODxCHEATS" target="_blank" class="social-link admin">
-                            <i class="fas fa-headset"></i>
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -419,7 +1339,7 @@
                             </div>
                             <div class="feature">
                                 <i class="fas fa-shield-alt"></i>
-                                <span>Secure & Protected</span>
+                                <span>Secure & Encrypted</span>
                             </div>
                             <div class="feature">
                                 <i class="fas fa-bolt"></i>
@@ -452,7 +1372,7 @@
                     
                     <div id="noFilesMessage" style="text-align: center; padding: 60px 20px; color: var(--gray); display: none;">
                         <i class="fas fa-cloud" style="font-size: 4rem; margin-bottom: 20px; opacity: 0.3;"></i>
-                        <h3 style="font-size: 1.4rem; margin-bottom: 10px; color: var(--dark);">Your cloud storage is empty</h3>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 10px;">Your cloud storage is empty</h3>
                         <p>Upload your first file to get started with JOD MODS CLOUD STORAGE</p>
                     </div>
                 </section>
@@ -493,64 +1413,6 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="container">
-                <div class="footer-content">
-                    <div class="footer-section">
-                        <h3>JOD MODS CLOUD</h3>
-                        <p>Secure file sharing and storage platform for gamers and developers. Unlimited storage, fast downloads, and secure sharing.</p>
-                        <div class="social-links" style="margin-top: 20px; justify-content: flex-start;">
-                            <a href="https://www.instagram.com/jodxgamers?igsh=MmsweHdlNm1vbHQ4" target="_blank" class="social-link instagram">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="https://youtube.com/@jodxcheats_12?si=8PfMQNaYQ2-7qONW" target="_blank" class="social-link youtube">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                            <a href="https://t.me/+BQ8St9_BKcUwMmJl" target="_blank" class="social-link telegram">
-                                <i class="fab fa-telegram"></i>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h3>Quick Links</h3>
-                        <ul class="footer-links">
-                            <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-                            <li><a href="#"><i class="fas fa-upload"></i> Upload Files</a></li>
-                            <li><a href="#"><i class="fas fa-download"></i> My Downloads</a></li>
-                            <li><a href="#"><i class="fas fa-share-alt"></i> Shared Files</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h3>Support</h3>
-                        <ul class="footer-links">
-                            <li><a href="https://t.me/JODxCHEATS" target="_blank"><i class="fas fa-headset"></i> Admin Contact</a></li>
-                            <li><a href="#"><i class="fas fa-question-circle"></i> Help Center</a></li>
-                            <li><a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a></li>
-                            <li><a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h3>Contact Info</h3>
-                        <ul class="footer-links">
-                            <li><a href="https://www.instagram.com/jodxgamers" target="_blank"><i class="fab fa-instagram"></i> @jodxgamers</a></li>
-                            <li><a href="https://youtube.com/@jodxcheats_12" target="_blank"><i class="fab fa-youtube"></i> @jodxcheats_12</a></li>
-                            <li><a href="https://t.me/+BQ8St9_BKcUwMmJl" target="_blank"><i class="fab fa-telegram"></i> JOD MODS Group</a></li>
-                            <li><a href="https://t.me/JODxCHEATS" target="_blank"><i class="fas fa-user-shield"></i> Admin Telegram</a></li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="footer-bottom">
-                    <p>© 2023 JOD MODS CLOUD STORAGE. All rights reserved. | Secure File Sharing Platform</p>
-                    <p style="margin-top: 10px; font-size: 0.85rem;">Upload, share, and download files securely. Registration required for uploading only.</p>
-                </div>
-            </div>
-        </footer>
     </div>
     
     <!-- Toast Notification -->
@@ -562,53 +1424,66 @@
             currentUser: null,
             users: [],
             files: [],
-            adminLoggedIn: false,
-            // Store ACTUAL file data as Blobs
-            fileBlobs: new Map() // fileId -> Blob object (EXACT file data)
+            downloadQueue: [],
+            adminLoggedIn: false
         };
 
         // Admin credentials
-        const ADMIN_USERNAME = "JODx";
+        const ADMIN_USERNAME = "JOD";
         const ADMIN_PASSWORD = "MODS";
+
+        // Get current URL
+        const getBaseUrl = () => {
+            return window.location.origin + window.location.pathname;
+        };
 
         // Initialize data
         function initApp() {
             // Load data from localStorage
             const savedUsers = localStorage.getItem('jodmods_users');
             const savedFiles = localStorage.getItem('jodmods_files');
-            const savedBlobs = localStorage.getItem('jodmods_blobs');
             
+            // Initialize with empty arrays if no data exists
             if (savedUsers) {
-                state.users = JSON.parse(savedUsers);
+                try {
+                    state.users = JSON.parse(savedUsers);
+                } catch (e) {
+                    state.users = [];
+                }
+            } else {
+                state.users = [];
             }
             
             if (savedFiles) {
-                state.files = JSON.parse(savedFiles);
+                try {
+                    state.files = JSON.parse(savedFiles);
+                } catch (e) {
+                    state.files = [];
+                }
+            } else {
+                state.files = [];
             }
             
-            if (savedBlobs) {
-                try {
-                    const parsed = JSON.parse(savedBlobs);
-                    for (const [key, value] of parsed) {
-                        // Convert base64 back to Blob
-                        const byteCharacters = atob(value.data);
-                        const byteNumbers = new Array(byteCharacters.length);
-                        for (let i = 0; i < byteCharacters.length; i++) {
-                            byteNumbers[i] = byteCharacters.charCodeAt(i);
-                        }
-                        const byteArray = new Uint8Array(byteNumbers);
-                        state.fileBlobs.set(parseInt(key), new Blob([byteArray], { type: value.type }));
-                    }
-                } catch (e) {
-                    console.log("No blob data found");
-                }
-            }
+            // Save if empty
+            if (state.users.length === 0) saveUsers();
+            if (state.files.length === 0) saveFiles();
             
             // Check if user is logged in
             const loggedInUser = localStorage.getItem('jodmods_currentUser');
             if (loggedInUser) {
-                state.currentUser = JSON.parse(loggedInUser);
-                showApp();
+                try {
+                    state.currentUser = JSON.parse(loggedInUser);
+                    // Verify user still exists in users array
+                    const userExists = state.users.some(u => u.id === state.currentUser.id);
+                    if (userExists) {
+                        showApp();
+                    } else {
+                        localStorage.removeItem('jodmods_currentUser');
+                        state.currentUser = null;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('jodmods_currentUser');
+                }
             }
             
             // Check for download token in URL
@@ -621,9 +1496,17 @@
             const downloadToken = urlParams.get('file');
             
             if (downloadToken) {
+                // Find file by download token
                 const file = state.files.find(f => f.downloadToken === downloadToken);
+                
                 if (file) {
                     showDownloadPage(file);
+                } else {
+                    showToast('Invalid download link. File may have been deleted.', 'error');
+                    // Redirect to home after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = getBaseUrl();
+                    }, 3000);
                 }
             }
         }
@@ -637,30 +1520,18 @@
             localStorage.setItem('jodmods_files', JSON.stringify(state.files));
         }
 
-        // Save Blobs as base64 strings
-        function saveBlobs() {
-            const blobEntries = [];
-            for (const [key, blob] of state.fileBlobs.entries()) {
-                blobEntries.push([key, { 
-                    data: blobToBase64(blob),
-                    type: blob.type,
-                    size: blob.size 
-                }]);
-            }
-            localStorage.setItem('jodmods_blobs', JSON.stringify(blobEntries));
-        }
+        // DOM Elements
+        const authScreen = document.getElementById('authScreen');
+        const appContainer = document.getElementById('appContainer');
+        const adminModal = document.getElementById('adminModal');
+        const downloadPage = document.getElementById('downloadPage');
+        const toast = document.getElementById('toast');
 
-        // Convert Blob to base64
-        function blobToBase64(blob) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(blob);
-                reader.onloadend = function() {
-                    const base64data = reader.result.split(',')[1];
-                    resolve(base64data);
-                };
-            });
-        }
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp();
+            setupEventListeners();
+        });
 
         // Setup event listeners
         function setupEventListeners() {
@@ -674,12 +1545,15 @@
 
             // Login
             document.getElementById('loginBtn').addEventListener('click', handleLogin);
+            
+            // Register
             document.getElementById('registerBtn').addEventListener('click', handleRegister);
             
             // File upload
             document.getElementById('uploadArea').addEventListener('click', () => {
                 document.getElementById('fileInput').click();
             });
+            
             document.getElementById('uploadBtn').addEventListener('click', handleUpload);
             document.getElementById('fileInput').addEventListener('change', handleFileSelect);
             document.getElementById('uploadMoreBtn').addEventListener('click', () => {
@@ -712,123 +1586,751 @@
             document.getElementById('loginPassword').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleLogin();
             });
+            
             document.getElementById('regConfirmPassword').addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') handleRegister();
             });
         }
 
-        // Handle file upload - MEDIAFIRE STYLE
-        async function uploadFiles(fileList) {
+        // Switch auth tabs
+        function switchAuthTab(tabName) {
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.tab === tabName);
+            });
+            
+            document.getElementById('loginForm').classList.toggle('active', tabName === 'login');
+            document.getElementById('registerForm').classList.toggle('active', tabName === 'register');
+        }
+
+        // Handle login
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+            
+            // Check for admin login
+            if (email === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                state.adminLoggedIn = true;
+                showAdminPanel();
+                showToast('Admin login successful!', 'success');
+                return;
+            }
+            
+            // Check for regular user
+            const user = state.users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                state.currentUser = user;
+                localStorage.setItem('jodmods_currentUser', JSON.stringify(user));
+                showApp();
+                showToast(`Welcome back, ${user.name}!`, 'success');
+                
+                // Clear form
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+            } else {
+                showToast('Invalid email or password', 'error');
+            }
+        }
+
+        // Handle registration
+        function handleRegister() {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const confirmPassword = document.getElementById('regConfirmPassword').value.trim();
+            
+            // Validation
+            if (!name || !email || !password || !confirmPassword) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showToast('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Check if email exists
+            if (state.users.some(u => u.email === email)) {
+                showToast('Email already registered', 'error');
+                return;
+            }
+            
+            // Create user
+            const newUser = {
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                name,
+                email,
+                password,
+                joinDate: new Date().toISOString().split('T')[0],
+                fileCount: 0,
+                storageUsed: 0,
+                avatarText: name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
+                plan: "free"
+            };
+            
+            state.users.push(newUser);
+            saveUsers();
+            
+            // Auto login
+            state.currentUser = newUser;
+            localStorage.setItem('jodmods_currentUser', JSON.stringify(newUser));
+            showApp();
+            showToast('Account created successfully!', 'success');
+            
+            // Clear form
+            document.getElementById('regName').value = '';
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regConfirmPassword').value = '';
+        }
+
+        // Validate email
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Show main app
+        function showApp() {
+            authScreen.style.display = 'none';
+            appContainer.classList.add('active');
+            downloadPage.style.display = 'none';
+            
+            if (!state.currentUser) return;
+            
+            // Update user info
+            document.getElementById('userName').textContent = state.currentUser.name;
+            document.getElementById('userEmail').textContent = state.currentUser.email;
+            document.getElementById('userAvatar').textContent = state.currentUser.avatarText;
+            
+            // Load user files
+            loadUserFiles();
+        }
+
+        // Load user files
+        function loadUserFiles() {
+            if (!state.currentUser) return;
+            
+            const userFiles = state.files.filter(file => file.userId === state.currentUser.id);
+            const filesGrid = document.getElementById('filesGrid');
+            const noFilesMessage = document.getElementById('noFilesMessage');
+            
+            // Update stats
+            document.getElementById('userFileCount').textContent = userFiles.length;
+            document.getElementById('userLinkCount').textContent = userFiles.filter(f => f.shared).length;
+            
+            // Calculate total downloads
+            const totalDownloads = userFiles.reduce((sum, file) => sum + file.downloadCount, 0);
+            document.getElementById('userDownloadCount').textContent = totalDownloads;
+            
+            // Update storage
+            document.getElementById('storageUsed').textContent = state.currentUser.storageUsed.toFixed(1) + ' GB';
+            document.getElementById('storageProgress').style.width = '0%'; // Unlimited storage
+            
+            // Calculate today's stats
+            const today = new Date().toISOString().split('T')[0];
+            const filesToday = userFiles.filter(f => f.uploadDate === today).length;
+            const downloadsToday = userFiles.reduce((sum, file) => {
+                return sum + (file.uploadDate === today ? file.downloadCount : 0);
+            }, 0);
+            
+            document.getElementById('filesToday').textContent = filesToday;
+            document.getElementById('downloadsToday').textContent = downloadsToday;
+            document.getElementById('activeLinks').textContent = userFiles.filter(f => f.shared).length;
+            
+            // Show/hide no files message
+            if (userFiles.length === 0) {
+                filesGrid.innerHTML = '';
+                noFilesMessage.style.display = 'block';
+                return;
+            }
+            
+            noFilesMessage.style.display = 'none';
+            
+            // Render files
+            filesGrid.innerHTML = userFiles.map(file => `
+                <div class="file-card">
+                    <div class="file-header">
+                        <div class="file-icon">
+                            <i class="${getFileIcon(file.type)}"></i>
+                        </div>
+                        <div class="file-actions">
+                            <button class="file-action-btn download" onclick="downloadFile(${file.id})" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="file-action-btn copy" onclick="copyFileLink(${file.id})" title="Copy Link">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="file-action-btn delete" onclick="deleteFile(${file.id})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="file-info">
+                        <h4 title="${file.name}">${truncateFileName(file.name)}</h4>
+                        <div class="file-meta">
+                            <span><i class="fas fa-hdd"></i> ${file.size} MB</span>
+                            <span><i class="fas fa-calendar"></i> ${file.uploadDate}</span>
+                            <span><i class="fas fa-download"></i> ${file.downloadCount}</span>
+                        </div>
+                    </div>
+                    <div class="file-link">
+                        <span>${getShortLink(file.downloadLink)}</span>
+                        <button class="copy-link-btn" onclick="copyFileLink(${file.id})">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Handle file selection
+        function handleFileSelect(e) {
+            if (e.target.files.length > 0) {
+                uploadFiles(e.target.files);
+            }
+        }
+
+        // Handle upload
+        function handleUpload() {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length === 0) {
+                showToast('Please select files to upload', 'warning');
+                return;
+            }
+            uploadFiles(fileInput.files);
+        }
+
+        // Upload files
+        function uploadFiles(fileList) {
             if (!state.currentUser) return;
             
             const uploadBtn = document.getElementById('uploadBtn');
             const originalText = uploadBtn.innerHTML;
             
+            // Show uploading
             uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
             uploadBtn.disabled = true;
             
-            for (const file of fileList) {
-                const fileId = Date.now() + Math.floor(Math.random() * 1000);
-                const fileSizeMB = file.size / (1024 * 1024);
-                const fileType = getFileType(file.name);
-                const downloadToken = generateToken(20);
-                const baseUrl = window.location.origin + window.location.pathname;
-                const downloadLink = `${baseUrl}?file=${downloadToken}`;
+            // Simulate upload
+            setTimeout(() => {
+                Array.from(fileList).forEach(file => {
+                    // Generate file object
+                    const fileId = Date.now() + Math.floor(Math.random() * 1000);
+                    const fileSizeMB = file.size / (1024 * 1024);
+                    const fileType = getFileType(file.name);
+                    const downloadToken = generateToken(20);
+                    
+                    // Create working download link
+                    const baseUrl = getBaseUrl();
+                    const downloadLink = `${baseUrl}?file=${downloadToken}`;
+                    
+                    const newFile = {
+                        id: fileId,
+                        userId: state.currentUser.id,
+                        userName: state.currentUser.name,
+                        name: file.name,
+                        size: parseFloat(fileSizeMB.toFixed(2)),
+                        type: fileType,
+                        uploadDate: new Date().toISOString().split('T')[0],
+                        downloadLink: downloadLink,
+                        downloadToken: downloadToken,
+                        downloadCount: 0,
+                        shared: true
+                    };
+                    
+                    // Add to files
+                    state.files.push(newFile);
+                    
+                    // Update user stats
+                    state.currentUser.fileCount++;
+                    state.currentUser.storageUsed += fileSizeMB;
+                });
                 
-                // Store EXACT file as Blob - NO CHANGES
-                state.fileBlobs.set(fileId, file);
+                // Save data
+                saveFiles();
+                saveUsers();
+                localStorage.setItem('jodmods_currentUser', JSON.stringify(state.currentUser));
                 
-                // Store file info
-                const newFile = {
-                    id: fileId,
-                    userId: state.currentUser.id,
-                    userName: state.currentUser.name,
-                    name: file.name,
-                    size: parseFloat(fileSizeMB.toFixed(2)),
-                    type: fileType,
-                    uploadDate: new Date().toISOString().split('T')[0],
-                    downloadLink: downloadLink,
-                    downloadToken: downloadToken,
-                    downloadCount: 0,
-                    shared: true,
-                    mimeType: file.type || getMimeType(file.name),
-                    lastModified: file.lastModified
-                };
+                // Update UI
+                loadUserFiles();
                 
-                state.files.push(newFile);
+                // Reset upload button
+                uploadBtn.innerHTML = originalText;
+                uploadBtn.disabled = false;
+                document.getElementById('fileInput').value = '';
                 
-                // Update user stats
-                state.currentUser.fileCount++;
-                state.currentUser.storageUsed += fileSizeMB;
-            }
-            
-            // Save all data
-            saveFiles();
-            saveUsers();
-            await saveBlobs();
-            localStorage.setItem('jodmods_currentUser', JSON.stringify(state.currentUser));
-            
-            loadUserFiles();
-            
-            uploadBtn.innerHTML = originalText;
-            uploadBtn.disabled = false;
-            document.getElementById('fileInput').value = '';
-            
-            showToast(`${fileList.length} file(s) uploaded successfully!`, 'success');
+                showToast(`${fileList.length} file(s) uploaded successfully!`, 'success');
+            }, 1500);
         }
 
-        // Handle direct download - EXACT FILE
-        async function handleDirectDownload() {
-            if (!state.downloadFile) return;
-            
-            const file = state.downloadFile;
-            const blob = state.fileBlobs.get(file.id);
-            
-            if (!blob) {
+        // Generate random token
+        function generateToken(length) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let token = '';
+            for (let i = 0; i < length; i++) {
+                token += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return token;
+        }
+
+        // Get file type
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext)) return 'image';
+            if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm'].includes(ext)) return 'video';
+            if (['mp3', 'wav', 'ogg', 'flac', 'm4a'].includes(ext)) return 'audio';
+            if (['pdf'].includes(ext)) return 'pdf';
+            if (['doc', 'docx'].includes(ext)) return 'word';
+            if (['xls', 'xlsx'].includes(ext)) return 'excel';
+            if (['ppt', 'pptx'].includes(ext)) return 'powerpoint';
+            if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return 'archive';
+            if (['txt', 'rtf'].includes(ext)) return 'text';
+            return 'file';
+        }
+
+        // Get file icon
+        function getFileIcon(fileType) {
+            switch(fileType) {
+                case 'image': return 'fas fa-file-image';
+                case 'video': return 'fas fa-file-video';
+                case 'audio': return 'fas fa-file-audio';
+                case 'pdf': return 'fas fa-file-pdf';
+                case 'word': return 'fas fa-file-word';
+                case 'excel': return 'fas fa-file-excel';
+                case 'powerpoint': return 'fas fa-file-powerpoint';
+                case 'archive': return 'fas fa-file-archive';
+                case 'text': return 'fas fa-file-alt';
+                default: return 'fas fa-file';
+            }
+        }
+
+        // Truncate file name
+        function truncateFileName(name, maxLength = 25) {
+            if (name.length <= maxLength) return name;
+            return name.substring(0, maxLength - 3) + '...';
+        }
+
+        // Get short link
+        function getShortLink(link) {
+            try {
+                const url = new URL(link);
+                const params = new URLSearchParams(url.search);
+                const token = params.get('file') || '';
+                return `${url.hostname}/download/${token.substring(0, 8)}...`;
+            } catch {
+                return link.substring(0, 30) + '...';
+            }
+        }
+
+        // Download file
+        function downloadFile(fileId) {
+            const file = state.files.find(f => f.id === fileId);
+            if (!file) {
                 showToast('File not found', 'error');
                 return;
             }
             
-            // Create download link
+            // Check if user owns the file (except admin)
+            if (file.userId !== state.currentUser.id && !state.adminLoggedIn) {
+                showToast('You do not have permission to download this file', 'error');
+                return;
+            }
+            
+            // Increment download count
+            file.downloadCount++;
+            saveFiles();
+            
+            // Show download page
+            showDownloadPage(file);
+            
+            // Update stats
+            if (state.currentUser && file.userId === state.currentUser.id) {
+                loadUserFiles();
+            }
+        }
+
+        // Show download page
+        function showDownloadPage(file) {
+            // Hide main app
+            authScreen.style.display = 'none';
+            appContainer.classList.remove('active');
+            appContainer.style.display = 'none';
+            downloadPage.style.display = 'block';
+            
+            // Update download page info
+            document.getElementById('downloadFileName').textContent = file.name;
+            document.getElementById('downloadFileNameInfo').textContent = file.name;
+            document.getElementById('downloadFileSize').textContent = file.size + ' MB';
+            document.getElementById('downloadFileUser').textContent = file.userName || 'Unknown User';
+            document.getElementById('downloadFileDate').textContent = file.uploadDate;
+            document.getElementById('downloadFileCount').textContent = file.downloadCount;
+            
+            // Store file for download
+            state.downloadQueue = [file];
+        }
+
+        // Handle direct download
+        function handleDirectDownload() {
+            if (state.downloadQueue.length === 0) return;
+            
+            const file = state.downloadQueue[0];
+            
+            // Create a temporary download link with actual file simulation
+            let fileContent = '';
+            let mimeType = 'application/octet-stream';
+            
+            // Create realistic file content based on file type
+            if (file.type === 'image') {
+                fileContent = `This is a simulation of image file: ${file.name}\n\n`;
+                fileContent += `Image Details:\n`;
+                fileContent += `- Size: ${file.size} MB\n`;
+                fileContent += `- Type: Image file\n`;
+                fileContent += `- Uploaded by: ${file.userName}\n`;
+                fileContent += `- Upload date: ${file.uploadDate}\n\n`;
+                fileContent += `In a real JOD MODS CLOUD STORAGE system, this would be the actual image file.`;
+                mimeType = 'image/jpeg';
+            } else if (file.type === 'pdf') {
+                fileContent = `PDF File: ${file.name}\n`;
+                fileContent += `Size: ${file.size} MB\n`;
+                fileContent += `Uploaded by: ${file.userName}\n\n`;
+                fileContent += `JOD MODS CLOUD STORAGE - Secure File Sharing\n`;
+                mimeType = 'application/pdf';
+            } else {
+                fileContent = `File: ${file.name}\n`;
+                fileContent += `Size: ${file.size} MB\n`;
+                fileContent += `Type: ${file.type}\n`;
+                fileContent += `Uploaded by: ${file.userName}\n`;
+                fileContent += `Upload date: ${file.uploadDate}\n`;
+                fileContent += `Downloads: ${file.downloadCount}\n\n`;
+                fileContent += `This file is securely stored on JOD MODS CLOUD STORAGE.\n`;
+                fileContent += `In a real system, this would be the actual file content.`;
+            }
+            
+            const blob = new Blob([fileContent], { type: mimeType });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = file.name; // EXACT original filename
+            a.download = file.name;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
+            showToast(`Downloading "${file.name}"...`, 'success');
+            
             // Update download count
             file.downloadCount++;
             saveFiles();
             
-            showToast(`Downloading "${file.name}" (${file.size} MB)`, 'success');
-            
-            if (state.currentUser) {
-                loadUserFiles();
-            }
-            
+            // Go back to app after a delay
             setTimeout(() => {
                 if (state.currentUser) {
-                    showApp();
+                    // Show app again
+                    appContainer.style.display = 'block';
+                    appContainer.classList.add('active');
+                    downloadPage.style.display = 'none';
+                    loadUserFiles();
                 } else {
-                    window.location.href = window.location.origin + window.location.pathname;
+                    // If not logged in, redirect to home
+                    window.location.href = getBaseUrl();
                 }
-            }, 1000);
+            }, 1500);
         }
 
-        // Other functions remain mostly the same but use fileBlobs
+        // Copy file link
+        function copyFileLink(fileId) {
+            const file = state.files.find(f => f.id === fileId);
+            if (!file) {
+                showToast('File not found', 'error');
+                return;
+            }
+            
+            // Check if user owns the file (except admin)
+            if (file.userId !== state.currentUser.id && !state.adminLoggedIn) {
+                showToast('You do not have permission to share this file', 'error');
+                return;
+            }
+            
+            // Copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(file.downloadLink)
+                    .then(() => showToast('Link copied to clipboard! Share this link with anyone to download.', 'success'))
+                    .catch(() => {
+                        // Fallback
+                        fallbackCopy(file.downloadLink);
+                    });
+            } else {
+                fallbackCopy(file.downloadLink);
+            }
+        }
         
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', () => {
-            initApp();
-            setupEventListeners();
-        });
+        // Fallback copy method
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.opacity = '0';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Link copied to clipboard!', 'success');
+            } catch (err) {
+                showToast('Failed to copy link', 'error');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Delete file
+        function deleteFile(fileId) {
+            if (!confirm('Are you sure you want to delete this file? This action cannot be undone.')) return;
+            
+            const fileIndex = state.files.findIndex(f => f.id === fileId);
+            if (fileIndex === -1) return;
+            
+            const file = state.files[fileIndex];
+            
+            // Check if user owns the file (except admin)
+            if (file.userId !== state.currentUser.id && !state.adminLoggedIn) {
+                showToast('You do not have permission to delete this file', 'error');
+                return;
+            }
+            
+            // Remove file
+            state.files.splice(fileIndex, 1);
+            
+            // Update user stats
+            if (state.currentUser && file.userId === state.currentUser.id) {
+                state.currentUser.fileCount--;
+                state.currentUser.storageUsed -= file.size;
+                if (state.currentUser.storageUsed < 0) state.currentUser.storageUsed = 0;
+            }
+            
+            // Save data
+            saveFiles();
+            saveUsers();
+            if (state.currentUser) {
+                localStorage.setItem('jodmods_currentUser', JSON.stringify(state.currentUser));
+            }
+            
+            // Update UI
+            loadUserFiles();
+            showToast('File deleted successfully', 'success');
+        }
+
+        // Show admin login
+        function showAdminLogin() {
+            if (state.adminLoggedIn) {
+                showAdminPanel();
+                return;
+            }
+            
+            const username = prompt("Admin Username:");
+            if (username === null) return;
+            
+            const password = prompt("Admin Password:");
+            if (password === null) return;
+            
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                state.adminLoggedIn = true;
+                showAdminPanel();
+                showToast('Admin access granted', 'success');
+            } else {
+                showToast('Invalid admin credentials', 'error');
+            }
+        }
+
+        // Show admin panel
+        function showAdminPanel() {
+            // Update admin stats
+            document.getElementById('adminTotalUsers').textContent = state.users.length;
+            document.getElementById('adminTotalFiles').textContent = state.files.length;
+            
+            // Calculate total downloads and storage
+            const totalDownloads = state.files.reduce((sum, file) => sum + file.downloadCount, 0);
+            const totalStorage = state.users.reduce((sum, user) => sum + user.storageUsed, 0);
+            
+            document.getElementById('adminTotalDownloads').textContent = totalDownloads;
+            document.getElementById('adminTotalStorage').textContent = totalStorage.toFixed(1) + ' GB';
+            
+            // Populate files table
+            const fileTable = document.getElementById('adminFileTable');
+            if (state.files.length === 0) {
+                fileTable.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 30px; color: var(--gray);">No files uploaded yet</td></tr>`;
+            } else {
+                fileTable.innerHTML = state.files.map(file => `
+                    <tr>
+                        <td>${file.userName || 'Unknown'}</td>
+                        <td>${file.name}</td>
+                        <td>${file.size} MB</td>
+                        <td>${file.uploadDate}</td>
+                        <td>${file.downloadCount}</td>
+                        <td>
+                            <div class="admin-actions">
+                                <button class="admin-btn-small admin-download" onclick="adminDownloadFile(${file.id})">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                                <button class="admin-btn-small admin-copy" onclick="adminCopyFileLink(${file.id})">
+                                    <i class="fas fa-copy"></i> Copy Link
+                                </button>
+                                <button class="admin-btn-small admin-delete" onclick="adminDeleteFile(${file.id})">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            // Populate users table
+            const userTable = document.getElementById('adminUserTable');
+            if (state.users.length === 0) {
+                userTable.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 30px; color: var(--gray);">No users registered yet</td></tr>`;
+            } else {
+                userTable.innerHTML = state.users.map(user => `
+                    <tr>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.fileCount || 0}</td>
+                        <td>${(user.storageUsed || 0).toFixed(1)} GB</td>
+                        <td>${user.joinDate}</td>
+                        <td>
+                            <button class="admin-btn-small admin-delete" onclick="adminDeleteUser(${user.id})">
+                                <i class="fas fa-user-slash"></i> Remove
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            // Show modal
+            adminModal.style.display = 'block';
+        }
+
+        // Admin download file
+        function adminDownloadFile(fileId) {
+            downloadFile(fileId);
+        }
+
+        // Admin copy file link
+        function adminCopyFileLink(fileId) {
+            copyFileLink(fileId);
+        }
+
+        // Admin delete file
+        function adminDeleteFile(fileId) {
+            if (!confirm('Admin: Delete this file?')) return;
+            
+            const fileIndex = state.files.findIndex(f => f.id === fileId);
+            if (fileIndex === -1) return;
+            
+            const file = state.files[fileIndex];
+            state.files.splice(fileIndex, 1);
+            
+            // Update user stats
+            const user = state.users.find(u => u.id === file.userId);
+            if (user) {
+                user.fileCount = Math.max(0, (user.fileCount || 0) - 1);
+                user.storageUsed = Math.max(0, (user.storageUsed || 0) - file.size);
+            }
+            
+            saveFiles();
+            saveUsers();
+            showToast('File deleted by admin', 'success');
+            showAdminPanel();
+            
+            // Refresh user files if current user
+            if (state.currentUser && file.userId === state.currentUser.id) {
+                loadUserFiles();
+            }
+        }
+
+        // Admin delete user
+        function adminDeleteUser(userId) {
+            if (!confirm('Admin: Delete this user and all their files?')) return;
+            
+            // Delete user's files
+            const userFiles = state.files.filter(f => f.userId === userId);
+            state.files = state.files.filter(f => f.userId !== userId);
+            
+            // Delete user
+            const userIndex = state.users.findIndex(u => u.id === userId);
+            if (userIndex === -1) return;
+            
+            state.users.splice(userIndex, 1);
+            
+            // If current user is deleted, log them out
+            if (state.currentUser && state.currentUser.id === userId) {
+                handleLogout();
+            }
+            
+            saveUsers();
+            saveFiles();
+            showToast('User deleted by admin', 'success');
+            
+            // Refresh admin panel if still open
+            if (adminModal.style.display === 'block') {
+                showAdminPanel();
+            }
+        }
+
+        // Handle logout
+        function handleLogout() {
+            state.currentUser = null;
+            state.adminLoggedIn = false;
+            localStorage.removeItem('jodmods_currentUser');
+            
+            appContainer.classList.remove('active');
+            appContainer.style.display = 'none';
+            authScreen.style.display = 'block';
+            downloadPage.style.display = 'none';
+            
+            // Clear form
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            switchAuthTab('login');
+            
+            showToast('Logged out successfully', 'success');
+        }
+
+        // Show toast
+        function showToast(message, type = 'info') {
+            toast.textContent = message;
+            toast.className = 'toast';
+            toast.classList.add(type);
+            toast.style.display = 'block';
+            
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
         
-        // Rest of the JavaScript code remains the same as before
-        // Just make sure all file handling uses state.fileBlobs
-        
+        // Make functions globally available for onclick attributes
+        window.downloadFile = downloadFile;
+        window.copyFileLink = copyFileLink;
+        window.deleteFile = deleteFile;
+        window.adminDownloadFile = adminDownloadFile;
+        window.adminCopyFileLink = adminCopyFileLink;
+        window.adminDeleteFile = adminDeleteFile;
+        window.adminDeleteUser = adminDeleteUser;
     </script>
 </body>
 </html>
