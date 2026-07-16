@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOD MODS CLOUD - Public File Storage</title>
+    <title>JOD MODS CLOUD - MediaFire Style</title>
     <!-- Copy Protect -->
     <script>
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
@@ -275,7 +275,6 @@
             animation: fadeIn 0.3s ease;
         }
         .progress-container.active { display: block; }
-        
         .progress-header {
             display: flex;
             justify-content: space-between;
@@ -284,7 +283,6 @@
         }
         .progress-header .title { font-weight: 600; font-size: 0.9rem; color: var(--dark); }
         .progress-header .percentage { font-weight: 800; font-size: 1.3rem; color: var(--primary); }
-        
         .progress-bar-wrapper {
             background: var(--gray-light);
             border-radius: 12px;
@@ -317,7 +315,6 @@
             animation: shimmer 1.5s infinite;
         }
         @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-        
         .progress-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -338,7 +335,6 @@
         .progress-detail-item i { color: var(--primary); font-size: 0.9rem; width: 16px; }
         .progress-detail-item .value { font-weight: 600; color: var(--dark); }
         .progress-detail-item .label { color: var(--gray); }
-        
         .progress-speed-time {
             display: flex;
             justify-content: space-between;
@@ -471,7 +467,7 @@
         .guest-banner .login-link { background: var(--white); color: var(--primary); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: var(--shadow); }
         
-        /* ===== DOWNLOAD PAGE ===== */
+        /* ===== DOWNLOAD PAGE - MEDIAFIRE STYLE ===== */
         .download-page {
             display: none;
             min-height: 100vh;
@@ -479,7 +475,6 @@
             background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
         }
         .download-page.active { display: flex; justify-content: center; align-items: center; }
-        
         .download-card {
             background: var(--white);
             border-radius: var(--radius);
@@ -491,7 +486,6 @@
             animation: slideUp 0.4s ease;
             border: 1px solid var(--primary-light);
         }
-        
         .download-icon {
             width: 90px;
             height: 90px;
@@ -507,10 +501,8 @@
             animation: pulse 2s infinite;
         }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        
         .download-card h2 { font-size: 1.6rem; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
         .download-card .subtitle { color: var(--gray); margin-bottom: 24px; font-size: 0.95rem; }
-        
         .download-info {
             background: var(--light);
             border-radius: var(--radius-sm);
@@ -527,7 +519,6 @@
         .download-info-item:last-child { border-bottom: none; }
         .download-info-item span { color: var(--gray); font-size: 0.9rem; }
         .download-info-item strong { color: var(--dark); font-size: 0.9rem; }
-        
         .download-btn {
             background: var(--primary-gradient);
             color: white;
@@ -546,7 +537,6 @@
         }
         .download-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4); }
         .download-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        
         .download-speed { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; font-size: 0.8rem; color: var(--gray); }
         .download-speed i { color: var(--success); }
         .download-speed .highlight { color: var(--primary); font-weight: 600; }
@@ -782,7 +772,7 @@
                 <div class="upload-area" id="uploadArea">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <h3>📁 Click to Upload Files</h3>
-                    <p>Public links • Anyone can download</p>
+                    <p>Unlimited • Any file type • Personal & Secure</p>
                 </div>
                 
                 <!-- Progress -->
@@ -926,7 +916,7 @@
 
     <script>
         // ============================================================
-        // PUBLIC FILE STORAGE - Using File.io API
+        // MEDIAFIRE STYLE - Personal Storage + Public Links
         // ============================================================
         
         // === COPY PROTECT ===
@@ -953,39 +943,16 @@
             updateGuestBanner();
         }
         
-        // === FILE.IO API - PUBLIC STORAGE ===
-        async function uploadToFileIO(file) {
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            try {
-                const response = await fetch('https://file.io', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Upload failed');
-                }
-                
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('File.io upload error:', error);
-                throw error;
-            }
-        }
-        
-        // === LOAD FILES FROM LOCALSTORAGE ===
+        // === STORAGE - MediaFire Style ===
         function loadFilesFromStorage() {
             try {
-                const saved = localStorage.getItem('jodmods_public_files');
+                const saved = localStorage.getItem('jodmods_mediafire_files');
                 return saved ? JSON.parse(saved) : [];
             } catch { return []; }
         }
         
         function saveFilesToStorage(fileList) {
-            localStorage.setItem('jodmods_public_files', JSON.stringify(fileList));
+            localStorage.setItem('jodmods_mediafire_files', JSON.stringify(fileList));
         }
         
         // === UPLOAD ===
@@ -1021,11 +988,21 @@
             for (let file of fileList) {
                 try {
                     // Upload to File.io for public link
-                    const result = await uploadToFileIO(file);
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    const response = await fetch('https://file.io', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
                     
                     if (result.success) {
+                        // MediaFire style: Name + File ID
+                        const fileId = result.key || Date.now() + '_' + Math.random().toString(36).substr(2, 8);
                         const fileData = {
-                            id: result.key || Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                            id: fileId,
                             name: file.name,
                             size: file.size,
                             sizeFormatted: formatSize(file.size),
@@ -1035,7 +1012,8 @@
                             userName: currentUser.name,
                             downloadCount: 0,
                             publicUrl: result.link,
-                            shareLink: result.link,
+                            // MediaFire style link format
+                            shareLink: `${window.location.origin}${window.location.pathname}?file=${fileId}`,
                             fileKey: result.key
                         };
                         
@@ -1148,8 +1126,8 @@
                         <span><i class="fas fa-download"></i> ${file.downloadCount}</span>
                     </div>
                     <div class="file-link-box">
-                        <input type="text" value="${file.publicUrl}" readonly id="linkInput_${file.id}">
-                        <button class="copy-btn" onclick="copyLink('${file.publicUrl}')">
+                        <input type="text" value="${window.location.origin}${window.location.pathname}?file=${file.id}" readonly id="linkInput_${file.id}">
+                        <button class="copy-btn" onclick="copyLink('${window.location.origin}${window.location.pathname}?file=${file.id}')">
                             <i class="fas fa-copy"></i> Copy
                         </button>
                     </div>
@@ -1187,7 +1165,7 @@
             document.getElementById('storageFill').style.width = pct + '%';
         }
         
-        // === DOWNLOAD ===
+        // === DOWNLOAD - MediaFire Style ===
         function downloadFile(id) {
             const file = files.find(f => f.id === id);
             if (!file) {
@@ -1196,7 +1174,13 @@
             }
             
             // Open public URL in new tab
-            window.open(file.publicUrl, '_blank');
+            if (file.publicUrl) {
+                window.open(file.publicUrl, '_blank');
+            } else {
+                // Fallback: Direct download from stored data
+                showToast('Download link not available', 'error');
+                return;
+            }
             
             // Increment download count
             file.downloadCount++;
@@ -1206,12 +1190,12 @@
             showToast(`Downloading ${file.name}...`, 'success');
         }
         
-        // === SHARE ===
+        // === SHARE - MediaFire Style ===
         function shareFile(id) {
             const file = files.find(f => f.id === id);
             if (!file) return;
             
-            const shareLink = file.publicUrl;
+            const shareLink = `${window.location.origin}${window.location.pathname}?file=${file.id}`;
             
             if (navigator.share) {
                 navigator.share({
@@ -1401,6 +1385,73 @@
             toast._timer = setTimeout(() => toast.style.display = 'none', 3000);
         }
         
+        // === CHECK SHARE LINK ===
+        function checkShareLink() {
+            const params = new URLSearchParams(window.location.search);
+            const fileId = params.get('file');
+            
+            if (fileId) {
+                const allFiles = loadFilesFromStorage();
+                const file = allFiles.find(f => f.id === fileId);
+                
+                if (file) {
+                    // Show download page
+                    document.getElementById('mainApp').style.display = 'none';
+                    document.getElementById('downloadPage').classList.add('active');
+                    
+                    document.getElementById('downloadFileName').textContent = file.name;
+                    document.getElementById('dFileName').textContent = file.name;
+                    document.getElementById('dFileSize').textContent = file.sizeFormatted;
+                    document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
+                    document.getElementById('dFileDate').textContent = file.uploadDate;
+                    document.getElementById('dFileDownloads').textContent = file.downloadCount;
+                    
+                    downloadFileId = fileId;
+                    
+                    // Store file for download
+                    window._downloadFile = file;
+                    
+                    // Clean URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } else {
+                    // File not found
+                    document.getElementById('mainApp').style.display = 'none';
+                    document.getElementById('downloadPage').classList.add('active');
+                    
+                    document.getElementById('downloadFileName').textContent = 'File Not Found';
+                    document.getElementById('dFileName').textContent = 'File Not Found';
+                    document.getElementById('dFileSize').textContent = '-';
+                    document.getElementById('dFileUser').textContent = '-';
+                    document.getElementById('dFileDate').textContent = '-';
+                    document.getElementById('dFileDownloads').textContent = '0';
+                    
+                    document.getElementById('downloadBtn').disabled = true;
+                    document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-times-circle"></i> File Not Available';
+                    
+                    showToast('⚠️ File not found or has been deleted', 'error');
+                }
+            }
+        }
+        
+        // === DOWNLOAD BUTTON ===
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            if (window._downloadFile && window._downloadFile.publicUrl) {
+                // Increment download count
+                window._downloadFile.downloadCount++;
+                const allFiles = loadFilesFromStorage();
+                const fileIndex = allFiles.findIndex(f => f.id === window._downloadFile.id);
+                if (fileIndex !== -1) {
+                    allFiles[fileIndex].downloadCount = window._downloadFile.downloadCount;
+                    saveFilesToStorage(allFiles);
+                }
+                
+                window.open(window._downloadFile.publicUrl, '_blank');
+                showToast(`Downloading ${window._downloadFile.name}...`, 'success');
+            } else {
+                showToast('Download link not available', 'error');
+            }
+        });
+        
         // === INIT ===
         document.addEventListener('DOMContentLoaded', () => {
             const savedUser = getCurrentUser();
@@ -1415,6 +1466,9 @@
                 displayFiles();
                 updateStats();
             }
+            
+            // Check for share link
+            checkShareLink();
             
             // === ELEMENTS ===
             const fileInput = document.getElementById('fileInput');
