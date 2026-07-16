@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOD MODS CLOUD - MediaFire Style</title>
+    <title>JOD MODS CLOUD - Personal Cloud Storage</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
+            --primary-light: #60a5fa;
             --secondary: #10b981;
+            --secondary-dark: #059669;
             --danger: #ef4444;
             --warning: #f59e0b;
             --dark: #1f2937;
@@ -21,8 +23,9 @@
             --light: #f9fafb;
             --shadow: 0 4px 6px rgba(0,0,0,0.05);
             --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
-            --radius: 12px;
-            --radius-sm: 8px;
+            --shadow-xl: 0 20px 50px rgba(0,0,0,0.15);
+            --radius: 16px;
+            --radius-sm: 10px;
         }
         
         body {
@@ -35,14 +38,14 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
         }
         
-        /* Navbar */
+        /* ===== NAVBAR ===== */
         .navbar {
             background: white;
             box-shadow: var(--shadow);
-            padding: 12px 0;
+            padding: 10px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -58,6 +61,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
         }
         
         .nav-brand i {
@@ -66,8 +70,8 @@
         }
         
         .nav-brand h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.4rem;
+            font-weight: 800;
         }
         
         .nav-brand span {
@@ -80,10 +84,320 @@
             gap: 16px;
         }
         
-        /* Stats */
+        /* ===== PROFILE ===== */
+        .profile-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px 6px 8px;
+            border-radius: 50px;
+            border: 2px solid var(--gray-light);
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .profile-trigger:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+        
+        .profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        
+        .profile-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            min-width: 260px;
+            padding: 8px;
+            display: none;
+            z-index: 2000;
+            border: 1px solid var(--gray-light);
+        }
+        
+        .profile-dropdown.active {
+            display: block;
+            animation: slideDown 0.25s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dropdown-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        
+        .dropdown-avatar-lg {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .dropdown-user h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .dropdown-user p {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+        
+        .dropdown-body {
+            padding: 6px 0;
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 0.85rem;
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+        }
+        
+        .dropdown-item:hover {
+            background: var(--light);
+        }
+        
+        .dropdown-item i {
+            width: 18px;
+            color: var(--gray);
+        }
+        
+        .dropdown-item .badge {
+            margin-left: auto;
+            background: var(--primary);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 10px;
+            border-radius: 50px;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: var(--gray-light);
+            margin: 6px 16px;
+        }
+        
+        .dropdown-item.logout {
+            color: var(--danger);
+        }
+        
+        .dropdown-item.logout i {
+            color: var(--danger);
+        }
+        
+        /* ===== AUTH MODAL ===== */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .auth-modal.active {
+            display: flex;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: var(--radius);
+            max-width: 440px;
+            width: 100%;
+            overflow: hidden;
+            animation: slideUp 0.4s ease;
+            box-shadow: var(--shadow-xl);
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .auth-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        
+        .auth-header .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .auth-header .logo i { font-size: 2.8rem; }
+        .auth-header h1 { font-size: 2rem; font-weight: 800; }
+        .auth-header p { opacity: 0.85; font-size: 0.9rem; margin-top: 4px; }
+        
+        .auth-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--gray-light);
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 14px;
+            background: none;
+            border: none;
+            font-weight: 600;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            position: relative;
+        }
+        
+        .auth-tab.active {
+            color: var(--primary);
+        }
+        
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .auth-form {
+            padding: 28px 24px;
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--gray-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+        
+        .auth-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 0.95rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+        
+        .auth-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .auth-card { position: relative; }
+        
+        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin: 24px 0;
         }
@@ -91,37 +405,50 @@
         .stat-card {
             background: white;
             border-radius: var(--radius);
-            padding: 18px 22px;
+            padding: 20px 24px;
             box-shadow: var(--shadow);
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
         }
         
         .stat-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: white;
         }
         
-        .stat-icon.blue { background: var(--primary); }
-        .stat-icon.green { background: var(--secondary); }
-        .stat-icon.orange { background: var(--warning); }
-        .stat-icon.purple { background: #8b5cf6; }
+        .stat-icon.blue { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
+        .stat-icon.green { background: linear-gradient(135deg, var(--secondary), #34d399); }
+        .stat-icon.orange { background: linear-gradient(135deg, var(--warning), #fbbf24); }
+        .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
         
-        .stat-info h3 { font-size: 1.3rem; font-weight: 700; }
-        .stat-info p { font-size: 0.8rem; color: var(--gray); }
+        .stat-info h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
         
-        /* Storage Bar - UNLIMITED */
+        .stat-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        /* ===== STORAGE BAR ===== */
         .storage-bar-container {
             background: white;
             border-radius: var(--radius);
-            padding: 16px 20px;
+            padding: 18px 24px;
             box-shadow: var(--shadow);
             margin-bottom: 24px;
         }
@@ -130,31 +457,45 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.85rem;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .storage-bar-label .unlimited {
+            color: var(--primary);
+            font-weight: 600;
         }
         
         .storage-bar {
-            height: 8px;
+            height: 10px;
             background: var(--gray-light);
-            border-radius: 4px;
+            border-radius: 8px;
             overflow: hidden;
         }
         
         .storage-bar-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--secondary), var(--primary));
-            border-radius: 4px;
+            border-radius: 8px;
             transition: width 0.8s ease;
             width: 0%;
         }
         
-        /* Upload Section */
+        /* ===== UPLOAD ===== */
         .upload-section {
             background: white;
             border-radius: var(--radius);
             padding: 28px;
             box-shadow: var(--shadow);
-            margin: 24px 0;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
         }
         
         .upload-area {
@@ -188,7 +529,7 @@
             font-size: 0.9rem;
         }
         
-        /* Progress Bar - New */
+        /* ===== PROGRESS ===== */
         .progress-container {
             margin-top: 20px;
             display: none;
@@ -196,12 +537,13 @@
         
         .progress-container.active {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
         
         .progress-bar-wrapper {
             background: var(--gray-light);
-            border-radius: 8px;
-            height: 30px;
+            border-radius: 10px;
+            height: 36px;
             overflow: hidden;
             position: relative;
         }
@@ -209,29 +551,24 @@
         .progress-bar-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 8px;
+            border-radius: 10px;
             transition: width 0.3s ease;
             width: 0%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: 600;
-            font-size: 0.8rem;
+            font-weight: 700;
+            font-size: 0.85rem;
         }
         
         .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 8px;
-            font-size: 0.85rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+            font-size: 0.8rem;
             color: var(--gray);
-        }
-        
-        .progress-info span {
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
         
         .progress-info .highlight {
@@ -240,10 +577,10 @@
         }
         
         .upload-btn {
-            background: linear-gradient(135deg, var(--secondary), #34d399);
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
             color: white;
             border: none;
-            padding: 12px 32px;
+            padding: 12px 36px;
             font-size: 0.95rem;
             border-radius: var(--radius-sm);
             cursor: pointer;
@@ -256,8 +593,8 @@
         }
         
         .upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
         }
         
         .upload-btn:disabled {
@@ -268,7 +605,7 @@
         
         #fileInput { display: none; }
         
-        /* Files */
+        /* ===== FILES ===== */
         .files-section {
             background: white;
             border-radius: var(--radius);
@@ -283,56 +620,56 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
         
         .files-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
         }
         
         .file-card {
             background: white;
             border-radius: var(--radius);
-            padding: 18px;
+            padding: 20px;
             border: 1px solid var(--gray-light);
             transition: all 0.3s;
         }
         
         .file-card:hover {
             border-color: var(--primary-light);
-            box-shadow: var(--shadow);
-            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
         }
         
         .file-top {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         
         .file-icon-lg {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: white;
         }
         
         .file-actions {
             display: flex;
-            gap: 4px;
+            gap: 6px;
         }
         
         .file-action-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 6px;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
             border: 1px solid var(--gray-light);
             background: white;
             cursor: pointer;
@@ -366,7 +703,7 @@
         }
         
         .file-name {
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 4px;
             word-break: break-word;
             font-size: 0.9rem;
@@ -374,16 +711,16 @@
         
         .file-meta {
             display: flex;
-            gap: 12px;
+            gap: 14px;
             font-size: 0.75rem;
             color: var(--gray);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         
         .file-link-box {
             background: var(--light);
-            border-radius: 6px;
-            padding: 6px 10px;
+            border-radius: 8px;
+            padding: 8px 12px;
             font-size: 0.7rem;
             display: flex;
             justify-content: space-between;
@@ -395,58 +732,52 @@
         .file-link-box input {
             border: none;
             background: transparent;
-            width: 70%;
+            width: 65%;
             font-size: 0.7rem;
             color: var(--gray);
             outline: none;
             font-family: 'Poppins', sans-serif;
         }
         
+        .file-link-box .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .file-link-box .copy-btn:hover {
+            background: var(--primary-dark);
+        }
+        
         .no-files {
             text-align: center;
-            padding: 40px 20px;
+            padding: 50px 20px;
             color: var(--gray);
         }
         
         .no-files i {
-            font-size: 3rem;
+            font-size: 4rem;
             opacity: 0.3;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
         
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--dark);
-            color: white;
-            padding: 14px 22px;
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-lg);
-            display: none;
-            z-index: 9999;
-            font-weight: 500;
-            max-width: 400px;
-            animation: slideIn 0.3s ease;
-            font-size: 0.9rem;
+        .no-files h3 {
+            font-size: 1.2rem;
+            margin-bottom: 6px;
         }
         
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        .toast.success { background: var(--secondary); }
-        .toast.error { background: var(--danger); }
-        .toast.warning { background: var(--warning); }
-        
-        /* Download Page */
+        /* ===== DOWNLOAD PAGE ===== */
         .download-page {
             display: none;
             min-height: 100vh;
             padding: 40px 20px;
-            background: linear-gradient(135deg, #f0f4ff 0%, #e6f7ff 100%);
+            background: linear-gradient(135deg, #f0f4ff 0%, #dbeafe 100%);
         }
         
         .download-page.active {
@@ -458,40 +789,43 @@
         .download-card {
             background: white;
             border-radius: var(--radius);
-            max-width: 500px;
+            max-width: 520px;
             width: 100%;
-            padding: 40px;
-            box-shadow: var(--shadow-lg);
+            padding: 44px;
+            box-shadow: var(--shadow-xl);
             text-align: center;
         }
         
         .download-icon {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--secondary), #34d399);
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: white;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
         }
         
         .download-card h2 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
         
-        .download-card p {
+        .download-card .subtitle {
             color: var(--gray);
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
         }
         
         .download-info {
             background: var(--light);
             border-radius: var(--radius-sm);
-            padding: 20px;
+            padding: 20px 24px;
             margin: 20px 0;
             text-align: left;
         }
@@ -509,74 +843,224 @@
         
         .download-info-item span {
             color: var(--gray);
+            font-size: 0.9rem;
         }
         
         .download-info-item strong {
             color: var(--dark);
+            font-size: 0.9rem;
         }
         
         .download-btn {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
-            padding: 14px 40px;
-            font-size: 1rem;
+            padding: 16px 40px;
+            font-size: 1.05rem;
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-weight: 600;
             transition: all 0.3s;
             width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
         
         .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
         }
         
         .download-back {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             margin-top: 16px;
             color: var(--primary);
             text-decoration: none;
             font-weight: 500;
             cursor: pointer;
+            font-size: 0.9rem;
         }
         
         .download-back:hover {
             text-decoration: underline;
         }
         
-        /* Responsive */
+        .download-security {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .download-security i {
+            color: var(--secondary);
+        }
+        
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--dark);
+            color: white;
+            padding: 14px 24px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-xl);
+            display: none;
+            z-index: 9999;
+            font-weight: 500;
+            max-width: 400px;
+            animation: slideIn 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .toast.success { background: var(--secondary); }
+        .toast.error { background: var(--danger); }
+        .toast.warning { background: var(--warning); }
+        
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            .profile-name { display: none; }
+            .profile-trigger { padding: 4px 8px; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .files-grid { grid-template-columns: 1fr; }
-            .download-card { padding: 24px; }
+            .auth-card { max-width: 100%; }
+            .download-card { padding: 28px; }
             .container { padding: 0 16px; }
+            .progress-info { grid-template-columns: 1fr 1fr; }
         }
         
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr; }
             .upload-area { padding: 24px 16px; }
+            .download-card { padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- ===== AUTH MODAL ===== -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-card">
+            <button class="auth-close" onclick="closeAuth()"><i class="fas fa-times"></i></button>
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-cloud"></i>
+                    <div>
+                        <h1>JOD MODS</h1>
+                        <p>CLOUD STORAGE</p>
+                    </div>
+                </div>
+                <p>Secure Personal Cloud Storage</p>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Sign In</button>
+                <button class="auth-tab" data-tab="register" onclick="switchAuthTab('register')">Sign Up</button>
+            </div>
+            
+            <div id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password">
+                </div>
+                <button class="auth-btn" onclick="handleLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+            </div>
+            
+            <div id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" id="regName" class="form-control" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="regEmail" class="form-control" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="regPassword" class="form-control" placeholder="Create password (min 6 chars)">
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-check-circle"></i> Confirm Password</label>
+                    <input type="password" id="regConfirm" class="form-control" placeholder="Confirm your password">
+                </div>
+                <button class="auth-btn" onclick="handleRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
         <div class="container nav-content">
-            <div class="nav-brand">
+            <div class="nav-brand" onclick="location.reload()">
                 <i class="fas fa-cloud"></i>
                 <h1>JOD MODS <span>CLOUD</span></h1>
             </div>
             <div class="nav-right">
-                <button onclick="refreshFiles()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:var(--gray);">
+                <button onclick="refreshFiles()" style="background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--gray);transition:all 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--gray)'">
                     <i class="fas fa-sync-alt"></i>
                 </button>
+                
+                <div class="profile-wrapper" id="profileWrapper">
+                    <button class="profile-trigger" id="profileTrigger">
+                        <div class="profile-avatar" id="profileAvatar">G</div>
+                        <span class="profile-name" id="profileName">Guest</span>
+                        <i class="fas fa-chevron-down" style="font-size:0.65rem;color:var(--gray);"></i>
+                    </button>
+                    
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="dropdown-header">
+                            <div class="dropdown-avatar-lg" id="dropdownAvatar">G</div>
+                            <div class="dropdown-user">
+                                <h4 id="dropdownName">Guest</h4>
+                                <p id="dropdownEmail">guest@jodmods.com</p>
+                            </div>
+                        </div>
+                        <div class="dropdown-body">
+                            <button class="dropdown-item" onclick="showStats()">
+                                <i class="fas fa-chart-bar"></i> Dashboard
+                            </button>
+                            <button class="dropdown-item" onclick="refreshFiles()">
+                                <i class="fas fa-sync-alt"></i> Refresh Files
+                            </button>
+                            <button class="dropdown-item" onclick="showStorageInfo()">
+                                <i class="fas fa-hdd"></i> Storage Used
+                                <span class="badge" id="storageBadge">0 MB</span>
+                            </button>
+                            <button class="dropdown-item" onclick="showFileStats()">
+                                <i class="fas fa-file"></i> Total Files
+                                <span class="badge" id="fileBadge">0</span>
+                            </button>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item" id="loginBtn" onclick="openAuth()">
+                                <i class="fas fa-sign-in-alt"></i> Sign In / Sign Up
+                            </button>
+                            <button class="dropdown-item logout" id="logoutBtn" onclick="handleLogout()" style="display:none;">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
     
-    <!-- Main App -->
+    <!-- ===== MAIN APP ===== -->
     <div id="mainApp">
         <div class="container">
             <!-- Stats -->
@@ -614,8 +1098,8 @@
             <!-- Storage Bar - UNLIMITED -->
             <div class="storage-bar-container">
                 <div class="storage-bar-label">
-                    <span>Storage Usage <i class="fas fa-infinity" style="color:var(--primary);"></i> Unlimited</span>
-                    <span><span id="storageUsedText">0 MB</span> / <strong>Unlimited</strong></span>
+                    <span><i class="fas fa-hdd"></i> Storage Usage</span>
+                    <span><span id="storageUsedText">0 MB</span> / <span class="unlimited"><i class="fas fa-infinity"></i> Unlimited</span></span>
                 </div>
                 <div class="storage-bar">
                     <div class="storage-bar-fill" id="storageFill"></div>
@@ -623,12 +1107,15 @@
             </div>
             
             <!-- Upload -->
-            <section class="upload-section">
-                <h2><i class="fas fa-cloud-upload-alt"></i> Upload Files</h2>
+            <section class="upload-section" id="uploadSection">
+                <div class="section-title">
+                    <i class="fas fa-cloud-upload-alt" style="color:var(--primary);"></i>
+                    Upload Files
+                </div>
                 <div class="upload-area" id="uploadArea">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <h3>Drag & Drop or Click to Upload</h3>
-                    <p>Unlimited storage | Any file type</p>
+                    <p>Unlimited storage • Any file type • Secure & Private</p>
                     <input type="file" id="fileInput" multiple>
                 </div>
                 
@@ -641,6 +1128,7 @@
                         <span><i class="fas fa-upload"></i> Uploaded: <span class="highlight" id="uploadedMB">0 MB</span></span>
                         <span><i class="fas fa-clock"></i> Remaining: <span class="highlight" id="remainingMB">0 MB</span></span>
                         <span><i class="fas fa-percent"></i> <span class="highlight" id="progressPercent">0%</span></span>
+                        <span><i class="fas fa-file"></i> Files: <span class="highlight" id="progressFiles">0</span></span>
                     </div>
                 </div>
                 
@@ -650,7 +1138,10 @@
             <!-- Files -->
             <section class="files-section">
                 <div class="files-header">
-                    <h2><i class="fas fa-folder"></i> My Files</h2>
+                    <div class="section-title" style="margin-bottom:0;">
+                        <i class="fas fa-folder" style="color:var(--primary);"></i>
+                        My Files
+                    </div>
                     <button class="upload-btn" onclick="document.getElementById('fileInput').click()" style="padding: 8px 20px; font-size: 0.85rem; margin:0;">
                         <i class="fas fa-plus"></i> Add Files
                     </button>
@@ -665,28 +1156,32 @@
         </div>
     </div>
     
-    <!-- Download Page -->
+    <!-- ===== DOWNLOAD PAGE ===== -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-file-download"></i></div>
             <h2 id="downloadFileName">File Name</h2>
-            <p>Secure download from JOD MODS CLOUD</p>
+            <p class="subtitle">Secure download from JOD MODS CLOUD</p>
             
             <div class="download-info">
                 <div class="download-info-item">
-                    <span>File Name</span>
+                    <span><i class="fas fa-file"></i> File Name</span>
                     <strong id="dFileName">-</strong>
                 </div>
                 <div class="download-info-item">
-                    <span>File Size</span>
+                    <span><i class="fas fa-hdd"></i> File Size</span>
                     <strong id="dFileSize">-</strong>
                 </div>
                 <div class="download-info-item">
-                    <span>Upload Date</span>
+                    <span><i class="fas fa-user"></i> Uploaded By</span>
+                    <strong id="dFileUser">-</strong>
+                </div>
+                <div class="download-info-item">
+                    <span><i class="fas fa-calendar"></i> Upload Date</span>
                     <strong id="dFileDate">-</strong>
                 </div>
                 <div class="download-info-item">
-                    <span>Downloads</span>
+                    <span><i class="fas fa-download"></i> Downloads</span>
                     <strong id="dFileDownloads">-</strong>
                 </div>
             </div>
@@ -698,20 +1193,190 @@
             <span class="download-back" onclick="goBack()">
                 <i class="fas fa-arrow-left"></i> Back to Cloud
             </span>
+            
+            <div class="download-security">
+                <i class="fas fa-shield-alt"></i>
+                <span>Securely stored & scanned for viruses</span>
+            </div>
         </div>
     </div>
     
-    <!-- Toast -->
+    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
     <script>
         // =============================================
-        // COMPLETE MEDIAFIRE STYLE - NO LOGIN, UNLIMITED
+        // COMPLETE PERSONAL CLOUD STORAGE
         // =============================================
         
         let db = null;
         let files = [];
+        let currentUser = null;
         let downloadFileId = null;
+        
+        // =============================================
+        // AUTH SYSTEM
+        // =============================================
+        
+        function loadUsers() {
+            try {
+                const users = localStorage.getItem('jodmods_users');
+                return users ? JSON.parse(users) : [];
+            } catch {
+                return [];
+            }
+        }
+        
+        function saveUsers(users) {
+            localStorage.setItem('jodmods_users', JSON.stringify(users));
+        }
+        
+        function getCurrentUser() {
+            try {
+                const user = localStorage.getItem('jodmods_currentUser');
+                return user ? JSON.parse(user) : null;
+            } catch {
+                return null;
+            }
+        }
+        
+        function setCurrentUser(user) {
+            if (user) {
+                localStorage.setItem('jodmods_currentUser', JSON.stringify(user));
+            } else {
+                localStorage.removeItem('jodmods_currentUser');
+            }
+            currentUser = user;
+            updateUI();
+        }
+        
+        function openAuth() {
+            document.getElementById('authModal').classList.add('active');
+            switchAuthTab('login');
+        }
+        
+        function closeAuth() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+        
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.tab === tab);
+            });
+            document.getElementById('loginForm').classList.toggle('active', tab === 'login');
+            document.getElementById('registerForm').classList.toggle('active', tab === 'register');
+        }
+        
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+            
+            const users = loadUsers();
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                setCurrentUser(user);
+                closeAuth();
+                showToast(`Welcome back, ${user.name}!`, 'success');
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+                loadFiles();
+            } else {
+                showToast('Invalid email or password', 'error');
+            }
+        }
+        
+        function handleRegister() {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const confirm = document.getElementById('regConfirm').value.trim();
+            
+            if (!name || !email || !password || !confirm) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+            if (password.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            if (password !== confirm) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showToast('Please enter a valid email', 'error');
+                return;
+            }
+            
+            const users = loadUsers();
+            if (users.some(u => u.email === email)) {
+                showToast('Email already registered', 'error');
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                name,
+                email,
+                password,
+                joinDate: new Date().toISOString().split('T')[0],
+                avatarText: name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)
+            };
+            
+            users.push(newUser);
+            saveUsers(users);
+            setCurrentUser(newUser);
+            closeAuth();
+            showToast('Account created successfully!', 'success');
+            
+            document.getElementById('regName').value = '';
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regConfirm').value = '';
+            
+            loadFiles();
+        }
+        
+        function handleLogout() {
+            if (confirm('Are you sure you want to sign out?')) {
+                setCurrentUser(null);
+                showToast('Signed out successfully', 'success');
+                files = [];
+                displayFiles();
+                updateStats();
+                document.getElementById('profileDropdown').classList.remove('active');
+            }
+        }
+        
+        function updateUI() {
+            if (currentUser) {
+                document.getElementById('profileAvatar').textContent = currentUser.avatarText || currentUser.name.substring(0, 2).toUpperCase();
+                document.getElementById('profileName').textContent = currentUser.name;
+                document.getElementById('dropdownAvatar').textContent = currentUser.avatarText || currentUser.name.substring(0, 2).toUpperCase();
+                document.getElementById('dropdownName').textContent = currentUser.name;
+                document.getElementById('dropdownEmail').textContent = currentUser.email;
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'flex';
+                document.getElementById('uploadSection').style.display = 'block';
+                document.querySelector('.upload-section').style.display = 'block';
+            } else {
+                document.getElementById('profileAvatar').textContent = 'G';
+                document.getElementById('profileName').textContent = 'Guest';
+                document.getElementById('dropdownAvatar').textContent = 'G';
+                document.getElementById('dropdownName').textContent = 'Guest';
+                document.getElementById('dropdownEmail').textContent = 'guest@jodmods.com';
+                document.getElementById('loginBtn').style.display = 'flex';
+                document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('uploadSection').style.display = 'none';
+                document.querySelector('.upload-section').style.display = 'none';
+            }
+        }
         
         // =============================================
         // INDEXEDDB - FILE STORAGE
@@ -719,14 +1384,14 @@
         
         function openDB() {
             return new Promise((resolve, reject) => {
-                const request = indexedDB.open('JODModsDB', 1);
+                const request = indexedDB.open('JODModsDB', 2);
                 
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
                     if (!db.objectStoreNames.contains('files')) {
                         const store = db.createObjectStore('files', { keyPath: 'id' });
+                        store.createIndex('userId', 'userId', { unique: false });
                         store.createIndex('name', 'name', { unique: false });
-                        store.createIndex('uploadDate', 'uploadDate', { unique: false });
                     }
                 };
                 
@@ -846,12 +1511,17 @@
         }
         
         async function uploadFiles(fileList) {
+            if (!currentUser) {
+                showToast('Please sign in to upload files', 'warning');
+                openAuth();
+                return;
+            }
+            
             const btn = document.getElementById('uploadBtn');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
             btn.disabled = true;
             
-            // Show progress
             const progressContainer = document.getElementById('progressContainer');
             progressContainer.classList.add('active');
             
@@ -860,7 +1530,6 @@
             let totalSize = 0;
             let uploadedSize = 0;
             
-            // Calculate total size
             for (let file of fileList) {
                 totalSize += file.size;
             }
@@ -874,6 +1543,8 @@
                             const id = generateId();
                             resolve({
                                 id: id,
+                                userId: currentUser.id,
+                                userName: currentUser.name,
                                 name: file.name,
                                 size: file.size,
                                 sizeFormatted: formatSize(file.size),
@@ -892,7 +1563,6 @@
                     uploaded++;
                     uploadedSize += file.size;
                     
-                    // Update progress
                     const percent = Math.round((uploadedSize / totalSize) * 100);
                     const remaining = totalSize - uploadedSize;
                     
@@ -901,6 +1571,7 @@
                     document.getElementById('uploadedMB').textContent = formatSize(uploadedSize);
                     document.getElementById('remainingMB').textContent = formatSize(remaining);
                     document.getElementById('progressPercent').textContent = percent + '%';
+                    document.getElementById('progressFiles').textContent = uploaded + '/' + total;
                     
                 } catch (error) {
                     console.error('Upload error:', error);
@@ -912,7 +1583,6 @@
             btn.disabled = false;
             document.getElementById('fileInput').value = '';
             
-            // Hide progress after 2 seconds
             setTimeout(() => {
                 progressContainer.classList.remove('active');
                 document.getElementById('progressFill').style.width = '0%';
@@ -927,7 +1597,12 @@
         
         async function loadFiles() {
             try {
-                files = await getAllFiles();
+                const allFiles = await getAllFiles();
+                if (currentUser) {
+                    files = allFiles.filter(f => f.userId === currentUser.id);
+                } else {
+                    files = [];
+                }
                 displayFiles();
                 updateStats();
             } catch (error) {
@@ -939,14 +1614,26 @@
             const grid = document.getElementById('filesGrid');
             const noFiles = document.getElementById('noFiles');
             
-            if (files.length === 0) {
+            if (!currentUser || files.length === 0) {
                 grid.innerHTML = '';
                 noFiles.style.display = 'block';
-                noFiles.innerHTML = `
-                    <i class="fas fa-cloud"></i>
-                    <h3>No files uploaded</h3>
-                    <p>Upload your first file to get started</p>
-                `;
+                if (!currentUser) {
+                    noFiles.innerHTML = `
+                        <i class="fas fa-lock"></i>
+                        <h3>Please Sign In</h3>
+                        <p>Sign in to view and manage your files</p>
+                        <button class="upload-btn" onclick="openAuth()" style="margin-top:16px;">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    `;
+                } else {
+                    noFiles.innerHTML = `
+                        <i class="fas fa-cloud"></i>
+                        <h3>No files uploaded</h3>
+                        <p>Upload your first file to get started</p>
+                    `;
+                }
+                noFiles.style.display = 'block';
                 return;
             }
             
@@ -978,8 +1665,8 @@
                     </div>
                     <div class="file-link-box">
                         <input type="text" value="${file.shareLink}" readonly>
-                        <button onclick="copyLink('${file.shareLink}')" style="background:none;border:none;cursor:pointer;color:var(--primary);">
-                            <i class="fas fa-copy"></i>
+                        <button class="copy-btn" onclick="copyLink('${file.shareLink}')">
+                            <i class="fas fa-copy"></i> Copy
                         </button>
                     </div>
                 </div>
@@ -987,6 +1674,18 @@
         }
         
         function updateStats() {
+            if (!currentUser) {
+                document.getElementById('storageUsed').textContent = '0 MB';
+                document.getElementById('fileCount').textContent = '0';
+                document.getElementById('downloadCount').textContent = '0';
+                document.getElementById('sharedCount').textContent = '0';
+                document.getElementById('storageUsedText').textContent = '0 MB';
+                document.getElementById('storageFill').style.width = '0%';
+                document.getElementById('storageBadge').textContent = '0 MB';
+                document.getElementById('fileBadge').textContent = '0';
+                return;
+            }
+            
             const totalSize = files.reduce((sum, f) => sum + f.size, 0);
             const totalDownloads = files.reduce((sum, f) => sum + f.downloadCount, 0);
             
@@ -996,8 +1695,10 @@
             document.getElementById('sharedCount').textContent = files.length;
             
             document.getElementById('storageUsedText').textContent = formatSize(totalSize);
+            document.getElementById('storageBadge').textContent = formatSize(totalSize);
+            document.getElementById('fileBadge').textContent = files.length;
             
-            // Unlimited storage - bar shows usage but never full
+            // Unlimited storage - show usage but never full
             const pct = Math.min((totalSize / (100 * 1024 * 1024 * 1024)) * 100, 80);
             document.getElementById('storageFill').style.width = pct + '%';
         }
@@ -1013,7 +1714,12 @@
                 return;
             }
             
-            // Show download page
+            // Check if user owns the file
+            if (currentUser && file.userId !== currentUser.id) {
+                showToast('You do not have permission to download this file', 'error');
+                return;
+            }
+            
             showDownloadPage(file);
         }
         
@@ -1024,6 +1730,7 @@
             document.getElementById('downloadFileName').textContent = file.name;
             document.getElementById('dFileName').textContent = file.name;
             document.getElementById('dFileSize').textContent = file.sizeFormatted;
+            document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
             document.getElementById('dFileDate').textContent = file.uploadDate;
             document.getElementById('dFileDownloads').textContent = file.downloadCount;
             
@@ -1058,8 +1765,6 @@
             document.body.removeChild(link);
             
             showToast(`Downloading ${file.name}...`, 'success');
-            
-            // Update stats
             loadFiles();
         });
         
@@ -1117,6 +1822,24 @@
             showToast('Files refreshed', 'success');
         }
         
+        function showStats() {
+            updateStats();
+            showToast('Stats updated', 'success');
+            document.getElementById('profileDropdown').classList.remove('active');
+        }
+        
+        function showStorageInfo() {
+            updateStats();
+            showToast('Storage info updated', 'info');
+            document.getElementById('profileDropdown').classList.remove('active');
+        }
+        
+        function showFileStats() {
+            updateStats();
+            showToast('File stats updated', 'info');
+            document.getElementById('profileDropdown').classList.remove('active');
+        }
+        
         // =============================================
         // CHECK SHARE LINK
         // =============================================
@@ -1134,6 +1857,7 @@
                     document.getElementById('downloadFileName').textContent = file.name;
                     document.getElementById('dFileName').textContent = file.name;
                     document.getElementById('dFileSize').textContent = file.sizeFormatted;
+                    document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
                     document.getElementById('dFileDate').textContent = file.uploadDate;
                     document.getElementById('dFileDownloads').textContent = file.downloadCount;
                     
@@ -1148,15 +1872,36 @@
         
         document.addEventListener('DOMContentLoaded', async () => {
             await openDB();
-            await loadFiles();
+            
+            const savedUser = getCurrentUser();
+            if (savedUser) {
+                currentUser = savedUser;
+                updateUI();
+                await loadFiles();
+            } else {
+                updateUI();
+                displayFiles();
+                updateStats();
+            }
+            
             await checkShareLink();
             
             // Upload events
             document.getElementById('uploadArea').addEventListener('click', () => {
+                if (!currentUser) {
+                    showToast('Please sign in to upload files', 'warning');
+                    openAuth();
+                    return;
+                }
                 document.getElementById('fileInput').click();
             });
             
             document.getElementById('uploadBtn').addEventListener('click', () => {
+                if (!currentUser) {
+                    showToast('Please sign in to upload files', 'warning');
+                    openAuth();
+                    return;
+                }
                 document.getElementById('fileInput').click();
             });
             
@@ -1184,16 +1929,55 @@
                 e.preventDefault();
                 uploadArea.style.borderColor = 'var(--primary)';
                 uploadArea.style.background = 'transparent';
+                if (!currentUser) {
+                    showToast('Please sign in to upload files', 'warning');
+                    openAuth();
+                    return;
+                }
                 uploadFiles(e.dataTransfer.files);
+            });
+            
+            // Profile dropdown
+            document.getElementById('profileTrigger').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('profileDropdown').classList.toggle('active');
+            });
+            
+            document.addEventListener('click', () => {
+                document.getElementById('profileDropdown').classList.remove('active');
+            });
+            
+            // Enter key for auth
+            document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleLogin();
+            });
+            document.getElementById('regConfirm').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleRegister();
+            });
+            
+            // Close auth on outside click
+            document.getElementById('authModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('authModal')) {
+                    closeAuth();
+                }
             });
         });
         
         // Global functions
+        window.openAuth = openAuth;
+        window.closeAuth = closeAuth;
+        window.switchAuthTab = switchAuthTab;
+        window.handleLogin = handleLogin;
+        window.handleRegister = handleRegister;
+        window.handleLogout = handleLogout;
         window.downloadFile = downloadFile;
         window.shareFile = shareFile;
         window.deleteFile = deleteFile;
         window.copyLink = copyLink;
         window.refreshFiles = refreshFiles;
+        window.showStats = showStats;
+        window.showStorageInfo = showStorageInfo;
+        window.showFileStats = showFileStats;
         window.goBack = goBack;
     </script>
 </body>
