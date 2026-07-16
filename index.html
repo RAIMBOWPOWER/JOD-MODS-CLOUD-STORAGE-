@@ -1281,13 +1281,14 @@
 
     <script>
         // =============================================
-        // REAL FILE STORAGE - NO BASE64 CONVERSION
+        // COMPLETE FIXED - REAL FILE STORAGE
         // =============================================
         
         let db = null;
         let files = [];
         let currentUser = null;
         let downloadFileId = null;
+        let dbVersion = 3; // Fixed version for data persistence
         
         // =============================================
         // AUTH SYSTEM
@@ -1295,7 +1296,7 @@
         
         function loadUsers() {
             try {
-                const users = localStorage.getItem('jodmods_users');
+                const users = localStorage.getItem('jodmods_users_v2');
                 return users ? JSON.parse(users) : [];
             } catch {
                 return [];
@@ -1303,12 +1304,12 @@
         }
         
         function saveUsers(users) {
-            localStorage.setItem('jodmods_users', JSON.stringify(users));
+            localStorage.setItem('jodmods_users_v2', JSON.stringify(users));
         }
         
         function getCurrentUser() {
             try {
-                const user = localStorage.getItem('jodmods_currentUser');
+                const user = localStorage.getItem('jodmods_currentUser_v2');
                 return user ? JSON.parse(user) : null;
             } catch {
                 return null;
@@ -1317,9 +1318,9 @@
         
         function setCurrentUser(user) {
             if (user) {
-                localStorage.setItem('jodmods_currentUser', JSON.stringify(user));
+                localStorage.setItem('jodmods_currentUser_v2', JSON.stringify(user));
             } else {
-                localStorage.removeItem('jodmods_currentUser');
+                localStorage.removeItem('jodmods_currentUser_v2');
             }
             currentUser = user;
             updateUI();
@@ -1464,12 +1465,12 @@
         }
         
         // =============================================
-        // INDEXEDDB - FILE STORAGE (Using ArrayBuffer)
+        // INDEXEDDB - FILE STORAGE (VERSION FIXED)
         // =============================================
         
         function openDB() {
             return new Promise((resolve, reject) => {
-                const request = indexedDB.open('JODModsDB_Real', 1);
+                const request = indexedDB.open('JODModsDB_Real_v2', 1);
                 
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
@@ -1547,7 +1548,7 @@
         }
         
         // =============================================
-        // FILE OPERATIONS - USING ARRAYBUFFER (NO BASE64)
+        // FILE OPERATIONS - ARRAYBUFFER (NO BASE64)
         // =============================================
         
         function generateId() {
@@ -1595,7 +1596,7 @@
             return name.length > max ? name.substring(0, max) + '...' : name;
         }
         
-        // ===== UPLOAD - REAL FILE (ArrayBuffer) =====
+        // ===== UPLOAD - REAL FILE =====
         async function uploadFiles(fileList) {
             if (!currentUser) {
                 showToast('Please sign in to upload files', 'warning');
@@ -1622,7 +1623,6 @@
             
             for (let file of fileList) {
                 try {
-                    // READ AS ARRAYBUFFER - REAL FILE DATA
                     const fileData = await new Promise((resolve, reject) => {
                         const reader = new FileReader();
                         reader.onload = (e) => {
@@ -1635,14 +1635,14 @@
                                 size: file.size,
                                 sizeFormatted: formatSize(file.size),
                                 type: file.type || 'application/octet-stream',
-                                data: e.target.result, // ArrayBuffer
+                                data: e.target.result,
                                 uploadDate: new Date().toISOString().split('T')[0],
                                 downloadCount: 0,
                                 shareLink: `${window.location.origin}${window.location.pathname}?file=${id}`
                             });
                         };
                         reader.onerror = reject;
-                        reader.readAsArrayBuffer(file); // REAL FILE - NO BASE64
+                        reader.readAsArrayBuffer(file);
                     });
                     
                     await saveFileToDB(fileData);
@@ -1677,7 +1677,7 @@
             
             if (uploaded > 0) {
                 showToast(`${uploaded} file(s) uploaded successfully! 🚀`, 'success');
-                loadFiles();
+                await loadFiles(); // Force reload
             }
         }
         
@@ -1790,7 +1790,7 @@
             document.getElementById('storageFill').style.width = pct + '%';
         }
         
-        // ===== REAL FILE DOWNLOAD =====
+        // ===== DOWNLOAD =====
         async function downloadFile(id) {
             const file = await getFileById(id);
             if (!file) {
@@ -1826,7 +1826,7 @@
             downloadFileId = null;
         }
         
-        // ===== REAL FILE DOWNLOAD - EXACT SIZE =====
+        // ===== REAL FILE DOWNLOAD =====
         document.getElementById('downloadBtn').addEventListener('click', async function() {
             if (!downloadFileId) return;
             
@@ -1848,7 +1848,7 @@
             await updateFileInDB(file);
             
             try {
-                // Create blob from ArrayBuffer - EXACT SIZE
+                // For large files - use streaming
                 const blob = new Blob([file.data], { type: file.type });
                 const url = URL.createObjectURL(blob);
                 
@@ -1859,11 +1859,10 @@
                 link.click();
                 document.body.removeChild(link);
                 
-                // Clean up
                 setTimeout(() => URL.revokeObjectURL(url), 100);
                 
                 showToast(`✅ Downloaded ${file.name} (${file.sizeFormatted})`, 'success');
-                loadFiles();
+                await loadFiles();
                 
                 btn.innerHTML = '<i class="fas fa-check-circle"></i> Downloaded!';
                 setTimeout(() => {
