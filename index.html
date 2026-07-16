@@ -37,7 +37,6 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         
-        /* ===== NAVBAR ===== */
         .navbar {
             background: var(--white);
             box-shadow: var(--shadow);
@@ -47,32 +46,13 @@
             z-index: 1000;
             border-bottom: 3px solid var(--primary);
         }
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-        .nav-brand i {
-            color: var(--primary);
-            font-size: 2rem;
-        }
-        .nav-brand h1 {
-            font-size: 1.4rem;
-            font-weight: 800;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+        .nav-brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .nav-brand i { color: var(--primary); font-size: 2rem; }
+        .nav-brand h1 { font-size: 1.4rem; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-brand span { -webkit-text-fill-color: var(--primary); }
         .nav-right { display: flex; align-items: center; gap: 16px; }
         
-        /* ===== PROFILE ===== */
         .profile-wrapper { position: relative; cursor: pointer; }
         .profile-trigger {
             display: flex;
@@ -114,25 +94,8 @@
         }
         .profile-dropdown.active { display: block; animation: slideDown 0.25s ease; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
-        .dropdown-header {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--primary-light);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .dropdown-avatar-lg {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
+        .dropdown-header { padding: 14px 16px; border-bottom: 1px solid var(--primary-light); display: flex; align-items: center; gap: 14px; }
+        .dropdown-avatar-lg { width: 48px; height: 48px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.1rem; }
         .dropdown-user h4 { font-size: 0.95rem; font-weight: 600; color: var(--dark); }
         .dropdown-user p { font-size: 0.75rem; color: var(--gray); }
         .dropdown-body { padding: 6px 0; }
@@ -154,19 +117,11 @@
         }
         .dropdown-item:hover { background: var(--light); }
         .dropdown-item i { width: 18px; color: var(--gray); }
-        .dropdown-item .badge {
-            margin-left: auto;
-            background: var(--primary-gradient);
-            color: white;
-            font-size: 0.65rem;
-            padding: 2px 10px;
-            border-radius: 50px;
-        }
+        .dropdown-item .badge { margin-left: auto; background: var(--primary-gradient); color: white; font-size: 0.65rem; padding: 2px 10px; border-radius: 50px; }
         .dropdown-divider { height: 1px; background: var(--primary-light); margin: 6px 16px; }
         .dropdown-item.logout { color: var(--danger); }
         .dropdown-item.logout i { color: var(--danger); }
         
-        /* ===== AUTH ===== */
         .auth-modal {
             display: none;
             position: fixed;
@@ -193,12 +148,7 @@
             border: 1px solid var(--primary-light);
         }
         @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .auth-header {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 32px 24px;
-            text-align: center;
-        }
+        .auth-header { background: var(--primary-gradient); color: white; padding: 32px 24px; text-align: center; }
         .auth-header .logo { display: flex; align-items: center; justify-content: center; gap: 12px; }
         .auth-header .logo i { font-size: 2.8rem; }
         .auth-header h1 { font-size: 2rem; font-weight: 800; }
@@ -218,49 +168,19 @@
             position: relative;
         }
         .auth-tab.active { color: var(--primary); }
-        .auth-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--primary-gradient);
-            border-radius: 3px 3px 0 0;
-        }
+        .auth-tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: var(--primary-gradient); border-radius: 3px 3px 0 0; }
         .auth-form { padding: 28px 24px; display: none; }
         .auth-form.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .form-group { margin-bottom: 16px; }
         .form-label { display: block; margin-bottom: 4px; font-weight: 500; font-size: 0.85rem; color: var(--dark); }
-        .form-control {
-            width: 100%;
-            padding: 10px 14px;
-            border: 2px solid var(--gray-light);
-            border-radius: var(--radius-sm);
-            font-size: 0.9rem;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
-        }
+        .form-control { width: 100%; padding: 10px 14px; border: 2px solid var(--gray-light); border-radius: var(--radius-sm); font-size: 0.9rem; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .form-control:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1); }
-        .auth-btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 12px;
-            font-size: 0.95rem;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
-        }
+        .auth-btn { background: var(--primary-gradient); color: white; border: none; padding: 12px; font-size: 0.95rem; border-radius: var(--radius-sm); cursor: pointer; width: 100%; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4); }
         .auth-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: var(--gray); font-size: 1.5rem; cursor: pointer; }
         .auth-card { position: relative; }
         
-        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -279,16 +199,7 @@
             transition: all 0.3s;
         }
         .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: var(--primary-light); }
-        .stat-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: white;
-        }
+        .stat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: white; }
         .stat-icon.blue { background: var(--primary-gradient); }
         .stat-icon.green { background: linear-gradient(135deg, var(--success), #34d399); }
         .stat-icon.orange { background: linear-gradient(135deg, var(--warning), #fbbf24); }
@@ -296,7 +207,6 @@
         .stat-info h3 { font-size: 1.3rem; font-weight: 700; color: var(--dark); }
         .stat-info p { font-size: 0.8rem; color: var(--gray); }
         
-        /* ===== STORAGE ===== */
         .storage-bar-container {
             background: var(--white);
             border-radius: var(--radius);
@@ -305,29 +215,11 @@
             margin-bottom: 24px;
             border: 1px solid var(--primary-light);
         }
-        .storage-bar-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-            color: var(--dark);
-        }
+        .storage-bar-label { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; color: var(--dark); }
         .storage-bar-label .unlimited { color: var(--primary); font-weight: 600; }
-        .storage-bar {
-            height: 8px;
-            background: var(--gray-light);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .storage-bar-fill {
-            height: 100%;
-            background: var(--primary-gradient);
-            border-radius: 8px;
-            transition: width 0.8s ease;
-            width: 0%;
-        }
+        .storage-bar { height: 8px; background: var(--gray-light); border-radius: 8px; overflow: hidden; }
+        .storage-bar-fill { height: 100%; background: var(--primary-gradient); border-radius: 8px; transition: width 0.8s ease; width: 0%; }
         
-        /* ===== UPLOAD ===== */
         .upload-section {
             background: var(--white);
             border-radius: var(--radius);
@@ -336,15 +228,7 @@
             margin-bottom: 24px;
             border: 1px solid var(--primary-light);
         }
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--dark);
-        }
+        .section-title { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; color: var(--dark); }
         .section-title i { color: var(--primary); }
         .upload-area {
             border: 2px dashed var(--primary);
@@ -361,7 +245,6 @@
         .upload-area h3 { margin: 10px 0 4px; font-size: 1.1rem; color: var(--dark); }
         .upload-area p { color: var(--gray); font-size: 0.9rem; }
         
-        /* ===== PROGRESS ===== */
         .progress-container {
             margin-top: 16px;
             display: none;
@@ -371,71 +254,18 @@
             border: 1px solid var(--primary-light);
         }
         .progress-container.active { display: block; animation: fadeIn 0.3s ease; }
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .progress-header .title { font-weight: 600; font-size: 0.85rem; color: var(--dark); }
         .progress-header .percentage { font-weight: 700; font-size: 1rem; color: var(--primary); }
-        .progress-bar-wrapper {
-            background: var(--gray-light);
-            border-radius: 10px;
-            height: 12px;
-            overflow: hidden;
-            position: relative;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            background: var(--primary-gradient);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-            width: 0%;
-            position: relative;
-        }
-        .progress-bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
+        .progress-bar-wrapper { background: var(--gray-light); border-radius: 10px; height: 12px; overflow: hidden; position: relative; }
+        .progress-bar-fill { height: 100%; background: var(--primary-gradient); border-radius: 10px; transition: width 0.3s ease; width: 0%; position: relative; }
+        .progress-bar-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 2s infinite; }
         @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-        .progress-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 6px;
-            margin-top: 10px;
-        }
-        .progress-detail-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.75rem;
-            color: var(--gray);
-            padding: 4px 10px;
-            background: var(--white);
-            border-radius: 6px;
-            border: 1px solid var(--gray-light);
-        }
+        .progress-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px; margin-top: 10px; }
+        .progress-detail-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--gray); padding: 4px 10px; background: var(--white); border-radius: 6px; border: 1px solid var(--gray-light); }
         .progress-detail-item i { color: var(--primary); font-size: 0.8rem; }
         .progress-detail-item .value { font-weight: 600; color: var(--dark); }
-        .progress-speed {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 8px;
-            padding: 6px 12px;
-            background: var(--white);
-            border-radius: 6px;
-            border: 1px solid var(--gray-light);
-            font-size: 0.75rem;
-            color: var(--gray);
-        }
+        .progress-speed { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding: 6px 12px; background: var(--white); border-radius: 6px; border: 1px solid var(--gray-light); font-size: 0.75rem; color: var(--gray); }
         .progress-speed i { color: var(--success); }
         .progress-speed .speed-value { font-weight: 600; color: var(--dark); }
         
@@ -458,7 +288,6 @@
         .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         #fileInput { display: none; }
         
-        /* ===== FILES ===== */
         .files-section {
             background: var(--white);
             border-radius: var(--radius);
@@ -467,19 +296,8 @@
             margin-bottom: 30px;
             border: 1px solid var(--primary-light);
         }
-        .files-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .files-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
-        }
+        .files-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+        .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
         .file-card {
             background: var(--white);
             border-radius: var(--radius);
@@ -488,81 +306,25 @@
             transition: all 0.3s;
         }
         .file-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow-lg); transform: translateY(-3px); }
-        .file-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .file-icon-lg {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: white;
-            background: var(--primary-gradient);
-        }
+        .file-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+        .file-icon-lg { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: white; background: var(--primary-gradient); }
         .file-actions { display: flex; gap: 4px; }
-        .file-action-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid var(--gray-light);
-            background: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray);
-        }
+        .file-action-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--gray-light); background: white; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; color: var(--gray); }
         .file-action-btn:hover { background: var(--light); }
         .file-action-btn.download:hover { background: var(--success); color: white; border-color: var(--success); }
         .file-action-btn.share:hover { background: var(--primary); color: white; border-color: var(--primary); }
         .file-action-btn.delete:hover { background: var(--danger); color: white; border-color: var(--danger); }
         .file-name { font-weight: 600; margin-bottom: 4px; word-break: break-word; font-size: 0.85rem; color: var(--dark); }
         .file-meta { display: flex; gap: 12px; font-size: 0.7rem; color: var(--gray); margin-bottom: 10px; }
-        .file-link-box {
-            background: var(--light);
-            border-radius: 6px;
-            padding: 6px 10px;
-            font-size: 0.65rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 6px;
-            border: 1px solid var(--gray-light);
-        }
-        .file-link-box input {
-            border: none;
-            background: transparent;
-            width: 65%;
-            font-size: 0.65rem;
-            color: var(--gray);
-            outline: none;
-            font-family: 'Poppins', sans-serif;
-        }
-        .file-link-box .copy-btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 3px 10px;
-            border-radius: 4px;
-            font-size: 0.6rem;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
+        .file-link-box { background: var(--light); border-radius: 6px; padding: 6px 10px; font-size: 0.65rem; display: flex; justify-content: space-between; align-items: center; gap: 6px; border: 1px solid var(--gray-light); }
+        .file-link-box input { border: none; background: transparent; width: 65%; font-size: 0.65rem; color: var(--gray); outline: none; font-family: 'Poppins', sans-serif; }
+        .file-link-box .copy-btn { background: var(--primary-gradient); color: white; border: none; padding: 3px 10px; border-radius: 4px; font-size: 0.6rem; cursor: pointer; font-weight: 500; transition: all 0.2s; }
         .file-link-box .copy-btn:hover { opacity: 0.8; }
         
         .no-files { text-align: center; padding: 40px 20px; color: var(--gray); }
         .no-files i { font-size: 3rem; opacity: 0.3; margin-bottom: 10px; color: var(--primary); }
         .no-files h3 { font-size: 1.1rem; margin-bottom: 4px; color: var(--dark); }
         
-        /* ===== GUEST BANNER ===== */
         .guest-banner {
             background: var(--primary-gradient);
             color: white;
@@ -579,20 +341,9 @@
         }
         .guest-banner.active { display: flex; }
         .guest-banner i { font-size: 1.1rem; }
-        .guest-banner .login-link {
-            background: var(--white);
-            color: var(--primary);
-            padding: 5px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
-        }
+        .guest-banner .login-link { background: var(--white); color: var(--primary); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: var(--shadow); }
         
-        /* ===== DOWNLOAD ===== */
         .download-page {
             display: none;
             min-height: 100vh;
@@ -611,82 +362,24 @@
             animation: slideUp 0.4s ease;
             border: 1px solid var(--primary-light);
         }
-        .download-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            font-size: 2.5rem;
-            color: white;
-            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
-            animation: pulse 2s infinite;
-        }
+        .download-icon { width: 80px; height: 80px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 2.5rem; color: white; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3); animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .download-card h2 { font-size: 1.4rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
         .download-card .subtitle { color: var(--gray); margin-bottom: 20px; font-size: 0.9rem; }
-        .download-info {
-            background: var(--light);
-            border-radius: var(--radius-sm);
-            padding: 16px 20px;
-            margin: 16px 0;
-            text-align: left;
-        }
-        .download-info-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px solid var(--primary-light);
-        }
+        .download-info { background: var(--light); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; text-align: left; }
+        .download-info-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--primary-light); }
         .download-info-item:last-child { border-bottom: none; }
         .download-info-item span { color: var(--gray); font-size: 0.85rem; }
         .download-info-item strong { color: var(--dark); font-size: 0.85rem; }
-        .download-btn {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 14px 36px;
-            font-size: 1rem;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+        .download-btn { background: var(--primary-gradient); color: white; border: none; padding: 14px 36px; font-size: 1rem; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; transition: all 0.3s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .download-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4); }
         .download-speed { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; font-size: 0.75rem; color: var(--gray); }
         .download-speed i { color: var(--success); }
-        .download-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 14px;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
+        .download-back { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; color: var(--primary); text-decoration: none; font-weight: 500; cursor: pointer; font-size: 0.85rem; }
         .download-back:hover { text-decoration: underline; }
-        .download-security {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 14px;
-            font-size: 0.75rem;
-            color: var(--gray);
-        }
+        .download-security { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; font-size: 0.75rem; color: var(--gray); }
         .download-security i { color: var(--success); }
         
-        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -727,7 +420,7 @@
     </style>
 </head>
 <body>
-    <!-- ===== AUTH MODAL ===== -->
+    <!-- AUTH MODAL -->
     <div class="auth-modal" id="authModal">
         <div class="auth-card">
             <button class="auth-close" onclick="closeAuth()"><i class="fas fa-times"></i></button>
@@ -775,7 +468,7 @@
         </div>
     </div>
     
-    <!-- ===== NAVBAR ===== -->
+    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="container nav-content">
             <div class="nav-brand" onclick="location.reload()">
@@ -815,7 +508,7 @@
         </div>
     </nav>
     
-    <!-- ===== GUEST BANNER ===== -->
+    <!-- GUEST BANNER -->
     <div class="container">
         <div class="guest-banner" id="guestBanner">
             <i class="fas fa-info-circle"></i>
@@ -824,7 +517,7 @@
         </div>
     </div>
     
-    <!-- ===== MAIN APP ===== -->
+    <!-- MAIN APP -->
     <div id="mainApp">
         <div class="container">
             <!-- Stats -->
@@ -881,7 +574,7 @@
             <section class="files-section">
                 <div class="files-header">
                     <div class="section-title" style="margin-bottom:0;"><i class="fas fa-folder"></i> My Files</div>
-                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()" style="padding: 6px 18px; font-size: 0.8rem; margin:0;"><i class="fas fa-plus"></i> Add</button>
+                    <button class="upload-btn" id="addFileBtn" style="padding: 6px 18px; font-size: 0.8rem; margin:0;"><i class="fas fa-plus"></i> Add</button>
                 </div>
                 <div class="files-grid" id="filesGrid"></div>
                 <div id="noFiles" class="no-files" style="display:none;">
@@ -893,7 +586,7 @@
         </div>
     </div>
     
-    <!-- ===== DOWNLOAD ===== -->
+    <!-- DOWNLOAD -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-bolt"></i></div>
@@ -913,12 +606,12 @@
         </div>
     </div>
     
-    <!-- ===== TOAST ===== -->
+    <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
     <script>
         // ============================================================
-        // COMPLETE FIXED - ALL WORKING
+        // COMPLETE WORKING - ALL BUTTONS FIXED
         // ============================================================
         
         // === CONSTANTS ===
@@ -959,36 +652,9 @@
                     if (!db.objectStoreNames.contains(STORE_NAME)) {
                         db.createObjectStore(STORE_NAME, { keyPath: 'id' });
                     }
-                    migrateOldData(db);
                 };
                 request.onsuccess = (e) => { db = e.target.result; resolve(db); };
                 request.onerror = (e) => { reject(e.target.error); };
-            });
-        }
-        
-        function migrateOldData(db) {
-            // Try to migrate from old databases
-            const oldDBs = ['JODModsDB', 'JODModsDB_Real', 'JODModsDB_Real_v2', 'JODModsDB_v3', 'JODModsDB_v4', 'JODMods_Main'];
-            oldDBs.forEach(dbName => {
-                try {
-                    const request = indexedDB.open(dbName);
-                    request.onsuccess = (e) => {
-                        const oldDb = e.target.result;
-                        if (oldDb.objectStoreNames.contains('files')) {
-                            const tx = oldDb.transaction(['files'], 'readonly');
-                            const store = tx.objectStore('files');
-                            const getAll = store.getAll();
-                            getAll.onsuccess = () => {
-                                const transaction = db.transaction([STORE_NAME], 'readwrite');
-                                const newStore = transaction.objectStore(STORE_NAME);
-                                getAll.result.forEach(file => {
-                                    newStore.add({ ...file, type: 'file' });
-                                });
-                            };
-                        }
-                        oldDb.close();
-                    };
-                } catch(e) {}
             });
         }
         
@@ -1548,7 +1214,7 @@
             }
         }
         
-        // === INIT ===
+        // === INIT - ALL BUTTONS FIXED ===
         document.addEventListener('DOMContentLoaded', async () => {
             await openDB();
             
@@ -1567,24 +1233,61 @@
             
             await checkShareLink();
             
-            // === UPLOAD BUTTON ===
-            document.getElementById('uploadBtn').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (!currentUser) { showToast('Please sign in to upload files', 'warning'); openAuth(); return; }
-                document.getElementById('fileInput').click();
-            });
-            
-            // === UPLOAD AREA ===
+            // === UPLOAD BUTTON - FIXED ===
+            const uploadBtn = document.getElementById('uploadBtn');
             const uploadArea = document.getElementById('uploadArea');
             const fileInput = document.getElementById('fileInput');
+            const addFileBtn = document.getElementById('addFileBtn');
             
-            uploadArea.addEventListener('click', function(e) {
+            // Upload button click
+            uploadBtn.addEventListener('click', function(e) {
                 e.preventDefault();
-                if (!currentUser) { showToast('Please sign in to upload files', 'warning'); openAuth(); return; }
+                e.stopPropagation();
+                console.log('Upload button clicked');
+                if (!currentUser) { 
+                    showToast('Please sign in to upload files', 'warning'); 
+                    openAuth(); 
+                    return; 
+                }
                 fileInput.click();
             });
             
-            // === DRAG & DROP ===
+            // Add file button click
+            addFileBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Add file button clicked');
+                if (!currentUser) { 
+                    showToast('Please sign in to upload files', 'warning'); 
+                    openAuth(); 
+                    return; 
+                }
+                fileInput.click();
+            });
+            
+            // Upload area click
+            uploadArea.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Upload area clicked');
+                if (!currentUser) { 
+                    showToast('Please sign in to upload files', 'warning'); 
+                    openAuth(); 
+                    return; 
+                }
+                fileInput.click();
+            });
+            
+            // File input change
+            fileInput.addEventListener('change', function(e) {
+                console.log('File input changed', this.files.length);
+                if (this.files.length > 0) {
+                    uploadFiles(this.files);
+                }
+                this.value = '';
+            });
+            
+            // === DRAG & DROP - FIXED ===
             uploadArea.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1601,29 +1304,29 @@
                 e.preventDefault();
                 e.stopPropagation();
                 this.classList.remove('dragover');
-                if (!currentUser) { showToast('Please sign in to upload', 'warning'); openAuth(); return; }
+                console.log('Files dropped', e.dataTransfer.files.length);
+                if (!currentUser) { 
+                    showToast('Please sign in to upload', 'warning'); 
+                    openAuth(); 
+                    return; 
+                }
                 const files = e.dataTransfer.files;
                 if (files.length > 0) {
                     uploadFiles(files);
                 }
             });
             
-            // === FILE INPUT ===
-            fileInput.addEventListener('change', function(e) {
-                if (this.files.length > 0) {
-                    uploadFiles(this.files);
-                }
-                this.value = '';
-            });
+            // === PROFILE DROPDOWN - FIXED ===
+            const profileTrigger = document.getElementById('profileTrigger');
+            const profileDropdown = document.getElementById('profileDropdown');
             
-            // === PROFILE DROPDOWN ===
-            document.getElementById('profileTrigger').addEventListener('click', function(e) {
+            profileTrigger.addEventListener('click', function(e) {
                 e.stopPropagation();
-                document.getElementById('profileDropdown').classList.toggle('active');
+                profileDropdown.classList.toggle('active');
             });
             
             document.addEventListener('click', function() {
-                document.getElementById('profileDropdown').classList.remove('active');
+                profileDropdown.classList.remove('active');
             });
             
             // === ENTER KEY ===
@@ -1638,6 +1341,8 @@
             document.getElementById('authModal').addEventListener('click', function(e) {
                 if (e.target === this) { closeAuth(); }
             });
+            
+            console.log('✅ All buttons initialized!');
         });
         
         // Global functions
