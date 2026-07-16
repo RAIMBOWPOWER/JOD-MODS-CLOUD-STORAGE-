@@ -449,41 +449,165 @@
         .guest-banner .login-link { background: var(--white); color: var(--primary); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: var(--shadow); }
         
+        /* ===== DOWNLOAD PAGE - MEDIAFIRE STYLE ===== */
         .download-page {
             display: none;
             min-height: 100vh;
             padding: 40px 20px;
             background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
         }
-        .download-page.active { display: flex; justify-content: center; align-items: center; }
+        .download-page.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
         .download-card {
             background: var(--white);
             border-radius: var(--radius);
-            max-width: 480px;
+            max-width: 520px;
             width: 100%;
-            padding: 36px;
-            box-shadow: var(--shadow-lg);
+            padding: 44px;
+            box-shadow: var(--shadow-xl);
             text-align: center;
             animation: slideUp 0.4s ease;
             border: 1px solid var(--primary-light);
         }
-        .download-icon { width: 80px; height: 80px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 2.5rem; color: white; box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .download-card h2 { font-size: 1.4rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
-        .download-card .subtitle { color: var(--gray); margin-bottom: 20px; font-size: 0.9rem; }
-        .download-info { background: var(--light); border-radius: var(--radius-sm); padding: 16px 20px; margin: 16px 0; text-align: left; }
-        .download-info-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--primary-light); }
-        .download-info-item:last-child { border-bottom: none; }
-        .download-info-item span { color: var(--gray); font-size: 0.85rem; }
-        .download-info-item strong { color: var(--dark); font-size: 0.85rem; }
-        .download-btn { background: var(--primary-gradient); color: white; border: none; padding: 14px 36px; font-size: 1rem; border-radius: var(--radius-sm); cursor: pointer; font-weight: 600; transition: all 0.3s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .download-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4); }
-        .download-speed { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; font-size: 0.75rem; color: var(--gray); }
-        .download-speed i { color: var(--success); }
-        .download-back { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; color: var(--primary); text-decoration: none; font-weight: 500; cursor: pointer; font-size: 0.85rem; }
-        .download-back:hover { text-decoration: underline; }
-        .download-security { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 14px; font-size: 0.75rem; color: var(--gray); }
-        .download-security i { color: var(--success); }
+        
+        .download-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.8rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .download-card h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+        
+        .download-card .subtitle {
+            color: var(--gray);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+        
+        .download-info {
+            background: var(--light);
+            border-radius: var(--radius-sm);
+            padding: 20px 24px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .download-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--primary-light);
+        }
+        
+        .download-info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .download-info-item span {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .download-info-item strong {
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+        
+        .download-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.05rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+        }
+        
+        .download-speed {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .download-speed i {
+            color: var(--success);
+        }
+        
+        .download-speed .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .download-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.9rem;
+            background: none;
+            border: none;
+        }
+        
+        .download-back:hover {
+            text-decoration: underline;
+        }
+        
+        .download-security {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .download-security i {
+            color: var(--success);
+        }
         
         .toast {
             position: fixed;
@@ -512,7 +636,7 @@
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .files-grid { grid-template-columns: 1fr; }
             .auth-card { max-width: 100%; }
-            .download-card { padding: 24px; }
+            .download-card { padding: 28px; }
             .container { padding: 0 16px; }
             .progress-details { grid-template-columns: 1fr 1fr; }
             .progress-speed-time { flex-direction: column; align-items: flex-start; }
@@ -521,7 +645,7 @@
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr; }
             .upload-area { padding: 20px 16px; }
-            .download-card { padding: 16px; }
+            .download-card { padding: 20px; }
             .progress-details { grid-template-columns: 1fr; }
         }
     </style>
@@ -712,23 +836,53 @@
         </div>
     </div>
     
-    <!-- DOWNLOAD -->
+    <!-- ===== DOWNLOAD PAGE - MEDIAFIRE STYLE ===== -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-bolt"></i></div>
             <h2 id="downloadFileName">File Name</h2>
-            <p class="subtitle">Download with exact size</p>
+            <p class="subtitle">⚡ Download with exact size</p>
+            
             <div class="download-info">
-                <div class="download-info-item"><span><i class="fas fa-file"></i> File Name</span><strong id="dFileName">-</strong></div>
-                <div class="download-info-item"><span><i class="fas fa-hdd"></i> File Size</span><strong id="dFileSize">-</strong></div>
-                <div class="download-info-item"><span><i class="fas fa-user"></i> Uploaded By</span><strong id="dFileUser">-</strong></div>
-                <div class="download-info-item"><span><i class="fas fa-calendar"></i> Upload Date</span><strong id="dFileDate">-</strong></div>
-                <div class="download-info-item"><span><i class="fas fa-download"></i> Downloads</span><strong id="dFileDownloads">-</strong></div>
+                <div class="download-info-item">
+                    <span><i class="fas fa-file"></i> File Name</span>
+                    <strong id="dFileName">-</strong>
+                </div>
+                <div class="download-info-item">
+                    <span><i class="fas fa-hdd"></i> File Size</span>
+                    <strong id="dFileSize">-</strong>
+                </div>
+                <div class="download-info-item">
+                    <span><i class="fas fa-user"></i> Uploaded By</span>
+                    <strong id="dFileUser">-</strong>
+                </div>
+                <div class="download-info-item">
+                    <span><i class="fas fa-calendar"></i> Upload Date</span>
+                    <strong id="dFileDate">-</strong>
+                </div>
+                <div class="download-info-item">
+                    <span><i class="fas fa-download"></i> Downloads</span>
+                    <strong id="dFileDownloads">-</strong>
+                </div>
             </div>
-            <button class="download-btn" id="downloadBtn"><i class="fas fa-download"></i> Download</button>
-            <div class="download-speed"><i class="fas fa-rocket"></i> <span>Exact file size • Optimized</span></div>
-            <span class="download-back" onclick="goBack()"><i class="fas fa-arrow-left"></i> Back</span>
-            <div class="download-security"><i class="fas fa-shield-alt"></i> <span>Securely stored</span></div>
+            
+            <button class="download-btn" id="downloadBtn">
+                <i class="fas fa-download"></i> Download Now
+            </button>
+            
+            <div class="download-speed">
+                <i class="fas fa-rocket"></i>
+                <span>Exact file size • <span class="highlight">Secure download</span></span>
+            </div>
+            
+            <button class="download-back" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Back to Cloud
+            </button>
+            
+            <div class="download-security">
+                <i class="fas fa-shield-alt"></i>
+                <span>Securely stored & scanned</span>
+            </div>
         </div>
     </div>
     
@@ -737,7 +891,7 @@
 
     <script>
         // ============================================================
-        // COMPLETE FIX - LARGE FILE SUPPORT WITH DISPLAY
+        // COMPLETE FIX - WITH DOWNLOAD PAGE
         // ============================================================
         
         // === CONSTANTS ===
@@ -771,18 +925,16 @@
             updateGuestBanner();
         }
         
-        // === DATABASE WITH CHUNK STORAGE ===
+        // === DATABASE ===
         function openDB() {
             return new Promise((resolve, reject) => {
                 const request = indexedDB.open(DB_NAME, DB_VERSION);
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
-                    // Meta store for file info
                     if (!db.objectStoreNames.contains(STORE_NAME)) {
                         const metaStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
                         metaStore.createIndex('userId', 'userId', { unique: false });
                     }
-                    // Chunk store for large file data
                     if (!db.objectStoreNames.contains(CHUNK_STORE_NAME)) {
                         const chunkStore = db.createObjectStore(CHUNK_STORE_NAME, { keyPath: 'id' });
                         chunkStore.createIndex('fileId', 'fileId', { unique: false });
@@ -793,7 +945,7 @@
             });
         }
         
-        // === CRUD FOR META ===
+        // === CRUD META ===
         function saveMeta(meta) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([STORE_NAME], 'readwrite');
@@ -844,7 +996,7 @@
             });
         }
         
-        // === CRUD FOR CHUNKS ===
+        // === CRUD CHUNKS ===
         function saveChunk(chunk) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([CHUNK_STORE_NAME], 'readwrite');
@@ -874,8 +1026,8 @@
                 const request = index.getAll(fileId);
                 request.onsuccess = () => {
                     const chunks = request.result;
-                    let deleted = 0;
                     if (chunks.length === 0) { resolve(true); return; }
+                    let deleted = 0;
                     chunks.forEach(chunk => {
                         const delReq = store.delete(chunk.id);
                         delReq.onsuccess = () => {
@@ -921,6 +1073,21 @@
         }
         
         function truncateName(name, max = 20) { return name.length > max ? name.substring(0, max) + '...' : name; }
+        
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const types = {
+                'jpg': 'image', 'jpeg': 'image', 'png': 'image', 'gif': 'image',
+                'mp4': 'video', 'avi': 'video', 'mov': 'video',
+                'mp3': 'audio', 'wav': 'audio',
+                'pdf': 'pdf',
+                'doc': 'word', 'docx': 'word',
+                'xls': 'excel', 'xlsx': 'excel',
+                'ppt': 'powerpoint', 'pptx': 'powerpoint',
+                'zip': 'archive', 'rar': 'archive'
+            };
+            return types[ext] || 'file';
+        }
         
         // === AUTH FUNCTIONS ===
         function openAuth() { document.getElementById('authModal').classList.add('active'); switchAuthTab('login'); }
@@ -1019,7 +1186,7 @@
             else { banner.classList.add('active'); }
         }
         
-        // === UPLOAD WITH CHUNKS ===
+        // === UPLOAD ===
         let uploadSpeed = 0;
         let speedInterval = null;
         let lastUploadedSize = 0;
@@ -1083,14 +1250,11 @@
                         chunkCount: 0
                     };
                     
-                    // Save meta first
                     await saveMeta(meta);
                     
-                    // Upload in chunks
                     const chunks = await splitFileIntoChunks(file);
                     meta.chunkCount = chunks.length;
                     
-                    // Save each chunk
                     for (let i = 0; i < chunks.length; i++) {
                         const chunkData = chunks[i];
                         const chunkId = fileId + '_chunk_' + i;
@@ -1116,7 +1280,6 @@
                         lastTime = Date.now();
                     }
                     
-                    // Update meta with chunk count
                     await updateMeta(meta);
                     uploaded++;
                     
@@ -1145,21 +1308,6 @@
                 showToast(`${uploaded} file(s) uploaded! 🚀`, 'success');
                 await loadFiles();
             }
-        }
-        
-        function getFileType(filename) {
-            const ext = filename.split('.').pop().toLowerCase();
-            const types = {
-                'jpg': 'image', 'jpeg': 'image', 'png': 'image', 'gif': 'image',
-                'mp4': 'video', 'avi': 'video', 'mov': 'video',
-                'mp3': 'audio', 'wav': 'audio',
-                'pdf': 'pdf',
-                'doc': 'word', 'docx': 'word',
-                'xls': 'excel', 'xlsx': 'excel',
-                'ppt': 'powerpoint', 'pptx': 'powerpoint',
-                'zip': 'archive', 'rar': 'archive'
-            };
-            return types[ext] || 'file';
         }
         
         function splitFileIntoChunks(file) {
@@ -1311,7 +1459,7 @@
             document.getElementById('storageFill').style.width = pct + '%';
         }
         
-        // === DOWNLOAD ===
+        // === DOWNLOAD - SHOW DOWNLOAD PAGE ===
         async function downloadFile(id) {
             const meta = await getMetaById(id);
             if (!meta) { showToast('File not found', 'error'); return; }
@@ -1320,17 +1468,58 @@
                 return;
             }
             
-            // Get chunks and combine
-            const chunks = await getChunksByFileId(id);
-            if (!chunks || chunks.length === 0) {
-                showToast('File data not found', 'error');
+            // Show download page
+            showDownloadPage(meta);
+        }
+        
+        function showDownloadPage(file) {
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('downloadPage').classList.add('active');
+            
+            document.getElementById('downloadFileName').textContent = file.name;
+            document.getElementById('dFileName').textContent = file.name;
+            document.getElementById('dFileSize').textContent = file.sizeFormatted;
+            document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
+            document.getElementById('dFileDate').textContent = file.uploadDate;
+            document.getElementById('dFileDownloads').textContent = file.downloadCount;
+            
+            downloadFileId = file.id;
+        }
+        
+        function goBack() {
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('downloadPage').classList.remove('active');
+            downloadFileId = null;
+        }
+        
+        // === DOWNLOAD BUTTON - ACTUAL DOWNLOAD ===
+        document.getElementById('downloadBtn').addEventListener('click', async function() {
+            if (!downloadFileId) return;
+            
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
+            btn.disabled = true;
+            
+            const meta = await getMetaById(downloadFileId);
+            if (!meta) {
+                showToast('File not found', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
                 return;
             }
             
-            // Sort chunks by index
+            // Get chunks
+            const chunks = await getChunksByFileId(downloadFileId);
+            if (!chunks || chunks.length === 0) {
+                showToast('File data not found', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return;
+            }
+            
             chunks.sort((a, b) => a.index - b.index);
             
-            // Combine chunks
             const totalSize = chunks.reduce((sum, c) => sum + c.data.byteLength, 0);
             const combined = new Uint8Array(totalSize);
             let position = 0;
@@ -1356,7 +1545,13 @@
             
             showToast(`✅ Downloaded ${meta.name} (${meta.sizeFormatted})`, 'success');
             await loadFiles();
-        }
+            
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Downloaded!';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1500);
+        });
         
         // === SHARE ===
         async function shareFile(id) {
@@ -1421,8 +1616,7 @@
             if (fileId) {
                 const meta = await getMetaById(fileId);
                 if (meta) {
-                    // Download directly
-                    await downloadFile(fileId);
+                    showDownloadPage(meta);
                     // Clean URL
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
