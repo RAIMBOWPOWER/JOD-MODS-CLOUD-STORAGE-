@@ -467,6 +467,7 @@
         .guest-banner .login-link { background: var(--white); color: var(--primary); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: var(--shadow); }
         
+        /* ===== DOWNLOAD PAGE - FIXED ===== */
         .download-page {
             display: none;
             min-height: 100vh;
@@ -837,7 +838,7 @@
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-bolt"></i></div>
             <h2 id="downloadFileName">File Name</h2>
-            <p class="subtitle">⚡ Download from Telegram Storage</p>
+            <p class="subtitle">⚡ Direct Download from Telegram</p>
             
             <div class="download-info">
                 <div class="download-info-item">
@@ -868,7 +869,7 @@
             
             <div class="download-speed">
                 <i class="fas fa-rocket"></i>
-                <span>Stored on Telegram • <span class="highlight">Public link</span></span>
+                <span>Stored on Telegram • <span class="highlight">Direct download</span></span>
             </div>
             
             <button class="download-back" onclick="goBack()">
@@ -914,7 +915,7 @@
 
     <script>
         // ============================================================
-        // TELEGRAM STORAGE SYSTEM - YOUR CONFIG
+        // TELEGRAM STORAGE - DIRECT DOWNLOAD FIX
         // ============================================================
         
         // ✅ YOUR CONFIGURATION
@@ -961,7 +962,16 @@
                 const data = await response.json();
                 if (data.ok) {
                     const fileId = data.result.document.file_id;
-                    const fileUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${fileId}`;
+                    
+                    // Get file path for direct download
+                    const filePathResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getFile?file_id=${fileId}`);
+                    const filePathData = await filePathResponse.json();
+                    
+                    let fileUrl = null;
+                    if (filePathData.ok) {
+                        const filePath = filePathData.result.file_path;
+                        fileUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${filePath}`;
+                    }
                     
                     return {
                         success: true,
@@ -978,16 +988,15 @@
             }
         }
         
-        // === GET FILE FROM TELEGRAM ===
-        async function getTelegramFile(fileId) {
+        // === GET DIRECT DOWNLOAD URL ===
+        async function getTelegramFileUrl(fileId) {
             try {
                 const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getFile?file_id=${fileId}`);
                 const data = await response.json();
                 
                 if (data.ok) {
                     const filePath = data.result.file_path;
-                    const fileUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${filePath}`;
-                    return fileUrl;
+                    return `https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/${filePath}`;
                 } else {
                     throw new Error('File not found on Telegram');
                 }
@@ -1207,7 +1216,7 @@
             document.getElementById('storageFill').style.width = pct + '%';
         }
         
-        // === DOWNLOAD ===
+        // === DOWNLOAD - DIRECT FROM TELEGRAM ===
         async function downloadFile(id) {
             const file = files.find(f => f.id === id);
             if (!file) {
@@ -1216,9 +1225,13 @@
             }
             
             try {
-                const fileUrl = await getTelegramFile(file.id);
+                // Get direct download URL from Telegram
+                const fileUrl = await getTelegramFileUrl(file.id);
+                
+                // Open in new tab for download
                 window.open(fileUrl, '_blank');
                 
+                // Increment download count
                 file.downloadCount++;
                 saveFilesToStorage(loadFilesFromStorage());
                 updateStats();
@@ -1468,12 +1481,14 @@
             }
         }
         
-        // === DOWNLOAD BUTTON ===
+        // === DOWNLOAD BUTTON - DIRECT DOWNLOAD ===
         document.getElementById('downloadBtn').addEventListener('click', async function() {
             if (window._downloadFile) {
                 try {
-                    const fileUrl = await getTelegramFile(window._downloadFile.id);
+                    // Get direct download URL from Telegram
+                    const fileUrl = await getTelegramFileUrl(window._downloadFile.id);
                     
+                    // Increment download count
                     window._downloadFile.downloadCount++;
                     const allFiles = loadFilesFromStorage();
                     const fileIndex = allFiles.findIndex(f => f.id === window._downloadFile.id);
@@ -1482,6 +1497,7 @@
                         saveFilesToStorage(allFiles);
                     }
                     
+                    // Open in new tab for download
                     window.open(fileUrl, '_blank');
                     showToast(`Downloading ${window._downloadFile.name} from Telegram...`, 'success');
                 } catch (error) {
@@ -1591,6 +1607,9 @@
             document.getElementById('authModal').addEventListener('click', function(e) {
                 if (e.target === this) { closeAuth(); }
             });
+            
+            console.log('✅ Telegram Storage ready! Bot Token:', TELEGRAM_BOT_TOKEN ? 'Set' : 'Not Set');
+            console.log('✅ Channel ID:', TELEGRAM_CHANNEL_ID);
         });
         
         // Global functions
