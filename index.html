@@ -3,10 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOD MODS - MediaFire Style Cloud</title>
+    <title>JOD MODS CLOUD - Personal Storage</title>
+    <!-- Copy Protect - Disable Right Click -->
+    <script>
+        // Disable Right Click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Disable Ctrl+C, Ctrl+X, Ctrl+V, Ctrl+A
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || 
+                e.key === 'x' || e.key === 'X' || 
+                e.key === 'v' || e.key === 'V' || 
+                e.key === 'a' || e.key === 'A' || 
+                e.key === 'u' || e.key === 'U')) {
+                e.preventDefault();
+                return false;
+            }
+            // Disable F12
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Disable text selection
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Disable copy
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Disable cut
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Disable paste
+        document.addEventListener('paste', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* Disable text selection globally */
+        * {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        /* Allow selection only on input fields */
+        input, textarea {
+            user-select: text !important;
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -47,9 +112,25 @@
             border-bottom: 3px solid var(--primary);
         }
         .nav-content { display: flex; justify-content: space-between; align-items: center; }
-        .nav-brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .nav-brand i { color: var(--primary); font-size: 2rem; }
-        .nav-brand h1 { font-size: 1.4rem; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .nav-brand img {
+            height: 40px;
+            width: auto;
+            border-radius: 8px;
+        }
+        .nav-brand h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         .nav-brand span { -webkit-text-fill-color: var(--primary); }
         .nav-right { display: flex; align-items: center; gap: 16px; }
         
@@ -150,7 +231,7 @@
         @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .auth-header { background: var(--primary-gradient); color: white; padding: 32px 24px; text-align: center; }
         .auth-header .logo { display: flex; align-items: center; justify-content: center; gap: 12px; }
-        .auth-header .logo i { font-size: 2.8rem; }
+        .auth-header .logo img { height: 50px; width: auto; border-radius: 10px; }
         .auth-header h1 { font-size: 2rem; font-weight: 800; }
         .auth-header p { opacity: 0.85; font-size: 0.9rem; margin-top: 4px; }
         .auth-tabs { display: flex; border-bottom: 2px solid var(--primary-light); }
@@ -422,8 +503,29 @@
         .file-name { font-weight: 600; margin-bottom: 4px; word-break: break-word; font-size: 0.85rem; color: var(--dark); }
         .file-meta { display: flex; gap: 12px; font-size: 0.7rem; color: var(--gray); margin-bottom: 10px; }
         .file-link-box { background: var(--light); border-radius: 6px; padding: 6px 10px; font-size: 0.65rem; display: flex; justify-content: space-between; align-items: center; gap: 6px; border: 1px solid var(--gray-light); }
-        .file-link-box input { border: none; background: transparent; width: 65%; font-size: 0.65rem; color: var(--gray); outline: none; font-family: 'Poppins', sans-serif; }
-        .file-link-box .copy-btn { background: var(--primary-gradient); color: white; border: none; padding: 3px 10px; border-radius: 4px; font-size: 0.6rem; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        .file-link-box input { 
+            border: none; 
+            background: transparent; 
+            width: 65%; 
+            font-size: 0.65rem; 
+            color: var(--gray); 
+            outline: none; 
+            font-family: 'Poppins', sans-serif;
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+        .file-link-box .copy-btn { 
+            background: var(--primary-gradient); 
+            color: white; 
+            border: none; 
+            padding: 3px 10px; 
+            border-radius: 4px; 
+            font-size: 0.6rem; 
+            cursor: pointer; 
+            font-weight: 500; 
+            transition: all 0.2s;
+            pointer-events: auto !important;
+        }
         .file-link-box .copy-btn:hover { opacity: 0.8; }
         
         .no-files { text-align: center; padding: 40px 20px; color: var(--gray); }
@@ -449,7 +551,6 @@
         .guest-banner .login-link { background: var(--white); color: var(--primary); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: var(--shadow); }
         
-        /* ===== DOWNLOAD PAGE - MEDIAFIRE STYLE ===== */
         .download-page {
             display: none;
             min-height: 100vh;
@@ -609,26 +710,84 @@
             color: var(--success);
         }
         
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--dark);
-            color: white;
-            padding: 12px 20px;
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-lg);
-            display: none;
-            z-index: 9999;
-            font-weight: 500;
-            max-width: 350px;
-            animation: slideIn 0.3s ease;
-            font-size: 0.85rem;
+        /* ===== FOOTER - SOCIAL MEDIA ===== */
+        .footer {
+            background: var(--white);
+            border-top: 3px solid var(--primary);
+            padding: 30px 0 20px;
+            margin-top: 30px;
         }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .toast.success { background: var(--success); }
-        .toast.error { background: var(--danger); }
-        .toast.warning { background: var(--warning); }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer-social a i {
+            font-size: 1.3rem;
+        }
+        
+        .footer-social a:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .footer-social a .social-label {
+            display: inline;
+        }
+        
+        .social-telegram {
+            background: linear-gradient(135deg, #0088cc, #004d7a);
+        }
+        
+        .social-instagram {
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        }
+        
+        .social-youtube {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+        }
+        
+        .footer-divider {
+            width: 80px;
+            height: 3px;
+            background: var(--primary-gradient);
+            border-radius: 3px;
+        }
+        
+        .footer-text {
+            color: var(--gray);
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .footer-text strong {
+            color: var(--primary);
+        }
         
         @media (max-width: 768px) {
             .profile-name { display: none; }
@@ -641,12 +800,20 @@
             .progress-details { grid-template-columns: 1fr 1fr; }
             .progress-speed-time { flex-direction: column; align-items: flex-start; }
             .progress-speed-time .file-name-display { max-width: 100%; }
+            .nav-brand img { height: 30px; }
+            .footer-social a { padding: 8px 14px; font-size: 0.8rem; }
+            .footer-social a .social-label { display: none; }
+            .footer-social a i { font-size: 1.5rem; }
         }
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr; }
             .upload-area { padding: 20px 16px; }
             .download-card { padding: 20px; }
             .progress-details { grid-template-columns: 1fr; }
+            .nav-brand h1 { font-size: 1rem; }
+            .nav-brand img { height: 25px; }
+            .footer-social { gap: 12px; }
+            .footer-social a { padding: 10px 14px; }
         }
     </style>
 </head>
@@ -657,8 +824,11 @@
             <button class="auth-close" onclick="closeAuth()"><i class="fas fa-times"></i></button>
             <div class="auth-header">
                 <div class="logo">
-                    <i class="fas fa-cloud"></i>
-                    <div><h1>JOD MODS</h1><p>CLOUD STORAGE</p></div>
+                    <img src="https://i.ibb.co/v4tHrQhW/x.jpg" alt="JOD MODS Logo">
+                    <div>
+                        <h1>JOD MODS</h1>
+                        <p>CLOUD STORAGE</p>
+                    </div>
                 </div>
                 <p>Secure Personal Cloud Storage</p>
             </div>
@@ -703,7 +873,7 @@
     <nav class="navbar">
         <div class="container nav-content">
             <div class="nav-brand" onclick="location.reload()">
-                <i class="fas fa-cloud"></i>
+                <img src="https://i.ibb.co/v4tHrQhW/x.jpg" alt="JOD MODS Logo">
                 <h1>JOD MODS <span>CLOUD</span></h1>
             </div>
             <div class="nav-right">
@@ -836,7 +1006,7 @@
         </div>
     </div>
     
-    <!-- ===== DOWNLOAD PAGE - MEDIAFIRE STYLE ===== -->
+    <!-- DOWNLOAD PAGE -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-bolt"></i></div>
@@ -886,13 +1056,50 @@
         </div>
     </div>
     
+    <!-- ===== FOOTER - SOCIAL MEDIA ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-social">
+                    <!-- Telegram -->
+                    <a href="https://t.me/JODxCHEATS/3" target="_blank" class="social-telegram" title="Join our Telegram">
+                        <i class="fab fa-telegram-plane"></i>
+                        <span class="social-label">Telegram</span>
+                    </a>
+                    
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/jodxgamers" target="_blank" class="social-instagram" title="Follow on Instagram">
+                        <i class="fab fa-instagram"></i>
+                        <span class="social-label">Instagram</span>
+                    </a>
+                    
+                    <!-- YouTube -->
+                    <a href="https://youtube.com/@jodxcheats_12" target="_blank" class="social-youtube" title="Subscribe on YouTube">
+                        <i class="fab fa-youtube"></i>
+                        <span class="social-label">YouTube</span>
+                    </a>
+                </div>
+                
+                <div class="footer-divider"></div>
+                
+                <div class="footer-text">
+                    &copy; 2026 <strong>JOD MODS CLOUD</strong> — Secure File Sharing Platform<br>
+                    <span style="font-size:0.75rem;color:var(--gray-light);">Made with ❤️ by JOD MODS Team</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
     <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
     <script>
         // ============================================================
-        // COMPLETE FIX - WITH DOWNLOAD PAGE
+        // COMPLETE - PERSONAL STORAGE + COPY PROTECT + SOCIAL MEDIA
         // ============================================================
+        
+        // === COPY PROTECT - Only copy button works ===
+        // All copy protection is already in the head section
         
         // === CONSTANTS ===
         const DB_NAME = 'JODMods_Main';
@@ -901,7 +1108,7 @@
         const CHUNK_STORE_NAME = 'file_chunks';
         const USERS_KEY = 'jodmods_users';
         const CURRENT_USER_KEY = 'jodmods_currentUser';
-        const CHUNK_SIZE = 1024 * 1024 * 5; // 5MB chunks
+        const CHUNK_SIZE = 1024 * 1024 * 5;
         
         // === STATE ===
         let db = null;
@@ -1355,6 +1562,7 @@
             try {
                 const allMeta = await getAllMeta();
                 if (currentUser) {
+                    // Personal storage - only show current user's files
                     files = allMeta.filter(f => f.userId === currentUser.id);
                 } else {
                     files = [];
@@ -1420,7 +1628,7 @@
                         <span><i class="fas fa-download"></i> ${file.downloadCount}</span>
                     </div>
                     <div class="file-link-box">
-                        <input type="text" value="${file.shareLink}" readonly>
+                        <input type="text" value="${file.shareLink}" readonly id="linkInput_${file.id}">
                         <button class="copy-btn" onclick="copyLink('${file.shareLink}')">
                             <i class="fas fa-copy"></i> Copy
                         </button>
@@ -1429,7 +1637,7 @@
             `).join('');
         }
         
-        // === STATS ===
+        // === STATS - Personal Storage ===
         function updateStats() {
             if (!currentUser) {
                 document.getElementById('storageUsed').textContent = '0 MB';
@@ -1443,6 +1651,7 @@
                 return;
             }
             
+            // Personal storage stats - only current user's files
             const totalSize = files.reduce((sum, f) => sum + f.size, 0);
             const totalDownloads = files.reduce((sum, f) => sum + f.downloadCount, 0);
             
@@ -1459,16 +1668,16 @@
             document.getElementById('storageFill').style.width = pct + '%';
         }
         
-        // === DOWNLOAD - SHOW DOWNLOAD PAGE ===
+        // === DOWNLOAD ===
         async function downloadFile(id) {
             const meta = await getMetaById(id);
             if (!meta) { showToast('File not found', 'error'); return; }
+            // Personal storage check
             if (currentUser && meta.userId !== currentUser.id) {
                 showToast('Permission denied', 'error');
                 return;
             }
             
-            // Show download page
             showDownloadPage(meta);
         }
         
@@ -1492,7 +1701,7 @@
             downloadFileId = null;
         }
         
-        // === DOWNLOAD BUTTON - ACTUAL DOWNLOAD ===
+        // === DOWNLOAD BUTTON ===
         document.getElementById('downloadBtn').addEventListener('click', async function() {
             if (!downloadFileId) return;
             
@@ -1509,7 +1718,6 @@
                 return;
             }
             
-            // Get chunks
             const chunks = await getChunksByFileId(downloadFileId);
             if (!chunks || chunks.length === 0) {
                 showToast('File data not found', 'error');
@@ -1528,11 +1736,9 @@
                 position += chunk.data.byteLength;
             }
             
-            // Increment download count
             meta.downloadCount++;
             await updateMeta(meta);
             
-            // Download
             const blob = new Blob([combined.buffer], { type: meta.type || 'application/octet-stream' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -1553,7 +1759,7 @@
             }, 1500);
         });
         
-        // === SHARE ===
+        // === SHARE - Only copy via button ===
         async function shareFile(id) {
             const meta = await getMetaById(id);
             if (!meta) return;
@@ -1564,19 +1770,42 @@
             }
         }
         
+        // === COPY LINK - Only this works ===
         function copyLink(link) {
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(link).then(() => showToast('Link copied! 📋', 'success')).catch(() => fallbackCopy(link));
-            } else { fallbackCopy(link); }
-        }
-        function fallbackCopy(text) {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            showToast('Link copied! 📋', 'success');
+                navigator.clipboard.writeText(link)
+                    .then(() => showToast('Link copied! 📋', 'success'))
+                    .catch(() => {
+                        // Fallback
+                        const ta = document.createElement('textarea');
+                        ta.value = link;
+                        ta.style.position = 'fixed';
+                        ta.style.left = '-9999px';
+                        document.body.appendChild(ta);
+                        ta.select();
+                        try {
+                            document.execCommand('copy');
+                            showToast('Link copied! 📋', 'success');
+                        } catch (e) {
+                            showToast('Failed to copy', 'error');
+                        }
+                        document.body.removeChild(ta);
+                    });
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = link;
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('Link copied! 📋', 'success');
+                } catch (e) {
+                    showToast('Failed to copy', 'error');
+                }
+                document.body.removeChild(ta);
+            }
         }
         
         // === DELETE ===
@@ -1617,7 +1846,6 @@
                 const meta = await getMetaById(fileId);
                 if (meta) {
                     showDownloadPage(meta);
-                    // Clean URL
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
             }
@@ -1642,7 +1870,7 @@
             
             await checkShareLink();
             
-            // === GET ELEMENTS ===
+            // === ELEMENTS ===
             const fileInput = document.getElementById('fileInput');
             const uploadArea = document.getElementById('uploadArea');
             const uploadBtn = document.getElementById('uploadBtn');
@@ -1699,7 +1927,7 @@
                 }
             });
             
-            // === PROFILE DROPDOWN ===
+            // === PROFILE ===
             const profileTrigger = document.getElementById('profileTrigger');
             const profileDropdown = document.getElementById('profileDropdown');
             
