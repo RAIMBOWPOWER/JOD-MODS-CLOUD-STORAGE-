@@ -551,6 +551,7 @@
         .guest-banner .login-link { background: var(--white); color: var(--primary); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: var(--shadow); }
         
+        /* ===== DOWNLOAD PAGE - FIXED ===== */
         .download-page {
             display: none;
             min-height: 100vh;
@@ -1006,7 +1007,7 @@
         </div>
     </div>
     
-    <!-- DOWNLOAD PAGE -->
+    <!-- ===== DOWNLOAD PAGE - FIXED ===== -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-bolt"></i></div>
@@ -1603,6 +1604,7 @@
             
             noFiles.style.display = 'none';
             
+            // FIXED: Share link with proper ?file= parameter
             grid.innerHTML = files.map(file => `
                 <div class="file-card">
                     <div class="file-top">
@@ -1763,10 +1765,23 @@
         async function shareFile(id) {
             const meta = await getMetaById(id);
             if (!meta) return;
+            
+            // Generate proper share link with file ID
+            const shareLink = `${window.location.origin}${window.location.pathname}?file=${id}`;
+            
             if (navigator.share) {
-                navigator.share({ title: meta.name, text: `Download ${meta.name} from JOD MODS`, url: meta.shareLink }).catch(() => {});
+                try {
+                    await navigator.share({
+                        title: meta.name,
+                        text: `Download ${meta.name} from JOD MODS CLOUD`,
+                        url: shareLink
+                    });
+                } catch (e) {
+                    // User cancelled or error
+                    copyLink(shareLink);
+                }
             } else {
-                copyLink(meta.shareLink);
+                copyLink(shareLink);
             }
         }
         
@@ -1842,11 +1857,28 @@
         async function checkShareLink() {
             const params = new URLSearchParams(window.location.search);
             const fileId = params.get('file');
+            
             if (fileId) {
                 const meta = await getMetaById(fileId);
                 if (meta) {
-                    showDownloadPage(meta);
+                    // Show download page directly
+                    document.getElementById('mainApp').style.display = 'none';
+                    document.getElementById('downloadPage').classList.add('active');
+                    
+                    document.getElementById('downloadFileName').textContent = meta.name;
+                    document.getElementById('dFileName').textContent = meta.name;
+                    document.getElementById('dFileSize').textContent = meta.sizeFormatted;
+                    document.getElementById('dFileUser').textContent = meta.userName || 'Unknown';
+                    document.getElementById('dFileDate').textContent = meta.uploadDate;
+                    document.getElementById('dFileDownloads').textContent = meta.downloadCount;
+                    
+                    downloadFileId = meta.id;
+                    
+                    // Clean URL
                     window.history.replaceState({}, document.title, window.location.pathname);
+                } else {
+                    // File not found - show message
+                    showToast('File not found or has been deleted', 'error');
                 }
             }
         }
