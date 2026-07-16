@@ -356,6 +356,7 @@
             background: rgba(124, 58, 237, 0.02);
         }
         .upload-area:hover { background: rgba(124, 58, 237, 0.05); border-color: var(--primary-dark); }
+        .upload-area.dragover { background: rgba(124, 58, 237, 0.1); border-color: var(--secondary); }
         .upload-area i { font-size: 3rem; color: var(--primary); opacity: 0.6; }
         .upload-area h3 { margin: 10px 0 4px; font-size: 1.1rem; color: var(--dark); }
         .upload-area p { color: var(--gray); font-size: 0.9rem; }
@@ -917,7 +918,7 @@
 
     <script>
         // ============================================================
-        // MEDIAFIRE STYLE - ONE DATABASE, AUTO MIGRATION, LAG FREE
+        // COMPLETE FIXED - ALL WORKING
         // ============================================================
         
         // === CONSTANTS ===
@@ -925,7 +926,6 @@
         const DB_VERSION = 1;
         const STORE_NAME = 'cloud_data';
         const USERS_KEY = 'jodmods_users';
-        const FILES_KEY = 'jodmods_files';
         const CURRENT_USER_KEY = 'jodmods_currentUser';
         
         // === STATE ===
@@ -950,18 +950,15 @@
             updateGuestBanner();
         }
         
-        // === DATABASE - ONE DB FOR ALL ===
+        // === DATABASE ===
         function openDB() {
             return new Promise((resolve, reject) => {
                 const request = indexedDB.open(DB_NAME, DB_VERSION);
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
                     if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-                        store.createIndex('type', 'type', { unique: false });
-                        store.createIndex('userId', 'userId', { unique: false });
+                        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
                     }
-                    // Auto-migration: Check if old data exists
                     migrateOldData(db);
                 };
                 request.onsuccess = (e) => { db = e.target.result; resolve(db); };
@@ -969,25 +966,9 @@
             });
         }
         
-        // === AUTO MIGRATION - Restore old data ===
         function migrateOldData(db) {
-            const transaction = db.transaction([STORE_NAME], 'readwrite');
-            const store = transaction.objectStore(STORE_NAME);
-            
-            // Check if we already have data
-            const countRequest = store.count();
-            countRequest.onsuccess = () => {
-                if (countRequest.result === 0) {
-                    // No data in new DB, try to migrate from old versions
-                    migrateFromOldDBs(store);
-                }
-            };
-        }
-        
-        function migrateFromOldDBs(store) {
-            const oldDBs = ['JODModsDB', 'JODModsDB_Real', 'JODModsDB_Real_v2', 'JODModsDB_v3', 'JODModsDB_v4'];
-            let found = false;
-            
+            // Try to migrate from old databases
+            const oldDBs = ['JODModsDB', 'JODModsDB_Real', 'JODModsDB_Real_v2', 'JODModsDB_v3', 'JODModsDB_v4', 'JODMods_Main'];
             oldDBs.forEach(dbName => {
                 try {
                     const request = indexedDB.open(dbName);
@@ -998,36 +979,20 @@
                             const store = tx.objectStore('files');
                             const getAll = store.getAll();
                             getAll.onsuccess = () => {
-                                const oldFiles = getAll.result;
-                                oldFiles.forEach(file => {
-                                    store.add({ ...file, type: 'file' });
+                                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                                const newStore = transaction.objectStore(STORE_NAME);
+                                getAll.result.forEach(file => {
+                                    newStore.add({ ...file, type: 'file' });
                                 });
-                                found = true;
                             };
                         }
                         oldDb.close();
                     };
                 } catch(e) {}
             });
-            
-            // Also migrate users from localStorage
-            try {
-                const oldUsers = JSON.parse(localStorage.getItem('jodmods_users')) || [];
-                const oldUsersV2 = JSON.parse(localStorage.getItem('jodmods_users_v2')) || [];
-                const oldUsersV3 = JSON.parse(localStorage.getItem('jodmods_users_v3')) || [];
-                const oldUsersV4 = JSON.parse(localStorage.getItem('jodmods_users_v4')) || [];
-                const allUsers = [...oldUsers, ...oldUsersV2, ...oldUsersV3, ...oldUsersV4];
-                if (allUsers.length > 0) {
-                    localStorage.setItem(USERS_KEY, JSON.stringify(allUsers));
-                }
-            } catch(e) {}
-            
-            if (found) {
-                console.log('✅ Auto-migration completed! Old data restored.');
-            }
         }
         
-        // === CRUD OPERATIONS ===
+        // === CRUD ===
         function saveToDB(data) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([STORE_NAME], 'readwrite');
@@ -1201,7 +1166,7 @@
             else { banner.classList.add('active'); }
         }
         
-        // === UPLOAD - MEDIAFIRE STYLE ===
+        // === UPLOAD ===
         let uploadSpeed = 0;
         let speedInterval = null;
         let lastUploadedSize = 0;
@@ -1602,52 +1567,76 @@
             
             await checkShareLink();
             
-            document.getElementById('uploadArea').addEventListener('click', () => {
+            // === UPLOAD BUTTON ===
+            document.getElementById('uploadBtn').addEventListener('click', function(e) {
+                e.preventDefault();
                 if (!currentUser) { showToast('Please sign in to upload files', 'warning'); openAuth(); return; }
                 document.getElementById('fileInput').click();
-            });
-            document.getElementById('uploadBtn').addEventListener('click', () => {
-                if (!currentUser) { showToast('Please sign in to upload files', 'warning'); openAuth(); return; }
-                document.getElementById('fileInput').click();
-            });
-            document.getElementById('fileInput').addEventListener('change', (e) => {
-                if (e.target.files.length > 0) { uploadFiles(e.target.files); }
             });
             
+            // === UPLOAD AREA ===
             const uploadArea = document.getElementById('uploadArea');
-            uploadArea.addEventListener('dragover', (e) => {
+            const fileInput = document.getElementById('fileInput');
+            
+            uploadArea.addEventListener('click', function(e) {
                 e.preventDefault();
-                uploadArea.style.borderColor = '#8b5cf6';
-                uploadArea.style.background = 'rgba(124, 58, 237, 0.05)';
-            });
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.style.borderColor = '#7c3aed';
-                uploadArea.style.background = 'transparent';
-            });
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#7c3aed';
-                uploadArea.style.background = 'transparent';
-                if (!currentUser) { showToast('Please sign in to upload', 'warning'); openAuth(); return; }
-                uploadFiles(e.dataTransfer.files);
+                if (!currentUser) { showToast('Please sign in to upload files', 'warning'); openAuth(); return; }
+                fileInput.click();
             });
             
-            document.getElementById('profileTrigger').addEventListener('click', (e) => {
+            // === DRAG & DROP ===
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('dragover');
+                if (!currentUser) { showToast('Please sign in to upload', 'warning'); openAuth(); return; }
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    uploadFiles(files);
+                }
+            });
+            
+            // === FILE INPUT ===
+            fileInput.addEventListener('change', function(e) {
+                if (this.files.length > 0) {
+                    uploadFiles(this.files);
+                }
+                this.value = '';
+            });
+            
+            // === PROFILE DROPDOWN ===
+            document.getElementById('profileTrigger').addEventListener('click', function(e) {
                 e.stopPropagation();
                 document.getElementById('profileDropdown').classList.toggle('active');
             });
-            document.addEventListener('click', () => {
+            
+            document.addEventListener('click', function() {
                 document.getElementById('profileDropdown').classList.remove('active');
             });
             
-            document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+            // === ENTER KEY ===
+            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') handleLogin();
             });
-            document.getElementById('regConfirm').addEventListener('keypress', (e) => {
+            document.getElementById('regConfirm').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') handleRegister();
             });
-            document.getElementById('authModal').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('authModal')) { closeAuth(); }
+            
+            // === CLOSE AUTH ===
+            document.getElementById('authModal').addEventListener('click', function(e) {
+                if (e.target === this) { closeAuth(); }
             });
         });
         
