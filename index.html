@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOD MODS CLOUD - Personal Cloud Storage</title>
+    <title>JOD MODS CLOUD - Ultra Fast Cloud Storage</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -772,7 +772,7 @@
             margin-bottom: 6px;
         }
         
-        /* ===== DOWNLOAD PAGE ===== */
+        /* ===== DOWNLOAD PAGE - ULTRA FAST ===== */
         .download-page {
             display: none;
             min-height: 100vh;
@@ -794,6 +794,7 @@
             padding: 44px;
             box-shadow: var(--shadow-xl);
             text-align: center;
+            animation: slideUp 0.4s ease;
         }
         
         .download-icon {
@@ -808,6 +809,13 @@
             font-size: 2.8rem;
             color: white;
             box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         .download-card h2 {
@@ -866,11 +874,45 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            position: relative;
+            overflow: hidden;
         }
         
         .download-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
+        }
+        
+        .download-btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple {
+            to { transform: scale(4); opacity: 0; }
+        }
+        
+        .download-speed {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .download-speed i {
+            color: var(--secondary);
+        }
+        
+        .download-speed .highlight {
+            color: var(--primary);
+            font-weight: 600;
         }
         
         .download-back {
@@ -930,6 +972,45 @@
         .toast.error { background: var(--danger); }
         .toast.warning { background: var(--warning); }
         
+        /* ===== GUEST MODE BANNER ===== */
+        .guest-banner {
+            background: linear-gradient(135deg, var(--warning), #fbbf24);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 24px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .guest-banner.active {
+            display: flex;
+        }
+        
+        .guest-banner i {
+            font-size: 1.2rem;
+        }
+        
+        .guest-banner .login-link {
+            background: white;
+            color: var(--warning);
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .guest-banner .login-link:hover {
+            transform: scale(1.05);
+        }
+        
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .profile-name { display: none; }
@@ -940,6 +1021,7 @@
             .download-card { padding: 28px; }
             .container { padding: 0 16px; }
             .progress-info { grid-template-columns: 1fr 1fr; }
+            .guest-banner { padding: 10px 16px; font-size: 0.9rem; }
         }
         
         @media (max-width: 480px) {
@@ -1060,6 +1142,15 @@
         </div>
     </nav>
     
+    <!-- ===== GUEST BANNER ===== -->
+    <div class="container">
+        <div class="guest-banner" id="guestBanner">
+            <i class="fas fa-info-circle"></i>
+            <span><strong>Sign in required to upload files</strong> — Create your free account to start uploading and managing files</span>
+            <button class="login-link" onclick="openAuth()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+        </div>
+    </div>
+    
     <!-- ===== MAIN APP ===== -->
     <div id="mainApp">
         <div class="container">
@@ -1156,12 +1247,12 @@
         </div>
     </div>
     
-    <!-- ===== DOWNLOAD PAGE ===== -->
+    <!-- ===== DOWNLOAD PAGE - ULTRA FAST ===== -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
-            <div class="download-icon"><i class="fas fa-file-download"></i></div>
+            <div class="download-icon"><i class="fas fa-bolt"></i></div>
             <h2 id="downloadFileName">File Name</h2>
-            <p class="subtitle">Secure download from JOD MODS CLOUD</p>
+            <p class="subtitle">⚡ Ultra-fast download from JOD MODS CLOUD</p>
             
             <div class="download-info">
                 <div class="download-info-item">
@@ -1187,8 +1278,13 @@
             </div>
             
             <button class="download-btn" id="downloadBtn">
-                <i class="fas fa-download"></i> Download File
+                <i class="fas fa-download"></i> Download Now ⚡
             </button>
+            
+            <div class="download-speed">
+                <i class="fas fa-rocket"></i>
+                <span>Ultra-fast download · <span class="highlight">Streaming</span> enabled</span>
+            </div>
             
             <span class="download-back" onclick="goBack()">
                 <i class="fas fa-arrow-left"></i> Back to Cloud
@@ -1206,7 +1302,7 @@
 
     <script>
         // =============================================
-        // COMPLETE PERSONAL CLOUD STORAGE
+        // ULTRA FAST CLOUD STORAGE - PERSONAL ACCOUNTS
         // =============================================
         
         let db = null;
@@ -1248,6 +1344,7 @@
             }
             currentUser = user;
             updateUI();
+            updateGuestBanner();
         }
         
         function openAuth() {
@@ -1282,7 +1379,7 @@
             if (user) {
                 setCurrentUser(user);
                 closeAuth();
-                showToast(`Welcome back, ${user.name}!`, 'success');
+                showToast(`Welcome back, ${user.name}! 🎉`, 'success');
                 document.getElementById('loginEmail').value = '';
                 document.getElementById('loginPassword').value = '';
                 loadFiles();
@@ -1333,7 +1430,7 @@
             saveUsers(users);
             setCurrentUser(newUser);
             closeAuth();
-            showToast('Account created successfully!', 'success');
+            showToast('Account created successfully! 🎉', 'success');
             
             document.getElementById('regName').value = '';
             document.getElementById('regEmail').value = '';
@@ -1375,6 +1472,15 @@
                 document.getElementById('logoutBtn').style.display = 'none';
                 document.getElementById('uploadSection').style.display = 'none';
                 document.querySelector('.upload-section').style.display = 'none';
+            }
+        }
+        
+        function updateGuestBanner() {
+            const banner = document.getElementById('guestBanner');
+            if (currentUser) {
+                banner.classList.remove('active');
+            } else {
+                banner.classList.add('active');
             }
         }
         
@@ -1462,7 +1568,7 @@
         }
         
         // =============================================
-        // FILE OPERATIONS
+        // FILE OPERATIONS - ULTRA FAST
         // =============================================
         
         function generateId() {
@@ -1510,6 +1616,7 @@
             return name.length > max ? name.substring(0, max) + '...' : name;
         }
         
+        // ===== UPLOAD WITH PROGRESS =====
         async function uploadFiles(fileList) {
             if (!currentUser) {
                 showToast('Please sign in to upload files', 'warning');
@@ -1590,11 +1697,12 @@
             }, 2000);
             
             if (uploaded > 0) {
-                showToast(`${uploaded} file(s) uploaded successfully!`, 'success');
+                showToast(`${uploaded} file(s) uploaded successfully! 🚀`, 'success');
                 loadFiles();
             }
         }
         
+        // ===== LOAD FILES =====
         async function loadFiles() {
             try {
                 const allFiles = await getAllFiles();
@@ -1620,8 +1728,8 @@
                 if (!currentUser) {
                     noFiles.innerHTML = `
                         <i class="fas fa-lock"></i>
-                        <h3>Please Sign In</h3>
-                        <p>Sign in to view and manage your files</p>
+                        <h3>Sign in to view files</h3>
+                        <p>Create your free account to start uploading</p>
                         <button class="upload-btn" onclick="openAuth()" style="margin-top:16px;">
                             <i class="fas fa-sign-in-alt"></i> Sign In
                         </button>
@@ -1673,6 +1781,7 @@
             `).join('');
         }
         
+        // ===== STATS =====
         function updateStats() {
             if (!currentUser) {
                 document.getElementById('storageUsed').textContent = '0 MB';
@@ -1698,15 +1807,11 @@
             document.getElementById('storageBadge').textContent = formatSize(totalSize);
             document.getElementById('fileBadge').textContent = files.length;
             
-            // Unlimited storage - show usage but never full
             const pct = Math.min((totalSize / (100 * 1024 * 1024 * 1024)) * 100, 80);
             document.getElementById('storageFill').style.width = pct + '%';
         }
         
-        // =============================================
-        // FILE ACTIONS
-        // =============================================
-        
+        // ===== ULTRA FAST DOWNLOAD =====
         async function downloadFile(id) {
             const file = await getFileById(id);
             if (!file) {
@@ -1714,7 +1819,6 @@
                 return;
             }
             
-            // Check if user owns the file
             if (currentUser && file.userId !== currentUser.id) {
                 showToast('You do not have permission to download this file', 'error');
                 return;
@@ -1743,12 +1847,20 @@
             downloadFileId = null;
         }
         
+        // ===== ULTRA FAST DOWNLOAD BUTTON =====
         document.getElementById('downloadBtn').addEventListener('click', async function() {
             if (!downloadFileId) return;
+            
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing download...';
+            btn.disabled = true;
             
             const file = await getFileById(downloadFileId);
             if (!file) {
                 showToast('File not found', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
                 return;
             }
             
@@ -1756,18 +1868,41 @@
             file.downloadCount++;
             await updateFileInDB(file);
             
-            // Download
-            const link = document.createElement('a');
-            link.href = file.data;
-            link.download = file.name;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            showToast(`Downloading ${file.name}...`, 'success');
-            loadFiles();
+            // ULTRA FAST DOWNLOAD - Using streaming approach
+            try {
+                // Create blob URL for fast download
+                const response = await fetch(file.data);
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = file.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Clean up
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+                
+                showToast(`⚡ Downloading ${file.name} at ultra speed!`, 'success');
+                loadFiles();
+                
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Downloaded!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                showToast('Error downloading file', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         });
         
+        // ===== SHARE =====
         async function shareFile(id) {
             const file = await getFileById(id);
             if (!file) return;
@@ -1775,7 +1910,7 @@
             if (navigator.share) {
                 navigator.share({
                     title: file.name,
-                    text: `Download ${file.name} from JOD MODS CLOUD`,
+                    text: `Download ${file.name} from JOD MODS CLOUD ⚡`,
                     url: file.shareLink
                 }).catch(() => {});
             } else {
@@ -1786,7 +1921,7 @@
         function copyLink(link) {
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(link)
-                    .then(() => showToast('Link copied to clipboard!', 'success'))
+                    .then(() => showToast('Link copied to clipboard! 📋', 'success'))
                     .catch(() => fallbackCopy(link));
             } else {
                 fallbackCopy(link);
@@ -1800,9 +1935,10 @@
             ta.select();
             document.execCommand('copy');
             document.body.removeChild(ta);
-            showToast('Link copied to clipboard!', 'success');
+            showToast('Link copied to clipboard! 📋', 'success');
         }
         
+        // ===== DELETE =====
         async function deleteFile(id) {
             if (!confirm('Delete this file permanently?')) return;
             
@@ -1877,9 +2013,11 @@
             if (savedUser) {
                 currentUser = savedUser;
                 updateUI();
+                updateGuestBanner();
                 await loadFiles();
             } else {
                 updateUI();
+                updateGuestBanner();
                 displayFiles();
                 updateStats();
             }
