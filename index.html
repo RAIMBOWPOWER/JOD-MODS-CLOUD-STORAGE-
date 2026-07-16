@@ -914,13 +914,14 @@
 
     <script>
         // ============================================================
-        // MEDIAFIRE STYLE - ORIGINAL FILE UPLOAD & DOWNLOAD
+        // MEDIAFIRE STYLE - ORIGINAL FILE UPLOAD & DOWNLOAD (FIXED)
         // ============================================================
         
         // === STATE ===
         let files = [];
         let currentUser = null;
         let downloadFileId = null;
+        let allFilesCache = [];
         
         // === AUTH ===
         function loadUsers() {
@@ -950,7 +951,7 @@
                 });
                 
                 if (!response.ok) {
-                    throw new Error('Upload failed');
+                    throw new Error('Upload failed: ' + response.status);
                 }
                 
                 const data = await response.json();
@@ -965,12 +966,17 @@
         function loadFilesFromStorage() {
             try {
                 const saved = localStorage.getItem('jodmods_original_files');
-                return saved ? JSON.parse(saved) : [];
-            } catch { return []; }
+                allFilesCache = saved ? JSON.parse(saved) : [];
+                return allFilesCache;
+            } catch { 
+                allFilesCache = [];
+                return []; 
+            }
         }
         
         function saveFilesToStorage(fileList) {
             localStorage.setItem('jodmods_original_files', JSON.stringify(fileList));
+            allFilesCache = fileList;
         }
         
         // === UPLOAD ===
@@ -1008,9 +1014,12 @@
                     // Upload to File.io - Original file
                     const result = await uploadToFileIO(file);
                     
+                    // Generate a unique file ID
+                    const fileId = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+                    
                     if (result.success) {
                         const fileData = {
-                            id: result.key || Date.now() + '_' + Math.random().toString(36).substr(2, 8),
+                            id: fileId,
                             name: file.name,
                             size: file.size,
                             sizeFormatted: formatSize(file.size),
@@ -1019,8 +1028,8 @@
                             userId: currentUser.id,
                             userName: currentUser.name,
                             downloadCount: 0,
-                            fileUrl: result.link,  // Original file URL
-                            shareLink: result.link,  // Direct download link
+                            fileUrl: result.link,  // Original file URL from file.io
+                            shareLink: window.location.origin + window.location.pathname + '?file=' + fileId,
                             fileKey: result.key
                         };
                         
@@ -1037,6 +1046,7 @@
                         document.getElementById('uploadedMB').textContent = formatSize(uploadedSize);
                         document.getElementById('remainingMB').textContent = formatSize(remaining);
                         document.getElementById('progressFiles').textContent = uploaded + '/' + total;
+                        document.getElementById('currentFileName').textContent = file.name;
                     } else {
                         showToast('Failed to upload: ' + file.name, 'error');
                     }
@@ -1133,8 +1143,8 @@
                         <span><i class="fas fa-download"></i> ${file.downloadCount}</span>
                     </div>
                     <div class="file-link-box">
-                        <input type="text" value="${file.shareLink}" readonly id="linkInput_${file.id}">
-                        <button class="copy-btn" onclick="copyLink('${file.shareLink}')">
+                        <input type="text" value="${window.location.origin + window.location.pathname + '?file=' + file.id}" readonly id="linkInput_${file.id}">
+                        <button class="copy-btn" onclick="copyLink('${window.location.origin + window.location.pathname + '?file=' + file.id}')">
                             <i class="fas fa-copy"></i> Copy
                         </button>
                     </div>
@@ -1174,7 +1184,8 @@
         
         // === DOWNLOAD - ORIGINAL FILE ===
         function downloadFile(id) {
-            const file = files.find(f => f.id === id);
+            const allFiles = loadFilesFromStorage();
+            const file = allFiles.find(f => f.id === id);
             if (!file) {
                 showToast('File not found', 'error');
                 return;
@@ -1197,6 +1208,10 @@
             
             downloadFileId = file.id;
             window._downloadFile = file;
+            
+            // Enable download button
+            document.getElementById('downloadBtn').disabled = false;
+            document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-download"></i> Download Original File';
         }
         
         function goBack() {
@@ -1208,17 +1223,20 @@
         
         // === SHARE ===
         function shareFile(id) {
-            const file = files.find(f => f.id === id);
+            const allFiles = loadFilesFromStorage();
+            const file = allFiles.find(f => f.id === id);
             if (!file) return;
+            
+            const shareLink = window.location.origin + window.location.pathname + '?file=' + file.id;
             
             if (navigator.share) {
                 navigator.share({
                     title: file.name,
                     text: `📁 Download "${file.name}" from JOD MODS CLOUD\nFile Size: ${file.sizeFormatted}`,
-                    url: file.shareLink
+                    url: shareLink
                 }).catch(() => {});
             } else {
-                copyLink(file.shareLink);
+                copyLink(shareLink);
             }
         }
         
@@ -1423,6 +1441,10 @@
                     downloadFileId = file.id;
                     window._downloadFile = file;
                     
+                    // Enable download button
+                    document.getElementById('downloadBtn').disabled = false;
+                    document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-download"></i> Download Original File';
+                    
                     window.history.replaceState({}, document.title, window.location.pathname);
                 } else {
                     document.getElementById('mainApp').style.display = 'none';
@@ -1453,6 +1475,13 @@
                 if (fileIndex !== -1) {
                     allFiles[fileIndex].downloadCount = window._downloadFile.downloadCount;
                     saveFilesToStorage(allFiles);
+                    // Update local files array if it belongs to current user
+                    if (currentUser && window._downloadFile.userId === currentUser.id) {
+                        const localIndex = files.findIndex(f => f.id === window._downloadFile.id);
+                        if (localIndex !== -1) {
+                            files[localIndex].downloadCount = window._downloadFile.downloadCount;
+                        }
+                    }
                 }
                 updateStats();
                 
