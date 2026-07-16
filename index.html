@@ -286,7 +286,16 @@
         }
         .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4); }
         .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        #fileInput { display: none; }
+        
+        /* FILE INPUT - VISIBLE AND WORKING */
+        #fileInput {
+            display: block !important;
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
         
         .files-section {
             background: var(--white);
@@ -542,9 +551,10 @@
                 <div class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload</div>
                 <div class="upload-area" id="uploadArea">
                     <i class="fas fa-cloud-upload-alt"></i>
-                    <h3>Drag & Drop or Click to Upload</h3>
+                    <h3>📁 Drag & Drop or Click to Upload</h3>
                     <p>Unlimited • Any file type</p>
-                    <input type="file" id="fileInput" multiple>
+                    <!-- FILE INPUT - VISIBLE BUT HIDDEN FOR CLICK -->
+                    <input type="file" id="fileInput" multiple style="display:none;">
                 </div>
                 
                 <!-- Progress -->
@@ -611,7 +621,7 @@
 
     <script>
         // ============================================================
-        // COMPLETE WORKING - ALL BUTTONS FIXED
+        // COMPLETE WORKING - FILE INPUT FIXED
         // ============================================================
         
         // === CONSTANTS ===
@@ -842,6 +852,11 @@
             if (!currentUser) {
                 showToast('Please sign in to upload files', 'warning');
                 openAuth();
+                return;
+            }
+            
+            if (!fileList || fileList.length === 0) {
+                showToast('No files selected', 'warning');
                 return;
             }
             
@@ -1214,7 +1229,7 @@
             }
         }
         
-        // === INIT - ALL BUTTONS FIXED ===
+        // === INIT - FILE INPUT WORKING ===
         document.addEventListener('DOMContentLoaded', async () => {
             await openDB();
             
@@ -1233,61 +1248,50 @@
             
             await checkShareLink();
             
-            // === UPLOAD BUTTON - FIXED ===
-            const uploadBtn = document.getElementById('uploadBtn');
-            const uploadArea = document.getElementById('uploadArea');
+            // === GET ELEMENTS ===
             const fileInput = document.getElementById('fileInput');
+            const uploadArea = document.getElementById('uploadArea');
+            const uploadBtn = document.getElementById('uploadBtn');
             const addFileBtn = document.getElementById('addFileBtn');
             
-            // Upload button click
-            uploadBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Upload button clicked');
-                if (!currentUser) { 
-                    showToast('Please sign in to upload files', 'warning'); 
-                    openAuth(); 
-                    return; 
+            // === FUNCTION TO TRIGGER FILE INPUT ===
+            function triggerFileInput(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
-                fileInput.click();
-            });
-            
-            // Add file button click
-            addFileBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Add file button clicked');
-                if (!currentUser) { 
-                    showToast('Please sign in to upload files', 'warning'); 
-                    openAuth(); 
-                    return; 
+                console.log('Triggering file input...');
+                if (!currentUser) {
+                    showToast('Please sign in to upload files', 'warning');
+                    openAuth();
+                    return;
                 }
+                // Directly click the file input
                 fileInput.click();
-            });
+            }
             
-            // Upload area click
-            uploadArea.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('Upload area clicked');
-                if (!currentUser) { 
-                    showToast('Please sign in to upload files', 'warning'); 
-                    openAuth(); 
-                    return; 
-                }
-                fileInput.click();
-            });
+            // === UPLOAD BUTTON ===
+            uploadBtn.addEventListener('click', triggerFileInput);
             
-            // File input change
+            // === ADD FILE BUTTON ===
+            addFileBtn.addEventListener('click', triggerFileInput);
+            
+            // === UPLOAD AREA ===
+            uploadArea.addEventListener('click', triggerFileInput);
+            
+            // === FILE INPUT CHANGE ===
             fileInput.addEventListener('change', function(e) {
-                console.log('File input changed', this.files.length);
+                console.log('File input changed - Files selected:', this.files.length);
                 if (this.files.length > 0) {
                     uploadFiles(this.files);
+                } else {
+                    console.log('No files selected');
                 }
+                // Reset so same file can be selected again
                 this.value = '';
             });
             
-            // === DRAG & DROP - FIXED ===
+            // === DRAG & DROP ===
             uploadArea.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1304,11 +1308,11 @@
                 e.preventDefault();
                 e.stopPropagation();
                 this.classList.remove('dragover');
-                console.log('Files dropped', e.dataTransfer.files.length);
-                if (!currentUser) { 
-                    showToast('Please sign in to upload', 'warning'); 
-                    openAuth(); 
-                    return; 
+                console.log('Files dropped:', e.dataTransfer.files.length);
+                if (!currentUser) {
+                    showToast('Please sign in to upload', 'warning');
+                    openAuth();
+                    return;
                 }
                 const files = e.dataTransfer.files;
                 if (files.length > 0) {
@@ -1316,7 +1320,7 @@
                 }
             });
             
-            // === PROFILE DROPDOWN - FIXED ===
+            // === PROFILE DROPDOWN ===
             const profileTrigger = document.getElementById('profileTrigger');
             const profileDropdown = document.getElementById('profileDropdown');
             
@@ -1342,7 +1346,7 @@
                 if (e.target === this) { closeAuth(); }
             });
             
-            console.log('✅ All buttons initialized!');
+            console.log('✅ All buttons initialized! File input will open folder dialog.');
         });
         
         // Global functions
