@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOD MODS CLOUD - MediaFire Style</title>
+    <title>JOD MODS CLOUD - Fast Upload/Download</title>
     <script>
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
         document.addEventListener('keydown', function(e) {
@@ -615,6 +615,16 @@
         .toast.error { background: var(--danger); }
         .toast.warning { background: var(--warning); }
         
+        .upload-badge {
+            display: inline-block;
+            background: var(--success);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 50px;
+            margin-left: 8px;
+        }
+        
         @media (max-width: 768px) {
             .profile-name { display: none; }
             .profile-trigger { padding: 4px 8px; }
@@ -766,7 +776,7 @@
             
             <!-- Upload -->
             <section class="upload-section" id="uploadSection">
-                <div class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload</div>
+                <div class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload <span class="upload-badge"><i class="fas fa-bolt"></i> FAST</span></div>
                 <div class="upload-area" id="uploadArea">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <h3>📁 Click to Upload Files</h3>
@@ -914,7 +924,7 @@
 
     <script>
         // ============================================================
-        // JOD MODS CLOUD - FULLY WORKING UPLOAD & DOWNLOAD
+        // JOD MODS CLOUD - FAST UPLOAD & DOWNLOAD
         // ============================================================
         
         // === STATE ===
@@ -939,7 +949,7 @@
             updateGuestBanner();
         }
         
-        // === FILE.IO - ORIGINAL FILE UPLOAD ===
+        // === FILE.IO - FAST UPLOAD ===
         async function uploadToFileIO(file) {
             const formData = new FormData();
             formData.append('file', file);
@@ -979,7 +989,7 @@
             allFilesCache = fileList;
         }
         
-        // === UPLOAD ===
+        // === UPLOAD - FAST ===
         async function uploadFiles(fileList) {
             if (!currentUser) {
                 showToast('Please sign in to upload files', 'warning');
@@ -1008,15 +1018,19 @@
             for (let file of fileList) { totalSize += file.size; }
             
             let allFiles = loadFilesFromStorage();
+            let startTime = Date.now();
+            let speed = 0;
             
             for (let file of fileList) {
                 try {
-                    // Upload to File.io - Original file
+                    // Upload to File.io - FAST
                     const result = await uploadToFileIO(file);
+                    
+                    const fileId = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
                     
                     if (result.success) {
                         const fileData = {
-                            id: 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8),
+                            id: fileId,
                             name: file.name,
                             size: file.size,
                             sizeFormatted: formatSize(file.size),
@@ -1033,8 +1047,15 @@
                         uploaded++;
                         uploadedSize += file.size;
                         
+                        // Calculate speed
+                        let elapsed = (Date.now() - startTime) / 1000;
+                        if (elapsed > 0) {
+                            speed = uploadedSize / elapsed / (1024 * 1024);
+                        }
+                        
                         const percent = Math.round((uploadedSize / totalSize) * 100);
                         const remaining = totalSize - uploadedSize;
+                        const remainingTime = speed > 0 ? remaining / speed / (1024 * 1024) : 0;
                         
                         document.getElementById('progressFill').style.width = percent + '%';
                         document.getElementById('progressFillText').textContent = percent + '%';
@@ -1043,6 +1064,17 @@
                         document.getElementById('remainingMB').textContent = formatSize(remaining);
                         document.getElementById('progressFiles').textContent = uploaded + '/' + total;
                         document.getElementById('currentFileName').textContent = file.name;
+                        document.getElementById('uploadSpeed').textContent = speed.toFixed(2) + ' MB/s';
+                        
+                        if (remainingTime > 0 && remainingTime < 3600) {
+                            if (remainingTime < 60) {
+                                document.getElementById('timeLeft').textContent = Math.round(remainingTime) + ' sec';
+                            } else {
+                                document.getElementById('timeLeft').textContent = Math.round(remainingTime / 60) + ' min';
+                            }
+                        } else {
+                            document.getElementById('timeLeft').textContent = '--';
+                        }
                     } else {
                         showToast('Failed to upload: ' + file.name, 'error');
                     }
@@ -1065,6 +1097,8 @@
                 document.getElementById('progressFillText').textContent = '0%';
                 document.getElementById('progressPercent').textContent = '0%';
                 document.getElementById('currentFileName').textContent = '-';
+                document.getElementById('uploadSpeed').textContent = '0 MB/s';
+                document.getElementById('timeLeft').textContent = '--';
             }, 2000);
             
             if (uploaded > 0) {
@@ -1187,7 +1221,6 @@
                 return;
             }
             
-            // Show download page with file info
             showDownloadPage(file);
         }
         
@@ -1205,7 +1238,6 @@
             downloadFileId = file.id;
             window._downloadFile = file;
             
-            // Enable download button
             document.getElementById('downloadBtn').disabled = false;
             document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-download"></i> Download Original File';
         }
@@ -1423,7 +1455,6 @@
                 const file = allFiles.find(f => f.id === fileId);
                 
                 if (file) {
-                    // Show download page directly
                     document.getElementById('mainApp').style.display = 'none';
                     document.getElementById('downloadPage').classList.add('active');
                     
@@ -1437,7 +1468,6 @@
                     downloadFileId = file.id;
                     window._downloadFile = file;
                     
-                    // Enable download button
                     document.getElementById('downloadBtn').disabled = false;
                     document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-download"></i> Download Original File';
                     
@@ -1464,14 +1494,12 @@
         // === DOWNLOAD BUTTON - ORIGINAL FILE ===
         document.getElementById('downloadBtn').addEventListener('click', function() {
             if (window._downloadFile) {
-                // Increment download count
                 window._downloadFile.downloadCount++;
                 const allFiles = loadFilesFromStorage();
                 const fileIndex = allFiles.findIndex(f => f.id === window._downloadFile.id);
                 if (fileIndex !== -1) {
                     allFiles[fileIndex].downloadCount = window._downloadFile.downloadCount;
                     saveFilesToStorage(allFiles);
-                    // Update local files array if it belongs to current user
                     if (currentUser && window._downloadFile.userId === currentUser.id) {
                         const localIndex = files.findIndex(f => f.id === window._downloadFile.id);
                         if (localIndex !== -1) {
@@ -1481,7 +1509,7 @@
                 }
                 updateStats();
                 
-                // Open original file URL - Direct download
+                // Open original file URL - FAST DOWNLOAD
                 window.open(window._downloadFile.fileUrl, '_blank');
                 showToast(`Downloading ${window._downloadFile.name}...`, 'success');
             } else {
@@ -1589,10 +1617,7 @@
                 if (e.target === this) { closeAuth(); }
             });
             
-            // Fix: Define fileId variable properly in uploadFiles
-            // The issue was fileId was undefined in the upload function
-            // Fixed by generating fileId before using it
-            console.log('JOD MODS CLOUD initialized successfully! 🚀');
+            console.log('JOD MODS CLOUD - FAST UPLOAD/DOWNLOAD 🚀');
         });
         
         // Global functions
