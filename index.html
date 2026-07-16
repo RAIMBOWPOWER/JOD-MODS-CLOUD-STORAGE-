@@ -3,29 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOD MODS CLOUD - Fast Upload/Download</title>
-    <script>
-        document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || 
-                e.key === 'x' || e.key === 'X' || 
-                e.key === 'v' || e.key === 'V' || 
-                e.key === 'a' || e.key === 'A' || 
-                e.key === 'u' || e.key === 'U')) {
-                e.preventDefault(); return false;
-            }
-            if (e.key === 'F12') { e.preventDefault(); return false; }
-        });
-        document.addEventListener('selectstart', function(e) { e.preventDefault(); return false; });
-        document.addEventListener('copy', function(e) { e.preventDefault(); return false; });
-        document.addEventListener('cut', function(e) { e.preventDefault(); return false; });
-        document.addEventListener('paste', function(e) { e.preventDefault(); return false; });
-    </script>
+    <title>JOD MODS - MediaFire Style Cloud</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; }
-        input, textarea { user-select: text !important; -webkit-user-select: text !important; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
@@ -42,13 +23,18 @@
             --gray-light: #e5e7eb;
             --light: #f5f3ff;
             --white: #ffffff;
-            --shadow: 0 4px 20px rgba(124, 58, 237, 0.15);
+            --shadow: 0 4px 20px rgba(124,  #####, 237, 0.15);
             --shadow-lg: 0 10px 40px rgba(124, 58, 237, 0.2);
             --radius: 16px;
             --radius-sm: 10px;
         }
         
-        body { font-family: 'Poppins', sans-serif; background: #f5f3ff; color: var(--dark); min-height: 100vh; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f3ff;
+            color: var(--dark);
+            min-height: 100vh;
+        }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
         
         .navbar {
@@ -61,13 +47,8 @@
             border-bottom: 3px solid var(--primary);
         }
         .nav-content { display: flex; justify-content: space-between; align-items: center; }
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-        .nav-brand img { height: 40px; width: auto; border-radius: 8px; }
+        .nav-brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .nav-brand i { color: var(--primary); font-size: 2rem; }
         .nav-brand h1 { font-size: 1.4rem; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .nav-brand span { -webkit-text-fill-color: var(--primary); }
         .nav-right { display: flex; align-items: center; gap: 16px; }
@@ -169,7 +150,7 @@
         @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .auth-header { background: var(--primary-gradient); color: white; padding: 32px 24px; text-align: center; }
         .auth-header .logo { display: flex; align-items: center; justify-content: center; gap: 12px; }
-        .auth-header .logo img { height: 50px; width: auto; border-radius: 10px; }
+        .auth-header .logo i { font-size: 2.8rem; }
         .auth-header h1 { font-size: 2rem; font-weight: 800; }
         .auth-header p { opacity: 0.85; font-size: 0.9rem; margin-top: 4px; }
         .auth-tabs { display: flex; border-bottom: 2px solid var(--primary-light); }
@@ -274,14 +255,24 @@
             animation: fadeIn 0.3s ease;
         }
         .progress-container.active { display: block; }
+        
         .progress-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
         }
-        .progress-header .title { font-weight: 600; font-size: 0.9rem; color: var(--dark); }
-        .progress-header .percentage { font-weight: 800; font-size: 1.3rem; color: var(--primary); }
+        .progress-header .title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        .progress-header .percentage {
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+        
         .progress-bar-wrapper {
             background: var(--gray-light);
             border-radius: 12px;
@@ -314,6 +305,7 @@
             animation: shimmer 1.5s infinite;
         }
         @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        
         .progress-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -332,8 +324,12 @@
             border: 1px solid var(--gray-light);
         }
         .progress-detail-item i { color: var(--primary); font-size: 0.9rem; width: 16px; }
-        .progress-detail-item .value { font-weight: 600; color: var(--dark); }
+        .progress-detail-item .value {
+            font-weight: 600;
+            color: var(--dark);
+        }
         .progress-detail-item .label { color: var(--gray); }
+        
         .progress-speed-time {
             display: flex;
             justify-content: space-between;
@@ -348,10 +344,18 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-        .progress-speed-time .speed { display: flex; align-items: center; gap: 6px; }
+        .progress-speed-time .speed {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
         .progress-speed-time .speed i { color: var(--success); }
         .progress-speed-time .speed .value { font-weight: 700; color: var(--dark); }
-        .progress-speed-time .time { display: flex; align-items: center; gap: 6px; }
+        .progress-speed-time .time {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
         .progress-speed-time .time i { color: var(--warning); }
         .progress-speed-time .time .value { font-weight: 700; color: var(--dark); }
         .progress-speed-time .file-name-display {
@@ -398,7 +402,7 @@
             border: 1px solid var(--primary-light);
         }
         .files-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
-        .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+        .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
         .file-card {
             background: var(--white);
             border-radius: var(--radius);
@@ -418,29 +422,8 @@
         .file-name { font-weight: 600; margin-bottom: 4px; word-break: break-word; font-size: 0.85rem; color: var(--dark); }
         .file-meta { display: flex; gap: 12px; font-size: 0.7rem; color: var(--gray); margin-bottom: 10px; }
         .file-link-box { background: var(--light); border-radius: 6px; padding: 6px 10px; font-size: 0.65rem; display: flex; justify-content: space-between; align-items: center; gap: 6px; border: 1px solid var(--gray-light); }
-        .file-link-box input { 
-            border: none; 
-            background: transparent; 
-            width: 65%; 
-            font-size: 0.65rem; 
-            color: var(--gray); 
-            outline: none; 
-            font-family: 'Poppins', sans-serif;
-            user-select: text !important;
-            -webkit-user-select: text !important;
-        }
-        .file-link-box .copy-btn { 
-            background: var(--primary-gradient); 
-            color: white; 
-            border: none; 
-            padding: 3px 10px; 
-            border-radius: 4px; 
-            font-size: 0.6rem; 
-            cursor: pointer; 
-            font-weight: 500; 
-            transition: all 0.2s;
-            pointer-events: auto !important;
-        }
+        .file-link-box input { border: none; background: transparent; width: 65%; font-size: 0.65rem; color: var(--gray); outline: none; font-family: 'Poppins', sans-serif; }
+        .file-link-box .copy-btn { background: var(--primary-gradient); color: white; border: none; padding: 3px 10px; border-radius: 4px; font-size: 0.6rem; cursor: pointer; font-weight: 500; transition: all 0.2s; }
         .file-link-box .copy-btn:hover { opacity: 0.8; }
         
         .no-files { text-align: center; padding: 40px 20px; color: var(--gray); }
@@ -466,14 +449,19 @@
         .guest-banner .login-link { background: var(--white); color: var(--primary); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: var(--shadow); }
         
-        /* ===== DOWNLOAD PAGE ===== */
+        /* ===== DOWNLOAD PAGE - MEDIAFIRE STYLE ===== */
         .download-page {
             display: none;
             min-height: 100vh;
             padding: 40px 20px;
             background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
         }
-        .download-page.active { display: flex; justify-content: center; align-items: center; }
+        .download-page.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
         .download-card {
             background: var(--white);
             border-radius: var(--radius);
@@ -485,6 +473,7 @@
             animation: slideUp 0.4s ease;
             border: 1px solid var(--primary-light);
         }
+        
         .download-icon {
             width: 90px;
             height: 90px;
@@ -499,9 +488,25 @@
             box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
             animation: pulse 2s infinite;
         }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .download-card h2 { font-size: 1.6rem; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
-        .download-card .subtitle { color: var(--gray); margin-bottom: 24px; font-size: 0.95rem; }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .download-card h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 6px;
+        }
+        
+        .download-card .subtitle {
+            color: var(--gray);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+        
         .download-info {
             background: var(--light);
             border-radius: var(--radius-sm);
@@ -509,15 +514,28 @@
             margin: 20px 0;
             text-align: left;
         }
+        
         .download-info-item {
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
             border-bottom: 1px solid var(--primary-light);
         }
-        .download-info-item:last-child { border-bottom: none; }
-        .download-info-item span { color: var(--gray); font-size: 0.9rem; }
-        .download-info-item strong { color: var(--dark); font-size: 0.9rem; }
+        
+        .download-info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .download-info-item span {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .download-info-item strong {
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+        
         .download-btn {
             background: var(--primary-gradient);
             color: white;
@@ -534,11 +552,31 @@
             justify-content: center;
             gap: 10px;
         }
-        .download-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4); }
-        .download-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .download-speed { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; font-size: 0.8rem; color: var(--gray); }
-        .download-speed i { color: var(--success); }
-        .download-speed .highlight { color: var(--primary); font-weight: 600; }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+        }
+        
+        .download-speed {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .download-speed i {
+            color: var(--success);
+        }
+        
+        .download-speed .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
         .download-back {
             display: inline-flex;
             align-items: center;
@@ -552,7 +590,11 @@
             background: none;
             border: none;
         }
-        .download-back:hover { text-decoration: underline; }
+        
+        .download-back:hover {
+            text-decoration: underline;
+        }
+        
         .download-security {
             display: flex;
             align-items: center;
@@ -562,37 +604,10 @@
             font-size: 0.8rem;
             color: var(--gray);
         }
-        .download-security i { color: var(--success); }
         
-        .footer {
-            background: var(--white);
-            border-top: 3px solid var(--primary);
-            padding: 30px 0 20px;
-            margin-top: 30px;
+        .download-security i {
+            color: var(--success);
         }
-        .footer-content { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-        .footer-social { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-        .footer-social a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            border-radius: 50px;
-            text-decoration: none;
-            color: white;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-        .footer-social a i { font-size: 1.3rem; }
-        .footer-social a:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .footer-social a .social-label { display: inline; }
-        .social-telegram { background: linear-gradient(135deg, #0088cc, #004d7a); }
-        .social-instagram { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-        .social-youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
-        .footer-divider { width: 80px; height: 3px; background: var(--primary-gradient); border-radius: 3px; }
-        .footer-text { color: var(--gray); font-size: 0.8rem; text-align: center; }
-        .footer-text strong { color: var(--primary); }
         
         .toast {
             position: fixed;
@@ -615,16 +630,6 @@
         .toast.error { background: var(--danger); }
         .toast.warning { background: var(--warning); }
         
-        .upload-badge {
-            display: inline-block;
-            background: var(--success);
-            color: white;
-            font-size: 0.6rem;
-            padding: 2px 10px;
-            border-radius: 50px;
-            margin-left: 8px;
-        }
-        
         @media (max-width: 768px) {
             .profile-name { display: none; }
             .profile-trigger { padding: 4px 8px; }
@@ -636,20 +641,12 @@
             .progress-details { grid-template-columns: 1fr 1fr; }
             .progress-speed-time { flex-direction: column; align-items: flex-start; }
             .progress-speed-time .file-name-display { max-width: 100%; }
-            .nav-brand img { height: 30px; }
-            .footer-social a { padding: 8px 14px; font-size: 0.8rem; }
-            .footer-social a .social-label { display: none; }
-            .footer-social a i { font-size: 1.5rem; }
         }
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr; }
             .upload-area { padding: 20px 16px; }
             .download-card { padding: 20px; }
             .progress-details { grid-template-columns: 1fr; }
-            .nav-brand h1 { font-size: 1rem; }
-            .nav-brand img { height: 25px; }
-            .footer-social { gap: 12px; }
-            .footer-social a { padding: 10px 14px; }
         }
     </style>
 </head>
@@ -660,11 +657,8 @@
             <button class="auth-close" onclick="closeAuth()"><i class="fas fa-times"></i></button>
             <div class="auth-header">
                 <div class="logo">
-                    <img src="https://i.ibb.co/ycXwBNgg/Et4Ty6Ib.jpg" alt="JOD MODS Logo">
-                    <div>
-                        <h1>JOD MODS</h1>
-                        <p>CLOUD STORAGE</p>
-                    </div>
+                    <i class="fas fa-cloud"></i>
+                    <div><h1>JOD MODS</h1><p>CLOUD STORAGE</p></div>
                 </div>
                 <p>Secure Personal Cloud Storage</p>
             </div>
@@ -709,7 +703,7 @@
     <nav class="navbar">
         <div class="container nav-content">
             <div class="nav-brand" onclick="location.reload()">
-                <img src="https://i.ibb.co/ycXwBNgg/Et4Ty6Ib.jpg" alt="JOD MODS Logo">
+                <i class="fas fa-cloud"></i>
                 <h1>JOD MODS <span>CLOUD</span></h1>
             </div>
             <div class="nav-right">
@@ -776,11 +770,11 @@
             
             <!-- Upload -->
             <section class="upload-section" id="uploadSection">
-                <div class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload <span class="upload-badge"><i class="fas fa-bolt"></i> FAST</span></div>
+                <div class="section-title"><i class="fas fa-cloud-upload-alt"></i> Upload</div>
                 <div class="upload-area" id="uploadArea">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <h3>📁 Click to Upload Files</h3>
-                    <p>Unlimited • Any file type • Original file download</p>
+                    <p>Unlimited • Any file type</p>
                 </div>
                 
                 <!-- Progress -->
@@ -842,12 +836,12 @@
         </div>
     </div>
     
-    <!-- DOWNLOAD PAGE -->
+    <!-- ===== DOWNLOAD PAGE - MEDIAFIRE STYLE ===== -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-bolt"></i></div>
             <h2 id="downloadFileName">File Name</h2>
-            <p class="subtitle">⚡ Original file download</p>
+            <p class="subtitle">⚡ Download with exact size</p>
             
             <div class="download-info">
                 <div class="download-info-item">
@@ -873,12 +867,12 @@
             </div>
             
             <button class="download-btn" id="downloadBtn">
-                <i class="fas fa-download"></i> Download Original File
+                <i class="fas fa-download"></i> Download Now
             </button>
             
             <div class="download-speed">
                 <i class="fas fa-rocket"></i>
-                <span>Exact file • <span class="highlight">Original size</span></span>
+                <span>Exact file size • <span class="highlight">Secure download</span></span>
             </div>
             
             <button class="download-back" onclick="goBack()">
@@ -892,429 +886,178 @@
         </div>
     </div>
     
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-social">
-                    <a href="https://t.me/JODxCHEATS/3" target="_blank" class="social-telegram" title="Join our Telegram">
-                        <i class="fab fa-telegram-plane"></i>
-                        <span class="social-label">Telegram</span>
-                    </a>
-                    <a href="https://www.instagram.com/jodxgamers" target="_blank" class="social-instagram" title="Follow on Instagram">
-                        <i class="fab fa-instagram"></i>
-                        <span class="social-label">Instagram</span>
-                    </a>
-                    <a href="https://youtube.com/@jodxcheats_12" target="_blank" class="social-youtube" title="Subscribe on YouTube">
-                        <i class="fab fa-youtube"></i>
-                        <span class="social-label">YouTube</span>
-                    </a>
-                </div>
-                <div class="footer-divider"></div>
-                <div class="footer-text">
-                    &copy; 2026 <strong>JOD MODS CLOUD</strong> — Secure File Sharing<br>
-                    <span style="font-size:0.75rem;color:var(--gray-light);">Made with ❤️ by JOD MODS Team</span>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
     <!-- TOAST -->
     <div class="toast" id="toast"></div>
 
     <script>
         // ============================================================
-        // JOD MODS CLOUD - FAST UPLOAD & DOWNLOAD
+        // COMPLETE FIX - LARGE FILE SUPPORT WITH DISPLAY
         // ============================================================
         
+        // === CONSTANTS ===
+        const DB_NAME = 'JODMods_Main';
+        const DB_VERSION = 2;
+        const STORE_NAME = 'files_meta';
+        const CHUNK_STORE_NAME = 'file_chunks';
+        const USERS_KEY = 'jodmods_users';
+        const CURRENT_USER_KEY = 'jodmods_currentUser';
+        const CHUNK_SIZE = 1024 * 1024 * 5; // 5MB chunks
+        
         // === STATE ===
+        let db = null;
         let files = [];
         let currentUser = null;
         let downloadFileId = null;
-        let allFilesCache = [];
         
         // === AUTH ===
         function loadUsers() {
-            try { return JSON.parse(localStorage.getItem('jodmods_users')) || []; } catch { return []; }
+            try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; } catch { return []; }
         }
-        function saveUsers(users) { localStorage.setItem('jodmods_users', JSON.stringify(users)); }
+        function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
         function getCurrentUser() {
-            try { return JSON.parse(localStorage.getItem('jodmods_currentUser')) || null; } catch { return null; }
+            try { return JSON.parse(localStorage.getItem(CURRENT_USER_KEY)) || null; } catch { return null; }
         }
         function setCurrentUser(user) {
-            if (user) { localStorage.setItem('jodmods_currentUser', JSON.stringify(user)); } 
-            else { localStorage.removeItem('jodmods_currentUser'); }
+            if (user) { localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user)); } 
+            else { localStorage.removeItem(CURRENT_USER_KEY); }
             currentUser = user;
             updateUI();
             updateGuestBanner();
         }
         
-        // === FILE.IO - FAST UPLOAD ===
-        async function uploadToFileIO(file) {
-            const formData = new FormData();
-            formData.append('file', file);
-            
-            try {
-                const response = await fetch('https://file.io', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Upload failed: ' + response.status);
-                }
-                
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('File.io upload error:', error);
-                throw error;
-            }
-        }
-        
-        // === LOAD FILES ===
-        function loadFilesFromStorage() {
-            try {
-                const saved = localStorage.getItem('jodmods_original_files');
-                allFilesCache = saved ? JSON.parse(saved) : [];
-                return allFilesCache;
-            } catch { 
-                allFilesCache = [];
-                return []; 
-            }
-        }
-        
-        function saveFilesToStorage(fileList) {
-            localStorage.setItem('jodmods_original_files', JSON.stringify(fileList));
-            allFilesCache = fileList;
-        }
-        
-        // === UPLOAD - FAST ===
-        async function uploadFiles(fileList) {
-            if (!currentUser) {
-                showToast('Please sign in to upload files', 'warning');
-                openAuth();
-                return;
-            }
-            
-            if (!fileList || fileList.length === 0) {
-                showToast('No files selected', 'warning');
-                return;
-            }
-            
-            const btn = document.getElementById('uploadBtn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-            btn.disabled = true;
-            
-            const progressContainer = document.getElementById('progressContainer');
-            progressContainer.classList.add('active');
-            
-            let uploaded = 0;
-            const total = fileList.length;
-            let totalSize = 0;
-            let uploadedSize = 0;
-            
-            for (let file of fileList) { totalSize += file.size; }
-            
-            let allFiles = loadFilesFromStorage();
-            let startTime = Date.now();
-            let speed = 0;
-            
-            for (let file of fileList) {
-                try {
-                    // Upload to File.io - FAST
-                    const result = await uploadToFileIO(file);
-                    
-                    const fileId = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-                    
-                    if (result.success) {
-                        const fileData = {
-                            id: fileId,
-                            name: file.name,
-                            size: file.size,
-                            sizeFormatted: formatSize(file.size),
-                            type: file.type || 'application/octet-stream',
-                            uploadDate: new Date().toISOString().split('T')[0],
-                            userId: currentUser.id,
-                            userName: currentUser.name,
-                            downloadCount: 0,
-                            fileUrl: result.link,
-                            shareLink: window.location.origin + window.location.pathname + '?file=' + fileId
-                        };
-                        
-                        allFiles.push(fileData);
-                        uploaded++;
-                        uploadedSize += file.size;
-                        
-                        // Calculate speed
-                        let elapsed = (Date.now() - startTime) / 1000;
-                        if (elapsed > 0) {
-                            speed = uploadedSize / elapsed / (1024 * 1024);
-                        }
-                        
-                        const percent = Math.round((uploadedSize / totalSize) * 100);
-                        const remaining = totalSize - uploadedSize;
-                        const remainingTime = speed > 0 ? remaining / speed / (1024 * 1024) : 0;
-                        
-                        document.getElementById('progressFill').style.width = percent + '%';
-                        document.getElementById('progressFillText').textContent = percent + '%';
-                        document.getElementById('progressPercent').textContent = percent + '%';
-                        document.getElementById('uploadedMB').textContent = formatSize(uploadedSize);
-                        document.getElementById('remainingMB').textContent = formatSize(remaining);
-                        document.getElementById('progressFiles').textContent = uploaded + '/' + total;
-                        document.getElementById('currentFileName').textContent = file.name;
-                        document.getElementById('uploadSpeed').textContent = speed.toFixed(2) + ' MB/s';
-                        
-                        if (remainingTime > 0 && remainingTime < 3600) {
-                            if (remainingTime < 60) {
-                                document.getElementById('timeLeft').textContent = Math.round(remainingTime) + ' sec';
-                            } else {
-                                document.getElementById('timeLeft').textContent = Math.round(remainingTime / 60) + ' min';
-                            }
-                        } else {
-                            document.getElementById('timeLeft').textContent = '--';
-                        }
-                    } else {
-                        showToast('Failed to upload: ' + file.name, 'error');
+        // === DATABASE WITH CHUNK STORAGE ===
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                request.onupgradeneeded = (e) => {
+                    const db = e.target.result;
+                    // Meta store for file info
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        const metaStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                        metaStore.createIndex('userId', 'userId', { unique: false });
                     }
-                    
-                } catch (error) {
-                    console.error('Upload error:', error);
-                    showToast('Failed to upload: ' + file.name, 'error');
-                }
-            }
-            
-            saveFilesToStorage(allFiles);
-            
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            document.getElementById('fileInput').value = '';
-            
-            setTimeout(() => {
-                progressContainer.classList.remove('active');
-                document.getElementById('progressFill').style.width = '0%';
-                document.getElementById('progressFillText').textContent = '0%';
-                document.getElementById('progressPercent').textContent = '0%';
-                document.getElementById('currentFileName').textContent = '-';
-                document.getElementById('uploadSpeed').textContent = '0 MB/s';
-                document.getElementById('timeLeft').textContent = '--';
-            }, 2000);
-            
-            if (uploaded > 0) {
-                showToast(`${uploaded} file(s) uploaded! 🚀`, 'success');
-                loadFiles();
-            }
+                    // Chunk store for large file data
+                    if (!db.objectStoreNames.contains(CHUNK_STORE_NAME)) {
+                        const chunkStore = db.createObjectStore(CHUNK_STORE_NAME, { keyPath: 'id' });
+                        chunkStore.createIndex('fileId', 'fileId', { unique: false });
+                    }
+                };
+                request.onsuccess = (e) => { db = e.target.result; resolve(db); };
+                request.onerror = (e) => { reject(e.target.error); };
+            });
         }
         
-        // === LOAD FILES ===
-        function loadFiles() {
-            const allFiles = loadFilesFromStorage();
-            if (currentUser) {
-                files = allFiles.filter(f => f.userId === currentUser.id);
-            } else {
-                files = [];
-            }
-            displayFiles();
-            updateStats();
+        // === CRUD FOR META ===
+        function saveMeta(meta) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.add(meta);
+                request.onsuccess = () => resolve(true);
+                request.onerror = () => reject(request.error);
+            });
         }
         
-        function displayFiles() {
-            const grid = document.getElementById('filesGrid');
-            const noFiles = document.getElementById('noFiles');
-            
-            if (!currentUser || files.length === 0) {
-                grid.innerHTML = '';
-                noFiles.style.display = 'block';
-                if (!currentUser) {
-                    noFiles.innerHTML = `
-                        <i class="fas fa-lock"></i>
-                        <h3>Sign in to view files</h3>
-                        <p>Create your free account to start uploading</p>
-                        <button class="upload-btn" onclick="openAuth()" style="margin-top:14px;padding:8px 24px;font-size:0.85rem;">
-                            <i class="fas fa-sign-in-alt"></i> Sign In
-                        </button>
-                    `;
-                } else {
-                    noFiles.innerHTML = `
-                        <i class="fas fa-cloud"></i>
-                        <h3>No files uploaded</h3>
-                        <p>Upload your first file to get started</p>
-                    `;
-                }
-                noFiles.style.display = 'block';
-                return;
-            }
-            
-            noFiles.style.display = 'none';
-            
-            grid.innerHTML = files.map(file => `
-                <div class="file-card">
-                    <div class="file-top">
-                        <div class="file-icon-lg" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
-                            <i class="fas ${getFileIcon(file.name)}"></i>
-                        </div>
-                        <div class="file-actions">
-                            <button class="file-action-btn download" onclick="downloadFile('${file.id}')" title="Download">
-                                <i class="fas fa-download"></i>
-                            </button>
-                            <button class="file-action-btn share" onclick="shareFile('${file.id}')" title="Share">
-                                <i class="fas fa-share-alt"></i>
-                            </button>
-                            <button class="file-action-btn delete" onclick="deleteFile('${file.id}')" title="Delete">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="file-name" title="${file.name}">${truncateName(file.name)}</div>
-                    <div class="file-meta">
-                        <span><i class="fas fa-hdd"></i> ${file.sizeFormatted}</span>
-                        <span><i class="fas fa-calendar"></i> ${file.uploadDate}</span>
-                        <span><i class="fas fa-download"></i> ${file.downloadCount}</span>
-                    </div>
-                    <div class="file-link-box">
-                        <input type="text" value="${window.location.origin + window.location.pathname + '?file=' + file.id}" readonly id="linkInput_${file.id}">
-                        <button class="copy-btn" onclick="copyLink('${window.location.origin + window.location.pathname + '?file=' + file.id}')">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                    </div>
-                </div>
-            `).join('');
+        function getAllMeta() {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAME], 'readonly');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
         }
         
-        // === STATS ===
-        function updateStats() {
-            if (!currentUser) {
-                document.getElementById('storageUsed').textContent = '0 MB';
-                document.getElementById('fileCount').textContent = '0';
-                document.getElementById('downloadCount').textContent = '0';
-                document.getElementById('sharedCount').textContent = '0';
-                document.getElementById('storageUsedText').textContent = '0 MB';
-                document.getElementById('storageFill').style.width = '0%';
-                document.getElementById('storageBadge').textContent = '0 MB';
-                document.getElementById('fileBadge').textContent = '0';
-                return;
-            }
-            
-            const totalSize = files.reduce((sum, f) => sum + f.size, 0);
-            const totalDownloads = files.reduce((sum, f) => sum + f.downloadCount, 0);
-            
-            document.getElementById('storageUsed').textContent = formatSize(totalSize);
-            document.getElementById('fileCount').textContent = files.length;
-            document.getElementById('downloadCount').textContent = totalDownloads;
-            document.getElementById('sharedCount').textContent = files.length;
-            
-            document.getElementById('storageUsedText').textContent = formatSize(totalSize);
-            document.getElementById('storageBadge').textContent = formatSize(totalSize);
-            document.getElementById('fileBadge').textContent = files.length;
-            
-            const pct = Math.min((totalSize / (100 * 1024 * 1024 * 1024)) * 100, 80);
-            document.getElementById('storageFill').style.width = pct + '%';
+        function getMetaById(id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAME], 'readonly');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.get(id);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
         }
         
-        // === DOWNLOAD - ORIGINAL FILE ===
-        function downloadFile(id) {
-            const allFiles = loadFilesFromStorage();
-            const file = allFiles.find(f => f.id === id);
-            if (!file) {
-                showToast('File not found', 'error');
-                return;
-            }
-            
-            showDownloadPage(file);
+        function updateMeta(meta) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.put(meta);
+                request.onsuccess = () => resolve(true);
+                request.onerror = () => reject(request.error);
+            });
         }
         
-        function showDownloadPage(file) {
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('downloadPage').classList.add('active');
-            
-            document.getElementById('downloadFileName').textContent = file.name;
-            document.getElementById('dFileName').textContent = file.name;
-            document.getElementById('dFileSize').textContent = file.sizeFormatted;
-            document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
-            document.getElementById('dFileDate').textContent = file.uploadDate;
-            document.getElementById('dFileDownloads').textContent = file.downloadCount;
-            
-            downloadFileId = file.id;
-            window._downloadFile = file;
-            
-            document.getElementById('downloadBtn').disabled = false;
-            document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-download"></i> Download Original File';
+        function deleteMeta(id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(STORE_NAME);
+                const request = store.delete(id);
+                request.onsuccess = () => resolve(true);
+                request.onerror = () => reject(request.error);
+            });
         }
         
-        function goBack() {
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('downloadPage').classList.remove('active');
-            downloadFileId = null;
-            window._downloadFile = null;
+        // === CRUD FOR CHUNKS ===
+        function saveChunk(chunk) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([CHUNK_STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(CHUNK_STORE_NAME);
+                const request = store.add(chunk);
+                request.onsuccess = () => resolve(true);
+                request.onerror = () => reject(request.error);
+            });
         }
         
-        // === SHARE ===
-        function shareFile(id) {
-            const allFiles = loadFilesFromStorage();
-            const file = allFiles.find(f => f.id === id);
-            if (!file) return;
-            
-            const shareLink = window.location.origin + window.location.pathname + '?file=' + file.id;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: file.name,
-                    text: `📁 Download "${file.name}" from JOD MODS CLOUD\nFile Size: ${file.sizeFormatted}`,
-                    url: shareLink
-                }).catch(() => {});
-            } else {
-                copyLink(shareLink);
-            }
+        function getChunksByFileId(fileId) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([CHUNK_STORE_NAME], 'readonly');
+                const store = transaction.objectStore(CHUNK_STORE_NAME);
+                const index = store.index('fileId');
+                const request = index.getAll(fileId);
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
         }
         
-        // === COPY LINK ===
-        function copyLink(link) {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(link)
-                    .then(() => showToast('Link copied! 📋 Anyone can download', 'success'))
-                    .catch(() => fallbackCopy(link));
-            } else {
-                fallbackCopy(link);
-            }
-        }
-        
-        function fallbackCopy(text) {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.position = 'fixed';
-            ta.style.left = '-9999px';
-            document.body.appendChild(ta);
-            ta.select();
-            try {
-                document.execCommand('copy');
-                showToast('Link copied! 📋 Anyone can download', 'success');
-            } catch (e) {
-                showToast('Failed to copy', 'error');
-            }
-            document.body.removeChild(ta);
-        }
-        
-        // === DELETE ===
-        function deleteFile(id) {
-            if (!confirm('Delete this file permanently?')) return;
-            
-            let allFiles = loadFilesFromStorage();
-            allFiles = allFiles.filter(f => f.id !== id);
-            saveFilesToStorage(allFiles);
-            
-            files = files.filter(f => f.id !== id);
-            displayFiles();
-            updateStats();
-            showToast('File deleted', 'success');
+        function deleteChunksByFileId(fileId) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([CHUNK_STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(CHUNK_STORE_NAME);
+                const index = store.index('fileId');
+                const request = index.getAll(fileId);
+                request.onsuccess = () => {
+                    const chunks = request.result;
+                    let deleted = 0;
+                    if (chunks.length === 0) { resolve(true); return; }
+                    chunks.forEach(chunk => {
+                        const delReq = store.delete(chunk.id);
+                        delReq.onsuccess = () => {
+                            deleted++;
+                            if (deleted === chunks.length) resolve(true);
+                        };
+                        delReq.onerror = () => reject(delReq.error);
+                    });
+                };
+                request.onerror = () => reject(request.error);
+            });
         }
         
         // === HELPERS ===
+        function generateId() { return Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
+        
         function formatSize(bytes) {
             if (bytes < 1024) return bytes + ' B';
             if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
             if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
             return (bytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+        }
+        
+        function formatTime(seconds) {
+            if (!seconds || seconds < 0) return '--';
+            if (seconds < 60) return Math.round(seconds) + 's';
+            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ' + Math.round(seconds % 60) + 's';
+            return Math.floor(seconds / 3600) + 'h ' + Math.floor((seconds % 3600) / 60) + 'm';
         }
         
         function getFileIcon(name) {
@@ -1430,6 +1173,386 @@
             else { banner.classList.add('active'); }
         }
         
+        // === UPLOAD WITH CHUNKS ===
+        let uploadSpeed = 0;
+        let speedInterval = null;
+        let lastUploadedSize = 0;
+        let lastTime = 0;
+        let startTime = 0;
+        let totalSizeAll = 0;
+        let uploadedAll = 0;
+        
+        async function uploadFiles(fileList) {
+            if (!currentUser) {
+                showToast('Please sign in to upload files', 'warning');
+                openAuth();
+                return;
+            }
+            
+            if (!fileList || fileList.length === 0) {
+                showToast('No files selected', 'warning');
+                return;
+            }
+            
+            const btn = document.getElementById('uploadBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            btn.disabled = true;
+            
+            const progressContainer = document.getElementById('progressContainer');
+            progressContainer.classList.add('active');
+            
+            let uploaded = 0;
+            const total = fileList.length;
+            totalSizeAll = 0;
+            uploadedAll = 0;
+            
+            for (let file of fileList) { totalSizeAll += file.size; }
+            
+            lastUploadedSize = 0;
+            lastTime = Date.now();
+            startTime = Date.now();
+            
+            if (speedInterval) clearInterval(speedInterval);
+            speedInterval = setInterval(updateRealTimeSpeed, 500);
+            
+            for (let file of fileList) {
+                const fileName = file.name;
+                document.getElementById('currentFileName').textContent = truncateName(fileName, 30);
+                document.getElementById('progressFileName').textContent = truncateName(fileName, 25);
+                
+                try {
+                    const fileId = generateId();
+                    const meta = {
+                        id: fileId,
+                        userId: currentUser.id,
+                        userName: currentUser.name,
+                        name: file.name,
+                        size: file.size,
+                        sizeFormatted: formatSize(file.size),
+                        type: getFileType(file.name),
+                        uploadDate: new Date().toISOString().split('T')[0],
+                        downloadCount: 0,
+                        shareLink: `${window.location.origin}${window.location.pathname}?file=${fileId}`,
+                        chunkCount: 0
+                    };
+                    
+                    // Save meta first
+                    await saveMeta(meta);
+                    
+                    // Upload in chunks
+                    const chunks = await splitFileIntoChunks(file);
+                    meta.chunkCount = chunks.length;
+                    
+                    // Save each chunk
+                    for (let i = 0; i < chunks.length; i++) {
+                        const chunkData = chunks[i];
+                        const chunkId = fileId + '_chunk_' + i;
+                        await saveChunk({
+                            id: chunkId,
+                            fileId: fileId,
+                            index: i,
+                            data: chunkData
+                        });
+                        
+                        uploadedAll += chunkData.byteLength;
+                        const percent = Math.round((uploadedAll / totalSizeAll) * 100);
+                        const remaining = totalSizeAll - uploadedAll;
+                        
+                        document.getElementById('progressFill').style.width = percent + '%';
+                        document.getElementById('progressFillText').textContent = percent + '%';
+                        document.getElementById('progressPercent').textContent = percent + '%';
+                        document.getElementById('uploadedMB').textContent = formatSize(uploadedAll);
+                        document.getElementById('remainingMB').textContent = formatSize(remaining);
+                        document.getElementById('progressFiles').textContent = (uploaded + 1) + '/' + total;
+                        
+                        lastUploadedSize = uploadedAll;
+                        lastTime = Date.now();
+                    }
+                    
+                    // Update meta with chunk count
+                    await updateMeta(meta);
+                    uploaded++;
+                    
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showToast('Failed to upload: ' + file.name, 'error');
+                }
+            }
+            
+            clearInterval(speedInterval);
+            document.getElementById('uploadSpeed').textContent = '0 MB/s';
+            document.getElementById('timeLeft').textContent = '--';
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            
+            setTimeout(() => {
+                progressContainer.classList.remove('active');
+                document.getElementById('progressFill').style.width = '0%';
+                document.getElementById('progressFillText').textContent = '0%';
+                document.getElementById('progressPercent').textContent = '0%';
+                document.getElementById('currentFileName').textContent = '-';
+            }, 1500);
+            
+            if (uploaded > 0) {
+                showToast(`${uploaded} file(s) uploaded! 🚀`, 'success');
+                await loadFiles();
+            }
+        }
+        
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const types = {
+                'jpg': 'image', 'jpeg': 'image', 'png': 'image', 'gif': 'image',
+                'mp4': 'video', 'avi': 'video', 'mov': 'video',
+                'mp3': 'audio', 'wav': 'audio',
+                'pdf': 'pdf',
+                'doc': 'word', 'docx': 'word',
+                'xls': 'excel', 'xlsx': 'excel',
+                'ppt': 'powerpoint', 'pptx': 'powerpoint',
+                'zip': 'archive', 'rar': 'archive'
+            };
+            return types[ext] || 'file';
+        }
+        
+        function splitFileIntoChunks(file) {
+            return new Promise((resolve, reject) => {
+                const chunks = [];
+                let offset = 0;
+                const fileSize = file.size;
+                
+                function readNextChunk() {
+                    const slice = file.slice(offset, Math.min(offset + CHUNK_SIZE, fileSize));
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        chunks.push(e.target.result);
+                        offset += CHUNK_SIZE;
+                        if (offset < fileSize) {
+                            setTimeout(readNextChunk, 5);
+                        } else {
+                            resolve(chunks);
+                        }
+                    };
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(slice);
+                }
+                readNextChunk();
+            });
+        }
+        
+        function updateRealTimeSpeed() {
+            const now = Date.now();
+            const timeDiff = (now - lastTime) / 1000;
+            if (timeDiff > 0) {
+                const speedMB = (uploadedAll - (uploadedAll - (lastUploadedSize || 0))) / (1024 * 1024 * timeDiff);
+                document.getElementById('uploadSpeed').textContent = Math.abs(speedMB).toFixed(1) + ' MB/s';
+                
+                const remaining = totalSizeAll - uploadedAll;
+                if (speedMB > 0) {
+                    const secondsLeft = remaining / (speedMB * 1024 * 1024);
+                    document.getElementById('timeLeft').textContent = formatTime(secondsLeft);
+                }
+            }
+        }
+        
+        // === LOAD FILES ===
+        async function loadFiles() {
+            try {
+                const allMeta = await getAllMeta();
+                if (currentUser) {
+                    files = allMeta.filter(f => f.userId === currentUser.id);
+                } else {
+                    files = [];
+                }
+                displayFiles();
+                updateStats();
+            } catch (error) {
+                console.error('Error loading files:', error);
+            }
+        }
+        
+        function displayFiles() {
+            const grid = document.getElementById('filesGrid');
+            const noFiles = document.getElementById('noFiles');
+            
+            if (!currentUser || files.length === 0) {
+                grid.innerHTML = '';
+                noFiles.style.display = 'block';
+                if (!currentUser) {
+                    noFiles.innerHTML = `
+                        <i class="fas fa-lock"></i>
+                        <h3>Sign in to view files</h3>
+                        <p>Create your free account to start uploading</p>
+                        <button class="upload-btn" onclick="openAuth()" style="margin-top:14px;padding:8px 24px;font-size:0.85rem;">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+                    `;
+                } else {
+                    noFiles.innerHTML = `
+                        <i class="fas fa-cloud"></i>
+                        <h3>No files uploaded</h3>
+                        <p>Upload your first file to get started</p>
+                    `;
+                }
+                noFiles.style.display = 'block';
+                return;
+            }
+            
+            noFiles.style.display = 'none';
+            
+            grid.innerHTML = files.map(file => `
+                <div class="file-card">
+                    <div class="file-top">
+                        <div class="file-icon-lg" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                            <i class="fas ${getFileIcon(file.name)}"></i>
+                        </div>
+                        <div class="file-actions">
+                            <button class="file-action-btn download" onclick="downloadFile('${file.id}')" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="file-action-btn share" onclick="shareFile('${file.id}')" title="Share">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <button class="file-action-btn delete" onclick="deleteFile('${file.id}')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="file-name" title="${file.name}">${truncateName(file.name)}</div>
+                    <div class="file-meta">
+                        <span><i class="fas fa-hdd"></i> ${file.sizeFormatted}</span>
+                        <span><i class="fas fa-calendar"></i> ${file.uploadDate}</span>
+                        <span><i class="fas fa-download"></i> ${file.downloadCount}</span>
+                    </div>
+                    <div class="file-link-box">
+                        <input type="text" value="${file.shareLink}" readonly>
+                        <button class="copy-btn" onclick="copyLink('${file.shareLink}')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // === STATS ===
+        function updateStats() {
+            if (!currentUser) {
+                document.getElementById('storageUsed').textContent = '0 MB';
+                document.getElementById('fileCount').textContent = '0';
+                document.getElementById('downloadCount').textContent = '0';
+                document.getElementById('sharedCount').textContent = '0';
+                document.getElementById('storageUsedText').textContent = '0 MB';
+                document.getElementById('storageFill').style.width = '0%';
+                document.getElementById('storageBadge').textContent = '0 MB';
+                document.getElementById('fileBadge').textContent = '0';
+                return;
+            }
+            
+            const totalSize = files.reduce((sum, f) => sum + f.size, 0);
+            const totalDownloads = files.reduce((sum, f) => sum + f.downloadCount, 0);
+            
+            document.getElementById('storageUsed').textContent = formatSize(totalSize);
+            document.getElementById('fileCount').textContent = files.length;
+            document.getElementById('downloadCount').textContent = totalDownloads;
+            document.getElementById('sharedCount').textContent = files.length;
+            
+            document.getElementById('storageUsedText').textContent = formatSize(totalSize);
+            document.getElementById('storageBadge').textContent = formatSize(totalSize);
+            document.getElementById('fileBadge').textContent = files.length;
+            
+            const pct = Math.min((totalSize / (100 * 1024 * 1024 * 1024)) * 100, 80);
+            document.getElementById('storageFill').style.width = pct + '%';
+        }
+        
+        // === DOWNLOAD ===
+        async function downloadFile(id) {
+            const meta = await getMetaById(id);
+            if (!meta) { showToast('File not found', 'error'); return; }
+            if (currentUser && meta.userId !== currentUser.id) {
+                showToast('Permission denied', 'error');
+                return;
+            }
+            
+            // Get chunks and combine
+            const chunks = await getChunksByFileId(id);
+            if (!chunks || chunks.length === 0) {
+                showToast('File data not found', 'error');
+                return;
+            }
+            
+            // Sort chunks by index
+            chunks.sort((a, b) => a.index - b.index);
+            
+            // Combine chunks
+            const totalSize = chunks.reduce((sum, c) => sum + c.data.byteLength, 0);
+            const combined = new Uint8Array(totalSize);
+            let position = 0;
+            for (const chunk of chunks) {
+                combined.set(new Uint8Array(chunk.data), position);
+                position += chunk.data.byteLength;
+            }
+            
+            // Increment download count
+            meta.downloadCount++;
+            await updateMeta(meta);
+            
+            // Download
+            const blob = new Blob([combined.buffer], { type: meta.type || 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = meta.name;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            
+            showToast(`✅ Downloaded ${meta.name} (${meta.sizeFormatted})`, 'success');
+            await loadFiles();
+        }
+        
+        // === SHARE ===
+        async function shareFile(id) {
+            const meta = await getMetaById(id);
+            if (!meta) return;
+            if (navigator.share) {
+                navigator.share({ title: meta.name, text: `Download ${meta.name} from JOD MODS`, url: meta.shareLink }).catch(() => {});
+            } else {
+                copyLink(meta.shareLink);
+            }
+        }
+        
+        function copyLink(link) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(link).then(() => showToast('Link copied! 📋', 'success')).catch(() => fallbackCopy(link));
+            } else { fallbackCopy(link); }
+        }
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast('Link copied! 📋', 'success');
+        }
+        
+        // === DELETE ===
+        async function deleteFile(id) {
+            if (!confirm('Delete this file permanently?')) return;
+            try {
+                await deleteMeta(id);
+                await deleteChunksByFileId(id);
+                files = files.filter(f => f.id !== id);
+                displayFiles();
+                updateStats();
+                showToast('File deleted', 'success');
+            } catch (error) {
+                showToast('Error deleting file', 'error');
+            }
+        }
+        
         function refreshFiles() { loadFiles(); showToast('Files refreshed', 'success'); }
         function showStats() { updateStats(); showToast('Stats updated', 'success'); document.getElementById('profileDropdown').classList.remove('active'); }
         function showStorageInfo() { updateStats(); showToast('Storage info updated', 'info'); document.getElementById('profileDropdown').classList.remove('active'); }
@@ -1446,85 +1569,99 @@
         }
         
         // === CHECK SHARE LINK ===
-        function checkShareLink() {
+        async function checkShareLink() {
             const params = new URLSearchParams(window.location.search);
             const fileId = params.get('file');
-            
             if (fileId) {
-                const allFiles = loadFilesFromStorage();
-                const file = allFiles.find(f => f.id === fileId);
-                
-                if (file) {
+                const meta = await getMetaById(fileId);
+                if (meta) {
+                    // Show download page
                     document.getElementById('mainApp').style.display = 'none';
                     document.getElementById('downloadPage').classList.add('active');
                     
-                    document.getElementById('downloadFileName').textContent = file.name;
-                    document.getElementById('dFileName').textContent = file.name;
-                    document.getElementById('dFileSize').textContent = file.sizeFormatted;
-                    document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
-                    document.getElementById('dFileDate').textContent = file.uploadDate;
-                    document.getElementById('dFileDownloads').textContent = file.downloadCount;
+                    document.getElementById('downloadFileName').textContent = meta.name;
+                    document.getElementById('dFileName').textContent = meta.name;
+                    document.getElementById('dFileSize').textContent = meta.sizeFormatted;
+                    document.getElementById('dFileUser').textContent = meta.userName || 'Unknown';
+                    document.getElementById('dFileDate').textContent = meta.uploadDate;
+                    document.getElementById('dFileDownloads').textContent = meta.downloadCount;
                     
-                    downloadFileId = file.id;
-                    window._downloadFile = file;
+                    downloadFileId = meta.id;
                     
-                    document.getElementById('downloadBtn').disabled = false;
-                    document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-download"></i> Download Original File';
-                    
+                    // Clean URL
                     window.history.replaceState({}, document.title, window.location.pathname);
-                } else {
-                    document.getElementById('mainApp').style.display = 'none';
-                    document.getElementById('downloadPage').classList.add('active');
-                    
-                    document.getElementById('downloadFileName').textContent = 'File Not Found';
-                    document.getElementById('dFileName').textContent = 'File Not Found';
-                    document.getElementById('dFileSize').textContent = '-';
-                    document.getElementById('dFileUser').textContent = '-';
-                    document.getElementById('dFileDate').textContent = '-';
-                    document.getElementById('dFileDownloads').textContent = '0';
-                    
-                    document.getElementById('downloadBtn').disabled = true;
-                    document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-times-circle"></i> File Not Available';
-                    
-                    showToast('⚠️ File not found or has been deleted', 'error');
                 }
             }
         }
         
-        // === DOWNLOAD BUTTON - ORIGINAL FILE ===
-        document.getElementById('downloadBtn').addEventListener('click', function() {
-            if (window._downloadFile) {
-                window._downloadFile.downloadCount++;
-                const allFiles = loadFilesFromStorage();
-                const fileIndex = allFiles.findIndex(f => f.id === window._downloadFile.id);
-                if (fileIndex !== -1) {
-                    allFiles[fileIndex].downloadCount = window._downloadFile.downloadCount;
-                    saveFilesToStorage(allFiles);
-                    if (currentUser && window._downloadFile.userId === currentUser.id) {
-                        const localIndex = files.findIndex(f => f.id === window._downloadFile.id);
-                        if (localIndex !== -1) {
-                            files[localIndex].downloadCount = window._downloadFile.downloadCount;
-                        }
-                    }
-                }
-                updateStats();
-                
-                // Open original file URL - FAST DOWNLOAD
-                window.open(window._downloadFile.fileUrl, '_blank');
-                showToast(`Downloading ${window._downloadFile.name}...`, 'success');
-            } else {
-                showToast('Download link not available', 'error');
+        // === DOWNLOAD BUTTON ===
+        document.getElementById('downloadBtn').addEventListener('click', async function() {
+            if (!downloadFileId) return;
+            
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
+            btn.disabled = true;
+            
+            const meta = await getMetaById(downloadFileId);
+            if (!meta) {
+                showToast('File not found', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return;
             }
+            
+            const chunks = await getChunksByFileId(downloadFileId);
+            if (!chunks || chunks.length === 0) {
+                showToast('File data not found', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return;
+            }
+            
+            chunks.sort((a, b) => a.index - b.index);
+            
+            const totalSize = chunks.reduce((sum, c) => sum + c.data.byteLength, 0);
+            const combined = new Uint8Array(totalSize);
+            let position = 0;
+            for (const chunk of chunks) {
+                combined.set(new Uint8Array(chunk.data), position);
+                position += chunk.data.byteLength;
+            }
+            
+            meta.downloadCount++;
+            await updateMeta(meta);
+            
+            const blob = new Blob([combined.buffer], { type: meta.type || 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = meta.name;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            
+            showToast(`✅ Downloaded ${meta.name} (${meta.sizeFormatted})`, 'success');
+            await loadFiles();
+            
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Downloaded!';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1500);
         });
         
         // === INIT ===
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await openDB();
+            
             const savedUser = getCurrentUser();
             if (savedUser) {
                 currentUser = savedUser;
                 updateUI();
                 updateGuestBanner();
-                loadFiles();
+                await loadFiles();
             } else {
                 updateUI();
                 updateGuestBanner();
@@ -1532,9 +1669,9 @@
                 updateStats();
             }
             
-            checkShareLink();
+            await checkShareLink();
             
-            // === ELEMENTS ===
+            // === GET ELEMENTS ===
             const fileInput = document.getElementById('fileInput');
             const uploadArea = document.getElementById('uploadArea');
             const uploadBtn = document.getElementById('uploadBtn');
@@ -1591,7 +1728,7 @@
                 }
             });
             
-            // === PROFILE ===
+            // === PROFILE DROPDOWN ===
             const profileTrigger = document.getElementById('profileTrigger');
             const profileDropdown = document.getElementById('profileDropdown');
             
@@ -1616,8 +1753,6 @@
             document.getElementById('authModal').addEventListener('click', function(e) {
                 if (e.target === this) { closeAuth(); }
             });
-            
-            console.log('JOD MODS CLOUD - FAST UPLOAD/DOWNLOAD 🚀');
         });
         
         // Global functions
