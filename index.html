@@ -5,1368 +5,443 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JOD MODS Cloud</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <style>
-        /* ===== SAME STYLES AS BEFORE (keeping your UI) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #0b0a1a; color: #fff; min-height: 100vh; }
-        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-        
-        /* NAVBAR */
-        .navbar {
-            background: rgba(11, 10, 26, 0.92);
-            backdrop-filter: blur(16px);
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(124, 58, 237, 0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-content {
+        body {
+            font-family: Arial, sans-serif;
+            background: #0b0a1a;
+            color: #fff;
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
         }
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
         }
-        .brand img {
-            height: 40px;
-            width: auto;
-            border-radius: 10px;
-        }
-        .brand h1 {
-            font-size: 22px;
+        .logo {
+            font-size: 32px;
             font-weight: 900;
             background: linear-gradient(135deg, #7c3aed, #a78bfa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
         }
-        .brand span {
-            -webkit-text-fill-color: #7c3aed;
+        .subtitle { color: #666; font-size: 14px; margin-bottom: 24px; }
+        
+        .upload-area {
+            border: 2px dashed rgba(124,58,237,0.3);
+            border-radius: 16px;
+            padding: 40px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255,255,255,0.03);
         }
-
-        /* ===== REST ALL STYLES SAME AS PREVIOUS ===== */
-        /* (Keeping it short - all styles from previous version) */
-        .nav-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-        .nav-stats { color: #666; font-size: 13px; }
-        .nav-stats i { color: #7c3aed; }
-        .profile-btn { display: flex; align-items: center; gap: 10px; padding: 6px 16px 6px 8px; border-radius: 50px; border: 1px solid rgba(124,58,237,0.2); background: rgba(124,58,237,0.08); cursor: pointer; transition: 0.3s; position: relative; }
-        .profile-btn:hover { border-color: #7c3aed; background: rgba(124,58,237,0.15); }
-        .profile-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #6d28d9); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #fff; }
-        .profile-name { font-size: 13px; font-weight: 600; }
-        .profile-dropdown { display: none; position: absolute; top: calc(100% + 10px); right: 0; background: #1a1833; border: 1px solid rgba(124,58,237,0.2); border-radius: 16px; padding: 8px; min-width: 220px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); z-index: 200; }
-        .profile-dropdown.active { display: block; animation: fadeDown 0.25s ease; }
-        @keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .dropdown-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 10px; cursor: pointer; transition: 0.2s; border: none; background: none; color: #ddd; width: 100%; font-size: 13px; font-family: 'Inter', sans-serif; }
-        .dropdown-item:hover { background: rgba(124,58,237,0.12); color: #fff; }
-        .dropdown-item i { color: #7c3aed; width: 18px; }
-        .dropdown-item .badge { margin-left: auto; background: rgba(124,58,237,0.2); padding: 2px 10px; border-radius: 50px; font-size: 11px; color: #a78bfa; }
-        .dropdown-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 6px 10px; }
-        .dropdown-item.logout { color: #ef4444; }
-        .dropdown-item.logout i { color: #ef4444; }
-        .auth-btn { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; border: none; padding: 8px 22px; border-radius: 50px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.3s; font-family: 'Inter', sans-serif; }
-        .auth-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(124,58,237,0.3); }
+        .upload-area:hover { border-color: #7c3aed; background: rgba(124,58,237,0.05); }
+        .upload-area i { font-size: 48px; color: #7c3aed; opacity: 0.5; }
+        .upload-area h3 { margin: 12px 0 4px; font-size: 18px; }
+        .upload-area p { color: #777; font-size: 14px; }
+        .upload-area .badge {
+            display: inline-block;
+            background: rgba(124,58,237,0.12);
+            color: #a78bfa;
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        #fileInput { display: none; }
         
-        /* HERO */
-        .hero { text-align: center; padding: 50px 0 30px; }
-        .hero h1 { font-size: 48px; font-weight: 900; background: linear-gradient(135deg, #fff, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { color: #777; font-size: 18px; margin-top: 10px; }
-        .hero .sub { color: #555; font-size: 14px; margin-top: 6px; }
+        .progress-container {
+            display: none;
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 16px;
+        }
+        .progress-container.active { display: block; }
+        .progress-bar {
+            background: rgba(255,255,255,0.06);
+            border-radius: 8px;
+            height: 6px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #7c3aed, #a78bfa);
+            border-radius: 8px;
+            transition: width 0.3s;
+        }
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #888;
+            margin-top: 6px;
+        }
         
-        /* STATS */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin: 24px 0; }
-        .stat-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; text-align: center; transition: 0.3s; }
-        .stat-card:hover { border-color: rgba(124,58,237,0.2); transform: translateY(-2px); }
-        .stat-card .num { font-size: 28px; font-weight: 800; color: #7c3aed; }
-        .stat-card .label { color: #666; font-size: 13px; margin-top: 4px; }
-        
-        /* STORAGE BAR */
-        .storage-bar-container { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 16px 22px; margin-bottom: 24px; }
-        .storage-bar-label { display: flex; justify-content: space-between; font-size: 13px; color: #888; margin-bottom: 6px; }
-        .storage-bar-label .unlimited { color: #7c3aed; font-weight: 600; }
-        .storage-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 8px; overflow: hidden; }
-        .storage-bar-fill { height: 100%; background: linear-gradient(90deg, #7c3aed, #a78bfa); border-radius: 8px; width: 0%; transition: width 0.6s ease; }
-        
-        /* UPLOAD */
-        .upload-section { background: rgba(255,255,255,0.03); border: 2px dashed rgba(124,58,237,0.2); border-radius: 20px; padding: 50px 20px; text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 24px; }
-        .upload-section:hover { border-color: #7c3aed; background: rgba(124,58,237,0.04); }
-        .upload-section.dragover { border-color: #7c3aed; background: rgba(124,58,237,0.08); }
-        .upload-section i { font-size: 52px; color: #7c3aed; opacity: 0.5; }
-        .upload-section h3 { font-size: 20px; margin: 14px 0 6px; }
-        .upload-section p { color: #777; font-size: 14px; }
-        .upload-section .badge { display: inline-block; background: rgba(124,58,237,0.12); color: #a78bfa; padding: 4px 16px; border-radius: 50px; font-size: 12px; margin-top: 10px; }
-        
-        /* PROGRESS */
-        .progress-container { display: none; background: rgba(255,255,255,0.04); border: 1px solid rgba(124,58,237,0.15); border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; }
-        .progress-container.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .progress-top .name { font-weight: 600; font-size: 14px; }
-        .progress-top .pct { font-weight: 800; font-size: 22px; color: #7c3aed; }
-        .progress-bar-bg { background: rgba(255,255,255,0.06); border-radius: 10px; height: 8px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #7c3aed, #a78bfa); border-radius: 10px; transition: width 0.3s; }
-        .progress-bottom { display: flex; justify-content: space-between; margin-top: 10px; font-size: 13px; color: #777; flex-wrap: wrap; gap: 8px; }
-        .progress-bottom i { color: #7c3aed; }
-        
-        /* FILES */
-        .files-header { display: flex; justify-content: space-between; align-items: center; margin: 30px 0 16px; flex-wrap: wrap; gap: 12px; }
-        .files-header h2 { font-size: 20px; display: flex; align-items: center; gap: 10px; }
-        .files-header h2 i { color: #7c3aed; }
-        .files-header .actions { display: flex; gap: 10px; }
-        .files-header .actions button { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.06); color: #aaa; padding: 8px 18px; border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 13px; font-family: 'Inter', sans-serif; }
-        .files-header .actions button:hover { background: rgba(124,58,237,0.12); color: #fff; border-color: rgba(124,58,237,0.2); }
-        
-        .files-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
-        .file-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 18px; transition: all 0.3s; }
-        .file-card:hover { border-color: rgba(124,58,237,0.2); transform: translateY(-3px); background: rgba(255,255,255,0.05); }
-        .file-card .icon { font-size: 32px; color: #7c3aed; margin-bottom: 8px; }
-        .file-card .name { font-weight: 600; font-size: 14px; word-break: break-word; margin-bottom: 4px; }
-        .file-card .meta { font-size: 12px; color: #666; display: flex; gap: 12px; margin: 6px 0 12px; flex-wrap: wrap; }
-        .file-card .actions { display: flex; gap: 6px; }
-        .file-card .actions button { flex: 1; padding: 7px 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12px; transition: 0.3s; font-family: 'Inter', sans-serif; }
+        .file-list { margin-top: 24px; text-align: left; }
+        .file-item {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .file-item .name { font-weight: 600; font-size: 14px; word-break: break-word; }
+        .file-item .size { color: #666; font-size: 12px; }
+        .file-item .actions { display: flex; gap: 6px; }
+        .file-item .actions button {
+            padding: 5px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
         .btn-download { background: #7c3aed; color: #fff; }
         .btn-download:hover { background: #6d28d9; }
-        .btn-share { background: rgba(255,255,255,0.06); color: #aaa; }
-        .btn-share:hover { background: rgba(255,255,255,0.12); color: #fff; }
-        .btn-delete { background: rgba(239,68,68,0.12); color: #ef4444; }
-        .btn-delete:hover { background: rgba(239,68,68,0.2); }
+        .btn-share { background: rgba(255,255,255,0.08); color: #aaa; }
+        .btn-share:hover { background: rgba(255,255,255,0.15); color: #fff; }
+        .btn-delete { background: rgba(239,68,68,0.15); color: #ef4444; }
+        .btn-delete:hover { background: rgba(239,68,68,0.25); }
         
-        .file-link-box { background: rgba(255,255,255,0.04); border-radius: 6px; padding: 4px 8px; display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 6px; }
-        .file-link-box input { background: transparent; border: none; color: #666; font-size: 11px; width: 65%; outline: none; font-family: 'Inter', sans-serif; }
-        .file-link-box .copy-btn { background: rgba(124,58,237,0.15); color: #a78bfa; border: none; padding: 2px 12px; border-radius: 4px; font-size: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; font-family: 'Inter', sans-serif; }
-        .file-link-box .copy-btn:hover { background: rgba(124,58,237,0.25); }
+        .no-files { text-align: center; padding: 30px 20px; color: #555; }
+        .no-files i { font-size: 32px; opacity: 0.3; margin-bottom: 8px; }
         
-        .no-files { text-align: center; padding: 50px 20px; color: #555; }
-        .no-files i { font-size: 44px; margin-bottom: 12px; opacity: 0.3; }
-        .no-files h3 { font-size: 18px; color: #777; }
-        .no-files p { font-size: 14px; }
-        .loading-spinner { text-align: center; padding: 40px; color: #666; }
-        .loading-spinner i { font-size: 28px; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        /* GUEST BANNER */
-        .guest-banner { display: none; background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(109,40,217,0.06)); border: 1px solid rgba(124,58,237,0.15); border-radius: 16px; padding: 14px 24px; margin-bottom: 24px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-        .guest-banner.active { display: flex; }
-        .guest-banner .text { display: flex; align-items: center; gap: 12px; color: #aaa; font-size: 14px; }
-        .guest-banner .text i { color: #7c3aed; font-size: 18px; }
-        .guest-banner .text strong { color: #fff; }
-        .guest-banner .login-link { background: #7c3aed; color: #fff; border: none; padding: 6px 20px; border-radius: 50px; font-weight: 600; font-size: 13px; cursor: pointer; transition: 0.3s; font-family: 'Inter', sans-serif; }
-        .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(124,58,237,0.3); }
-        
-        /* MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(12px); z-index: 9999; justify-content: center; align-items: center; padding: 20px; }
-        .modal.active { display: flex; }
-        .modal-box { background: #1a1833; border: 1px solid rgba(124,58,237,0.2); border-radius: 20px; max-width: 420px; width: 100%; padding: 32px; animation: modalIn 0.3s ease; position: relative; }
-        @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .modal-close { position: absolute; top: 12px; right: 16px; background: none; border: none; color: #666; font-size: 22px; cursor: pointer; }
-        .modal-close:hover { color: #fff; }
-        .modal-box h2 { text-align: center; margin-bottom: 20px; font-size: 24px; }
-        .modal-box h2 i { color: #7c3aed; }
-        .modal-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 20px; }
-        .modal-tab { flex: 1; padding: 12px; background: none; border: none; color: #666; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 14px; font-family: 'Inter', sans-serif; }
-        .modal-tab.active { color: #7c3aed; border-bottom: 2px solid #7c3aed; }
-        .modal-form { display: none; }
-        .modal-form.active { display: block; }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #888; }
-        .form-group input { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.04); color: #fff; font-size: 14px; outline: none; transition: 0.3s; font-family: 'Inter', sans-serif; }
-        .form-group input:focus { border-color: #7c3aed; background: rgba(124,58,237,0.04); }
-        .modal-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #7c3aed, #6d28d9); border: none; border-radius: 10px; color: #fff; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.3s; font-family: 'Inter', sans-serif; }
-        .modal-btn:hover { transform: scale(1.02); box-shadow: 0 0 40px rgba(124,58,237,0.25); }
-        
-        /* DOWNLOAD PAGE */
-        .download-page { display: none; min-height: 80vh; padding: 40px 20px; justify-content: center; align-items: center; }
-        .download-page.active { display: flex; }
-        .download-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; max-width: 500px; width: 100%; padding: 44px; text-align: center; animation: modalIn 0.4s ease; }
-        .download-icon { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #6d28d9); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 32px; color: #fff; box-shadow: 0 10px 40px rgba(124,58,237,0.3); }
-        .download-card h2 { font-size: 22px; margin-bottom: 4px; }
-        .download-card .subtitle { color: #888; font-size: 14px; margin-bottom: 20px; }
-        .download-info { background: rgba(255,255,255,0.04); border-radius: 12px; padding: 16px 20px; margin: 16px 0; text-align: left; }
-        .download-info-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 14px; }
-        .download-info-item:last-child { border-bottom: none; }
-        .download-info-item span { color: #888; }
-        .download-info-item strong { color: #fff; font-weight: 600; }
-        .download-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #7c3aed, #6d28d9); border: none; border-radius: 12px; color: #fff; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .download-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(124,58,237,0.3); }
-        .download-back { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; color: #7c3aed; background: none; border: none; cursor: pointer; font-size: 14px; font-weight: 500; font-family: 'Inter', sans-serif; }
-        .download-back:hover { text-decoration: underline; }
-        .download-security { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; font-size: 12px; color: #555; }
-        .download-security i { color: #10b981; }
-        
-        /* TOAST */
-        .toast { position: fixed; bottom: 30px; right: 30px; padding: 14px 24px; border-radius: 12px; background: #1a1833; border: 1px solid rgba(124,58,237,0.15); display: none; z-index: 99999; max-width: 380px; font-size: 14px; font-weight: 500; animation: slideUp 0.3s ease; box-shadow: 0 10px 40px rgba(0,0,0,0.4); }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            border-radius: 12px;
+            background: #1a1833;
+            border: 1px solid rgba(124,58,237,0.15);
+            display: none;
+            z-index: 999;
+            font-size: 14px;
+            max-width: 90%;
+            text-align: center;
+        }
         .toast.success { border-color: #10b981; }
         .toast.error { border-color: #ef4444; }
-        .toast.warning { border-color: #f59e0b; }
         
-        /* FOOTER */
-        .footer { text-align: center; padding: 30px 0 20px; color: #444; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.03); margin-top: 40px; }
-        
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 28px; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .files-grid { grid-template-columns: 1fr; }
-            .upload-section { padding: 30px 16px; }
-            .toast { bottom: 16px; right: 16px; left: 16px; max-width: 100%; }
-            .download-card { padding: 28px 20px; }
-            .nav-content { flex-direction: column; align-items: stretch; gap: 8px; }
-            .nav-right { justify-content: space-between; }
-            .profile-name { display: none; }
-            .guest-banner { flex-direction: column; text-align: center; }
-            .modal-box { margin: 16px; padding: 24px; }
-            .brand img { height: 32px; }
-        }
-        @media (max-width: 480px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .file-card .actions { flex-wrap: wrap; }
-            .file-card .actions button { flex: 1 1 40%; }
-        }
+        .footer { margin-top: 30px; color: #444; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <!-- ========================================================== -->
-    <!-- NAVBAR WITH LOGO -->
-    <!-- ========================================================== -->
-    <nav class="navbar">
-        <div class="container nav-content">
-            <div class="brand" onclick="goHome()">
-                <!-- ✅ YOUR LOGO ADDED HERE -->
-                <img src="https://i.ibb.co/ycXwBNgg/Et4Ty6Ib.jpg" alt="JOD MODS Logo" />
-                <h1>JOD MODS <span>CLOUD</span></h1>
-            </div>
-            <div class="nav-right">
-                <span class="nav-stats">
-                    <i class="fas fa-file"></i> <span id="navFileCount">0</span> files
-                </span>
-                <div class="profile-btn" id="profileBtn">
-                    <div class="profile-avatar" id="profileAvatar">G</div>
-                    <span class="profile-name" id="profileName">Guest</span>
-                    <i class="fas fa-chevron-down" style="font-size:10px;color:#666;"></i>
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.05);">
-                            <div style="font-weight:700;" id="dropdownName">Guest</div>
-                            <div style="font-size:12px;color:#666;" id="dropdownEmail">guest@jodmods.com</div>
-                        </div>
-                        <div style="padding:6px 0;">
-                            <button class="dropdown-item" onclick="refreshFiles()"><i class="fas fa-sync-alt"></i> Refresh Files</button>
-                            <button class="dropdown-item" onclick="showStats()"><i class="fas fa-chart-bar"></i> Dashboard</button>
-                            <button class="dropdown-item" onclick="showStorageInfo()"><i class="fas fa-hdd"></i> Storage Used <span class="badge" id="storageBadge">0 MB</span></button>
-                            <button class="dropdown-item" onclick="showFileStats()"><i class="fas fa-file"></i> Total Files <span class="badge" id="fileBadge">0</span></button>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item" id="loginDropdownBtn" onclick="openModal()"><i class="fas fa-sign-in-alt"></i> Sign In / Sign Up</button>
-                            <button class="dropdown-item logout" id="logoutDropdownBtn" onclick="handleLogout()" style="display:none;"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
-                        </div>
-                    </div>
-                </div>
-                <button class="auth-btn" id="authBtn" onclick="openModal()">Sign In</button>
-            </div>
+<div class="container">
+    <div class="logo">☁️ JOD MODS CLOUD</div>
+    <div class="subtitle">Upload any file • 2GB limit • Free & Secure</div>
+    
+    <div class="upload-area" id="uploadArea">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <h3>📁 Click or Drop Files Here</h3>
+        <p>All file types supported • Max 2GB</p>
+        <div class="badge"><i class="fas fa-lock"></i> Private • Secure</div>
+        <input type="file" id="fileInput" multiple>
+    </div>
+    
+    <div class="progress-container" id="progressContainer">
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:#aaa;">
+            <span id="progressName">Uploading...</span>
+            <span id="progressPct">0%</span>
         </div>
-    </nav>
-
-    <!-- ========================================================== -->
-    <!-- MAIN APP -->
-    <!-- ========================================================== -->
-    <div id="mainApp">
-        <div class="container">
-
-            <!-- Hero -->
-            <div class="hero">
-                <h1>☁️ Free Cloud Storage</h1>
-                <p>Upload any file up to 2GB • No signup required • 100% free</p>
-                <div class="sub">🔒 Secure • Fast • Anonymous</div>
-            </div>
-
-            <!-- Guest Banner -->
-            <div class="guest-banner" id="guestBanner">
-                <div class="text">
-                    <i class="fas fa-info-circle"></i>
-                    <span><strong>Sign in required</strong> to upload files — Create your free account</span>
-                </div>
-                <button class="login-link" onclick="openModal()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
-            </div>
-
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="num" id="statFiles">0</div>
-                    <div class="label">📁 Total Files</div>
-                </div>
-                <div class="stat-card">
-                    <div class="num" id="statSize">0 MB</div>
-                    <div class="label">📦 Storage Used</div>
-                </div>
-                <div class="stat-card">
-                    <div class="num" id="statDownloads">0</div>
-                    <div class="label">⬇ Total Downloads</div>
-                </div>
-            </div>
-
-            <!-- Storage Bar -->
-            <div class="storage-bar-container">
-                <div class="storage-bar-label">
-                    <span><i class="fas fa-hdd"></i> Storage Usage</span>
-                    <span><span id="storageUsedText">0 MB</span> / <span class="unlimited"><i class="fas fa-infinity"></i> Unlimited</span></span>
-                </div>
-                <div class="storage-bar">
-                    <div class="storage-bar-fill" id="storageFill"></div>
-                </div>
-            </div>
-
-            <!-- Upload Section -->
-            <div class="upload-section" id="uploadArea">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <h3>📁 Click or Drop Files Here</h3>
-                <p>All file types supported • Max 2GB per file</p>
-                <div class="badge"><i class="fas fa-lock"></i> Private • Secure</div>
-                <input type="file" id="fileInput" multiple style="display:none;">
-            </div>
-
-            <!-- Progress -->
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-top">
-                    <span class="name" id="progressName">Uploading...</span>
-                    <span class="pct" id="progressPct">0%</span>
-                </div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill" id="progressFill"></div>
-                </div>
-                <div class="progress-bottom">
-                    <span><i class="fas fa-hdd"></i> <span id="progressUploaded">0 MB</span></span>
-                    <span><i class="fas fa-bolt"></i> <span id="progressSpeed">0 MB/s</span></span>
-                    <span><i class="fas fa-clock"></i> <span id="progressTime">--</span></span>
-                </div>
-            </div>
-
-            <!-- Files -->
-            <div class="files-header">
-                <h2><i class="fas fa-folder"></i> My Files</h2>
-                <div class="actions">
-                    <button onclick="refreshFiles()"><i class="fas fa-sync-alt"></i> Refresh</button>
-                    <button onclick="document.getElementById('fileInput').click()" id="uploadBtnHeader"><i class="fas fa-plus"></i> Upload</button>
-                </div>
-            </div>
-            <div id="filesContainer">
-                <div class="loading-spinner"><i class="fas fa-spinner"></i> Loading...</div>
-            </div>
-
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text">
+            <span id="progressUploaded">0 MB</span>
+            <span id="progressSpeed">0 MB/s</span>
         </div>
     </div>
-
-    <!-- ========================================================== -->
-    <!-- DOWNLOAD PAGE -->
-    <!-- ========================================================== -->
-    <div class="download-page" id="downloadPage">
-        <div class="download-card">
-            <div class="download-icon"><i class="fas fa-bolt"></i></div>
-            <h2 id="downloadFileName">File Name</h2>
-            <p class="subtitle">⚡ Download from JOD MODS Cloud</p>
-
-            <div class="download-info">
-                <div class="download-info-item">
-                    <span><i class="fas fa-file"></i> File Name</span>
-                    <strong id="dFileName">-</strong>
-                </div>
-                <div class="download-info-item">
-                    <span><i class="fas fa-hdd"></i> File Size</span>
-                    <strong id="dFileSize">-</strong>
-                </div>
-                <div class="download-info-item">
-                    <span><i class="fas fa-user"></i> Uploaded By</span>
-                    <strong id="dFileUser">-</strong>
-                </div>
-                <div class="download-info-item">
-                    <span><i class="fas fa-calendar"></i> Upload Date</span>
-                    <strong id="dFileDate">-</strong>
-                </div>
-                <div class="download-info-item">
-                    <span><i class="fas fa-download"></i> Downloads</span>
-                    <strong id="dFileDownloads">-</strong>
-                </div>
-            </div>
-
-            <button class="download-btn" id="downloadBtn">
-                <i class="fas fa-download"></i> Download Now
-            </button>
-
-            <button class="download-back" onclick="goHome()">
-                <i class="fas fa-arrow-left"></i> Back to Cloud
-            </button>
-
-            <div class="download-security">
-                <i class="fas fa-shield-alt"></i>
-                <span>Securely stored • Direct download</span>
-            </div>
+    
+    <div class="file-list" id="fileList">
+        <div class="no-files">
+            <i class="fas fa-cloud"></i>
+            <p>No files uploaded yet</p>
         </div>
     </div>
+    
+    <div class="footer">JOD MODS Cloud &bull; Powered by Google Drive</div>
+</div>
 
-    <!-- ========================================================== -->
-    <!-- AUTH MODAL -->
-    <!-- ========================================================== -->
-    <div class="modal" id="authModal">
-        <div class="modal-box">
-            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
-            <h2><i class="fas fa-cloud"></i> JOD MODS Cloud</h2>
-            <div class="modal-tabs">
-                <button class="modal-tab active" data-tab="login" onclick="switchTab('login')">Sign In</button>
-                <button class="modal-tab" data-tab="register" onclick="switchTab('register')">Sign Up</button>
-            </div>
-            <div class="modal-form active" id="loginForm">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="loginEmail" placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPass" placeholder="Enter your password">
-                </div>
-                <button class="modal-btn" onclick="handleLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
-            </div>
-            <div class="modal-form" id="registerForm">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="regName" placeholder="Enter your name">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="regEmail" placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="regPass" placeholder="Min 6 characters">
-                </div>
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" id="regConfirm" placeholder="Confirm your password">
-                </div>
-                <button class="modal-btn" onclick="handleRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
-            </div>
-        </div>
-    </div>
+<div class="toast" id="toast"></div>
 
-    <!-- ========================================================== -->
-    <!-- TOAST -->
-    <!-- ========================================================== -->
-    <div class="toast" id="toast"></div>
+<script>
+// ============================================================
+// ✅ TERA PERSONAL API URL (Already Deployed)
+// ============================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbz7G6n8pVV6QgX6y3XIvW9jyJjfNE-hlWv_8CCqL1dMQeey0VWrT-azv7jZLY85K__ILA/exec';
 
-    <!-- ========================================================== -->
-    <!-- FOOTER -->
-    <!-- ========================================================== -->
-    <div class="footer">
-        <p>JOD MODS Cloud &bull; Powered by Secure Storage &bull; 100% Free &bull; Unlimited</p>
-    </div>
+// ============================================================
+// STATE
+// ============================================================
+let fileList = [];
 
-    <!-- ========================================================== -->
-    <!-- JAVASCRIPT - COMPLETE (NO ENCRYPTION) -->
-    <!-- ========================================================== -->
-    <script>
-        // ==========================================================
-        // ✅ TELEGRAM CONFIG (Your Token & Channel)
-        // ==========================================================
+// ============================================================
+// HELPERS
+// ============================================================
+function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes/1024).toFixed(1) + ' KB';
+    if (bytes < 1073741824) return (bytes/1048576).toFixed(1) + ' MB';
+    return (bytes/1073741824).toFixed(2) + ' GB';
+}
 
-        const BOT_TOKEN = '8912679390:AAHjunC2scpFKPJr0QgwfGWdAOFaLhUhzwY';
-        const CHANNEL_ID = '-1002441669316';
+function getFileIcon(name) {
+    const ext = name.split('.').pop().toLowerCase();
+    const map = {
+        'pdf': 'fa-file-pdf', 'doc': 'fa-file-word', 'docx': 'fa-file-word',
+        'xls': 'fa-file-excel', 'xlsx': 'fa-file-excel',
+        'ppt': 'fa-file-powerpoint', 'pptx': 'fa-file-powerpoint',
+        'jpg': 'fa-file-image', 'jpeg': 'fa-file-image', 'png': 'fa-file-image',
+        'mp4': 'fa-file-video', 'mp3': 'fa-file-audio',
+        'zip': 'fa-file-archive', 'rar': 'fa-file-archive',
+        'txt': 'fa-file-alt'
+    };
+    return map[ext] || 'fa-file';
+}
 
-        // ==========================================================
-        // STATE
-        // ==========================================================
+function toast(msg, type='info') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast ' + type;
+    el.style.display = 'block';
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => { el.style.display = 'none'; }, 3000);
+}
 
-        let db = null;
-        let fileList = [];
-        let currentUser = null;
-        let downloadFileId = null;
-        let _downloadFile = null;
-
-        // ==========================================================
-        // DATABASE (IndexedDB)
-        // ==========================================================
-
-        const DB_NAME = 'JODCloudDB';
-        const STORE_NAME = 'files';
-        const USERS_KEY = 'jodmods_users';
-        const CURRENT_USER_KEY = 'jodmods_currentUser';
-
-        function openDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, 1);
-                request.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-                    }
-                };
-                request.onsuccess = (e) => {
-                    db = e.target.result;
-                    resolve(db);
-                };
-                request.onerror = (e) => reject(e.target.error);
-            });
-        }
-
-        function saveFileMeta(meta) {
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                const request = store.add(meta);
-                request.onsuccess = () => resolve(true);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        function getAllFilesMeta() {
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readonly');
-                const store = tx.objectStore(STORE_NAME);
-                const request = store.getAll();
-                request.onsuccess = () => resolve(request.result || []);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        function getFileMeta(id) {
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readonly');
-                const store = tx.objectStore(STORE_NAME);
-                const request = store.get(id);
-                request.onsuccess = () => resolve(request.result);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        function updateFileMeta(meta) {
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                const request = store.put(meta);
-                request.onsuccess = () => resolve(true);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        function deleteFileMeta(id) {
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                const request = store.delete(id);
-                request.onsuccess = () => resolve(true);
-                request.onerror = () => reject(request.error);
-            });
-        }
-
-        // ==========================================================
-        // AUTH
-        // ==========================================================
-
-        function getUsers() {
-            try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; } catch { return []; }
-        }
-
-        function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
-
-        function getCurrentUser() {
-            try { return JSON.parse(localStorage.getItem(CURRENT_USER_KEY)) || null; } catch { return null; }
-        }
-
-        function setCurrentUser(user) {
-            if (user) { localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user)); } else { localStorage
-                    .removeItem(CURRENT_USER_KEY); }
-            currentUser = user;
-            updateUI();
-            updateGuestBanner();
-        }
-
-        function openModal() { document.getElementById('authModal').classList.add('active'); }
-
-        function closeModal() { document.getElementById('authModal').classList.remove('active'); }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.modal-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-            document.getElementById('loginForm').classList.toggle('active', tab === 'login');
-            document.getElementById('registerForm').classList.toggle('active', tab === 'register');
-        }
-
-        function handleLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-            if (!email || !pass) { toast('Please fill all fields', 'error'); return; }
-
-            const users = getUsers();
-            const user = users.find(u => u.email === email && u.pass === pass);
-            if (user) {
-                setCurrentUser(user);
-                closeModal();
-                toast('Welcome back, ' + user.name + '! 🎉', 'success');
-                document.getElementById('loginEmail').value = '';
-                document.getElementById('loginPass').value = '';
-                loadFiles();
-            } else {
-                toast('Invalid email or password', 'error');
-            }
-        }
-
-        function handleRegister() {
-            const name = document.getElementById('regName').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const pass = document.getElementById('regPass').value.trim();
-            const confirm = document.getElementById('regConfirm').value.trim();
-
-            if (!name || !email || !pass || !confirm) { toast('Please fill all fields', 'error'); return; }
-            if (pass.length < 6) { toast('Password must be at least 6 characters', 'error'); return; }
-            if (pass !== confirm) { toast('Passwords do not match', 'error'); return; }
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Please enter a valid email', 'error'); return; }
-
-            const users = getUsers();
-            if (users.some(u => u.email === email)) { toast('Email already registered', 'error'); return; }
-
-            const newUser = {
-                id: Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-                name,
-                email,
-                pass,
-                avatar: name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2),
-                joinDate: new Date().toISOString().split('T')[0]
+// ============================================================
+// UPLOAD
+// ============================================================
+async function uploadFiles(files) {
+    if (!files || !files.length) return;
+    
+    const progress = document.getElementById('progressContainer');
+    progress.classList.add('active');
+    
+    let uploaded = 0;
+    let totalBytes = 0;
+    let uploadedBytes = 0;
+    
+    for (let f of files) totalBytes += f.size;
+    
+    for (let file of files) {
+        document.getElementById('progressName').textContent = '📤 ' + file.name;
+        
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        try {
+            const xhr = new XMLHttpRequest();
+            const startTime = Date.now();
+            
+            xhr.upload.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    const pct = Math.round((e.loaded / e.total) * 100);
+                    document.getElementById('progressFill').style.width = pct + '%';
+                    document.getElementById('progressPct').textContent = pct + '%';
+                    document.getElementById('progressUploaded').textContent = formatSize(e.loaded);
+                    
+                    const speed = e.loaded / 1024 / 1024 / ((Date.now() - startTime) / 1000);
+                    document.getElementById('progressSpeed').textContent = speed.toFixed(1) + ' MB/s';
+                }
             };
-
-            users.push(newUser);
-            saveUsers(users);
-            setCurrentUser(newUser);
-            closeModal();
-            toast('Account created successfully! 🎉', 'success');
-
-            document.getElementById('regName').value = '';
-            document.getElementById('regEmail').value = '';
-            document.getElementById('regPass').value = '';
-            document.getElementById('regConfirm').value = '';
-
-            loadFiles();
-        }
-
-        function handleLogout() {
-            if (confirm('Are you sure you want to sign out?')) {
-                setCurrentUser(null);
-                toast('Signed out successfully', 'success');
-                fileList = [];
-                renderFiles();
-                updateStats();
-                document.getElementById('profileDropdown').classList.remove('active');
-            }
-        }
-
-        function updateUI() {
-            const avatar = document.getElementById('profileAvatar');
-            const name = document.getElementById('profileName');
-            const dropdownName = document.getElementById('dropdownName');
-            const dropdownEmail = document.getElementById('dropdownEmail');
-            const authBtn = document.getElementById('authBtn');
-            const loginDropdown = document.getElementById('loginDropdownBtn');
-            const logoutDropdown = document.getElementById('logoutDropdownBtn');
-
-            if (currentUser) {
-                avatar.textContent = currentUser.avatar || currentUser.name.slice(0, 2).toUpperCase();
-                name.textContent = currentUser.name;
-                dropdownName.textContent = currentUser.name;
-                dropdownEmail.textContent = currentUser.email;
-                authBtn.textContent = 'Sign Out';
-                authBtn.onclick = handleLogout;
-                loginDropdown.style.display = 'none';
-                logoutDropdown.style.display = 'flex';
-                document.getElementById('uploadArea').style.display = 'block';
-                document.getElementById('uploadBtnHeader').style.display = 'inline-block';
-            } else {
-                avatar.textContent = 'G';
-                name.textContent = 'Guest';
-                dropdownName.textContent = 'Guest';
-                dropdownEmail.textContent = 'guest@jodmods.com';
-                authBtn.textContent = 'Sign In';
-                authBtn.onclick = openModal;
-                loginDropdown.style.display = 'flex';
-                logoutDropdown.style.display = 'none';
-                document.getElementById('uploadArea').style.display = 'none';
-                document.getElementById('uploadBtnHeader').style.display = 'none';
-            }
-        }
-
-        function updateGuestBanner() {
-            const banner = document.getElementById('guestBanner');
-            if (currentUser) {
-                banner.classList.remove('active');
-            } else {
-                banner.classList.add('active');
-            }
-        }
-
-        // ==========================================================
-        // TELEGRAM API (NO ENCRYPTION - ORIGINAL FILE)
-        // ==========================================================
-
-        async function uploadToTelegram(file) {
-            const formData = new FormData();
-            formData.append('chat_id', CHANNEL_ID);
-            formData.append('document', file); // ✅ Original file, no encryption
-
-            const response = await fetch(
-                `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
-                    method: 'POST',
-                    body: formData
-                }
-            );
-
-            const data = await response.json();
-            if (!data.ok) {
-                throw new Error(data.description || 'Telegram upload failed');
-            }
-
-            return {
-                fileId: data.result.document.file_id,
-                messageId: data.result.message_id
-            };
-        }
-
-        async function getTelegramFileUrl(fileId) {
-            const response = await fetch(
-                `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`
-            );
-            const data = await response.json();
-            if (!data.ok) {
-                throw new Error('File not found on Telegram');
-            }
-            return `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
-        }
-
-        // ==========================================================
-        // HELPERS
-        // ==========================================================
-
-        function formatSize(bytes) {
-            if (bytes < 1024) return bytes + ' B';
-            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-            if (bytes < 1073741824) return (bytes / 1048576).toFixed(1) + ' MB';
-            return (bytes / 1073741824).toFixed(2) + ' GB';
-        }
-
-        function getFileIcon(name) {
-            const ext = name.split('.').pop().toLowerCase();
-            const map = {
-                'pdf': 'fa-file-pdf',
-                'doc': 'fa-file-word',
-                'docx': 'fa-file-word',
-                'xls': 'fa-file-excel',
-                'xlsx': 'fa-file-excel',
-                'ppt': 'fa-file-powerpoint',
-                'pptx': 'fa-file-powerpoint',
-                'jpg': 'fa-file-image',
-                'jpeg': 'fa-file-image',
-                'png': 'fa-file-image',
-                'gif': 'fa-file-image',
-                'mp4': 'fa-file-video',
-                'avi': 'fa-file-video',
-                'mov': 'fa-file-video',
-                'mp3': 'fa-file-audio',
-                'wav': 'fa-file-audio',
-                'zip': 'fa-file-archive',
-                'rar': 'fa-file-archive',
-                'txt': 'fa-file-alt',
-                'js': 'fa-file-code',
-                'html': 'fa-file-code',
-                'css': 'fa-file-code',
-                'json': 'fa-file-code',
-                'xml': 'fa-file-code'
-            };
-            return map[ext] || 'fa-file';
-        }
-
-        function truncateName(name, max = 18) {
-            return name.length > max ? name.substring(0, max) + '…' : name;
-        }
-
-        function formatDate(dateStr) {
-            const d = new Date(dateStr);
-            const now = new Date();
-            const diff = (now - d) / 86400000;
-            if (diff < 1) return 'Today';
-            if (diff < 2) return 'Yesterday';
-            if (diff < 7) return Math.round(diff) + 'd ago';
-            return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function generateShareLink(fileId) {
-            return window.location.origin + window.location.pathname + '?file=' + fileId;
-        }
-
-        // ==========================================================
-        // UPLOAD
-        // ==========================================================
-
-        let speedInterval = null;
-        let lastBytes = 0;
-        let lastTime = 0;
-        let totalBytes = 0;
-        let uploadedBytes = 0;
-
-        async function uploadFiles(fileListInput) {
-            if (!currentUser) {
-                toast('Please sign in to upload files', 'warning');
-                openModal();
-                return;
-            }
-
-            if (!fileListInput || !fileListInput.length) return;
-
-            const progress = document.getElementById('progressContainer');
-            progress.classList.add('active');
-
-            totalBytes = 0;
-            uploadedBytes = 0;
-            lastBytes = 0;
-            lastTime = Date.now();
-
-            for (let f of fileListInput) {
-                totalBytes += f.size;
-            }
-
-            if (speedInterval) clearInterval(speedInterval);
-            speedInterval = setInterval(updateSpeed, 300);
-
-            let uploaded = 0;
-            const total = fileListInput.length;
-
-            for (let file of fileListInput) {
-                document.getElementById('progressName').textContent = '📤 ' + truncateName(file.name, 25);
-
-                try {
-                    const result = await uploadToTelegram(file);
-
-                    const meta = {
-                        id: result.fileId,
-                        userId: currentUser.id,
-                        userName: currentUser.name,
-                        name: file.name,
-                        size: file.size,
-                        sizeFormatted: formatSize(file.size),
-                        type: file.type || 'file',
-                        uploadDate: new Date().toISOString(),
-                        downloads: 0,
-                        shareLink: generateShareLink(result.fileId)
-                    };
-
-                    await saveFileMeta(meta);
-
-                    uploaded++;
-                    uploadedBytes += file.size;
-                    updateProgress();
-
-                    toast('✅ ' + file.name + ' uploaded!', 'success');
-
-                } catch (error) {
-                    console.error('Upload error:', error);
-                    toast('❌ ' + file.name + ' failed: ' + error.message, 'error');
-                }
-            }
-
-            clearInterval(speedInterval);
-            document.getElementById('progressSpeed').textContent = '0 MB/s';
-
-            setTimeout(() => {
-                progress.classList.remove('active');
-                document.getElementById('progressFill').style.width = '0%';
-                document.getElementById('progressPct').textContent = '0%';
-            }, 1000);
-
-            if (uploaded > 0) {
-                await loadFiles();
-                updateStats();
-            }
-        }
-
-        function updateProgress() {
-            const pct = totalBytes ? Math.round((uploadedBytes / totalBytes) * 100) : 0;
-            document.getElementById('progressFill').style.width = pct + '%';
-            document.getElementById('progressPct').textContent = pct + '%';
-            document.getElementById('progressUploaded').textContent = formatSize(uploadedBytes);
-
-            const remaining = totalBytes - uploadedBytes;
-            const speed = parseFloat(document.getElementById('progressSpeed').textContent) || 0;
-
-            if (speed > 0) {
-                const secs = remaining / (speed * 1048576);
-                if (secs > 3600) {
-                    document.getElementById('progressTime').textContent = Math.round(secs / 3600) + 'h';
-                } else if (secs > 60) {
-                    document.getElementById('progressTime').textContent = Math.round(secs / 60) + 'm';
-                } else {
-                    document.getElementById('progressTime').textContent = Math.round(secs) + 's';
-                }
-            }
-        }
-
-        function updateSpeed() {
-            const now = Date.now();
-            const dt = (now - lastTime) / 1000;
-            if (dt > 0) {
-                const bytes = uploadedBytes - lastBytes;
-                const speed = bytes / dt;
-                document.getElementById('progressSpeed').textContent = (speed / 1048576).toFixed(1) + ' MB/s';
-                lastBytes = uploadedBytes;
-                lastTime = now;
-                updateProgress();
-            }
-        }
-
-        // ==========================================================
-        // LOAD FILES
-        // ==========================================================
-
-        async function loadFiles() {
-            const container = document.getElementById('filesContainer');
-            container.innerHTML =
-            '<div class="loading-spinner"><i class="fas fa-spinner"></i> Loading...</div>';
-
-            try {
-                const allFiles = await getAllFilesMeta();
-
-                if (currentUser) {
-                    fileList = allFiles.filter(f => f.userId === currentUser.id);
-                } else {
-                    fileList = [];
-                }
-
-                fileList.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
-
-                renderFiles();
-                updateStats();
-
-            } catch (error) {
-                console.error('Load files error:', error);
-                container.innerHTML = `
-                    <div class="no-files">
-                        <i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i>
-                        <h3>Error loading files</h3>
-                        <p>Please refresh the page</p>
-                    </div>
-                `;
-            }
-        }
-
-        function renderFiles() {
-            const container = document.getElementById('filesContainer');
-
-            if (!currentUser) {
-                container.innerHTML = `
-                    <div class="no-files">
-                        <i class="fas fa-lock"></i>
-                        <h3>Sign in to view your files</h3>
-                        <p>Create your free account to start uploading</p>
-                        <button onclick="openModal()" style="background:#7c3aed;color:#fff;border:none;padding:10px 30px;border-radius:50px;font-weight:600;cursor:pointer;margin-top:12px;font-family:'Inter',sans-serif;">
-                            <i class="fas fa-sign-in-alt"></i> Sign In
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-
-            if (fileList.length === 0) {
-                container.innerHTML = `
-                    <div class="no-files">
-                        <i class="fas fa-cloud"></i>
-                        <h3>No files uploaded yet</h3>
-                        <p>Upload your first file above ☝️</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = `
-                <div class="files-grid">
-                    ${fileList.map(f => `
-                        <div class="file-card">
-                            <div class="icon"><i class="fas ${getFileIcon(f.name)}"></i></div>
-                            <div class="name" title="${escapeHtml(f.name)}">${escapeHtml(truncateName(f.name))}</div>
-                            <div class="meta">
-                                <span>📦 ${f.sizeFormatted}</span>
-                                <span>📅 ${formatDate(f.uploadDate)}</span>
-                                <span>⬇ ${f.downloads}</span>
-                            </div>
-                            <div class="actions">
-                                <button class="btn-download" onclick="downloadFile('${f.id}')">
-                                    <i class="fas fa-download"></i> Download
-                                </button>
-                                <button class="btn-share" onclick="shareFile('${f.id}')">
-                                    <i class="fas fa-share"></i>
-                                </button>
-                                <button class="btn-delete" onclick="deleteFile('${f.id}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                            <div class="file-link-box">
-                                <input value="${f.shareLink}" readonly>
-                                <button class="copy-btn" onclick="copyLink('${f.shareLink}')">Copy</button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        // ==========================================================
-        // STATS
-        // ==========================================================
-
-        function updateStats() {
-            const totalFiles = fileList.length;
-            const totalSize = fileList.reduce((sum, f) => sum + f.size, 0);
-            const totalDownloads = fileList.reduce((sum, f) => sum + f.downloads, 0);
-
-            document.getElementById('statFiles').textContent = totalFiles;
-            document.getElementById('statSize').textContent = formatSize(totalSize);
-            document.getElementById('statDownloads').textContent = totalDownloads;
-            document.getElementById('navFileCount').textContent = totalFiles;
-            document.getElementById('storageUsedText').textContent = formatSize(totalSize);
-            document.getElementById('storageBadge').textContent = formatSize(totalSize);
-            document.getElementById('fileBadge').textContent = totalFiles;
-
-            const pct = Math.min((totalSize / (100 * 1024 * 1024 * 1024)) * 100, 80);
-            document.getElementById('storageFill').style.width = pct + '%';
-        }
-
-        // ==========================================================
-        // DOWNLOAD
-        // ==========================================================
-
-        async function downloadFile(fileId) {
-            try {
-                const fileMeta = await getFileMeta(fileId);
-                if (!fileMeta) {
-                    toast('❌ File not found', 'error');
-                    return;
-                }
-
-                if (currentUser && fileMeta.userId !== currentUser.id) {
-                    toast('❌ Access denied', 'error');
-                    return;
-                }
-
-                showDownloadPage(fileMeta);
-
-            } catch (error) {
-                console.error('Download error:', error);
-                toast('❌ Download failed: ' + error.message, 'error');
-            }
-        }
-
-        function showDownloadPage(file) {
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('downloadPage').classList.add('active');
-
-            document.getElementById('downloadFileName').textContent = file.name;
-            document.getElementById('dFileName').textContent = file.name;
-            document.getElementById('dFileSize').textContent = file.sizeFormatted;
-            document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
-            document.getElementById('dFileDate').textContent = formatDate(file.uploadDate);
-            document.getElementById('dFileDownloads').textContent = file.downloads;
-
-            downloadFileId = file.id;
-            _downloadFile = file;
-        }
-
-        function goHome() {
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('downloadPage').classList.remove('active');
-            downloadFileId = null;
-            _downloadFile = null;
-        }
-
-        document.getElementById('downloadBtn').addEventListener('click', async function() {
-            if (!_downloadFile) {
-                toast('Download link not available', 'error');
-                return;
-            }
-
-            const btn = this;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
-            btn.disabled = true;
-
-            try {
-                const url = await getTelegramFileUrl(_downloadFile.id);
-
-                _downloadFile.downloads++;
-                await updateFileMeta(_downloadFile);
-                updateStats();
-
-                window.open(url, '_blank');
-                toast('⬇ Downloading ' + _downloadFile.name, 'success');
-
-                btn.innerHTML = '<i class="fas fa-check-circle"></i> Downloaded!';
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }, 2000);
-
-            } catch (error) {
-                console.error('Download error:', error);
-                toast('❌ Download failed: ' + error.message, 'error');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        });
-
-        // ==========================================================
-        // SHARE
-        // ==========================================================
-
-        async function shareFile(fileId) {
-            const file = await getFileMeta(fileId);
-            if (!file) return;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: file.name,
-                    text: '📁 ' + file.name + ' - JOD MODS Cloud',
-                    url: file.shareLink
-                }).catch(() => {});
-            } else {
-                copyLink(file.shareLink);
-            }
-        }
-
-        function copyLink(link) {
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(link).then(() => toast('📋 Link copied!', 'success'))
-                    .catch(() => fallbackCopy(link));
-            } else {
-                fallbackCopy(link);
-            }
-        }
-
-        function fallbackCopy(text) {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            toast('📋 Link copied!', 'success');
-        }
-
-        // ==========================================================
-        // DELETE
-        // ==========================================================
-
-        async function deleteFile(fileId) {
-            if (!confirm('Delete this file permanently?')) return;
-
-            try {
-                await deleteFileMeta(fileId);
-                fileList = fileList.filter(f => f.id !== fileId);
-                renderFiles();
-                updateStats();
-                toast('🗑️ File deleted', 'success');
-            } catch (error) {
-                toast('❌ Delete failed', 'error');
-            }
-        }
-
-        // ==========================================================
-        // REFRESH
-        // ==========================================================
-
-        function refreshFiles() {
-            loadFiles();
-            toast('🔄 Refreshed', 'success');
-            document.getElementById('profileDropdown').classList.remove('active');
-        }
-
-        function showStats() {
-            updateStats();
-            toast('📊 Stats updated', 'success');
-            document.getElementById('profileDropdown').classList.remove('active');
-        }
-
-        function showStorageInfo() {
-            updateStats();
-            toast('💾 Storage info updated', 'success');
-            document.getElementById('profileDropdown').classList.remove('active');
-        }
-
-        function showFileStats() {
-            updateStats();
-            toast('📁 File stats updated', 'success');
-            document.getElementById('profileDropdown').classList.remove('active');
-        }
-
-        // ==========================================================
-        // SHARE LINK DETECTION
-        // ==========================================================
-
-        async function checkShareLink() {
-            const params = new URLSearchParams(window.location.search);
-            const fileId = params.get('file');
-
-            if (fileId) {
-                const file = await getFileMeta(fileId);
-                if (file) {
-                    showDownloadPage(file);
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                }
-            }
-        }
-
-        // ==========================================================
-        // TOAST
-        // ==========================================================
-
-        function toast(message, type = 'info') {
-            const el = document.getElementById('toast');
-            el.textContent = message;
-            el.className = 'toast ' + type;
-            el.style.display = 'block';
-            clearTimeout(el._timer);
-            el._timer = setTimeout(() => {
-                el.style.display = 'none';
-            }, 4000);
-        }
-
-        // ==========================================================
-        // INIT
-        // ==========================================================
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            await openDB();
-
-            currentUser = getCurrentUser();
-            updateUI();
-            updateGuestBanner();
-
-            await loadFiles();
-            await checkShareLink();
-
-            // ===== UPLOAD EVENTS =====
-
-            const uploadArea = document.getElementById('uploadArea');
-            const fileInput = document.getElementById('fileInput');
-
-            uploadArea.addEventListener('click', () => {
-                if (!currentUser) {
-                    toast('Please sign in to upload', 'warning');
-                    openModal();
-                    return;
-                }
-                fileInput.click();
-            });
-
-            fileInput.addEventListener('change', function() {
-                if (this.files.length) {
-                    uploadFiles(this.files);
-                    this.value = '';
-                }
-            });
-
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('dragover');
-            });
-
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('dragover');
-            });
-
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('dragover');
-                if (!currentUser) {
-                    toast('Please sign in to upload', 'warning');
-                    openModal();
-                    return;
-                }
-                if (e.dataTransfer.files.length) {
-                    uploadFiles(e.dataTransfer.files);
-                }
-            });
-
-            // ===== PROFILE DROPDOWN =====
-
-            const profileBtn = document.getElementById('profileBtn');
-            const profileDropdown = document.getElementById('profileDropdown');
-
-            profileBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileDropdown.classList.toggle('active');
-            });
-
-            document.addEventListener('click', function() {
-                profileDropdown.classList.remove('active');
-            });
-
-            // ===== KEYBOARD SHORTCUTS =====
-
-            document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.key === 'u') {
-                    e.preventDefault();
-                    if (currentUser) {
-                        fileInput.click();
+            
+            const response = await new Promise((resolve, reject) => {
+                xhr.open('POST', API_URL);
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        try { resolve(JSON.parse(xhr.responseText)); } 
+                        catch(e) { reject(new Error('Invalid response')); }
                     } else {
-                        toast('Please sign in to upload', 'warning');
-                        openModal();
+                        reject(new Error('Upload failed: ' + xhr.status));
                     }
-                }
-                if (e.ctrlKey && e.key === 'r') {
-                    e.preventDefault();
-                    refreshFiles();
-                }
+                };
+                xhr.onerror = () => reject(new Error('Network error'));
+                xhr.send(formData);
             });
+            
+            if (response.success) {
+                uploaded++;
+                uploadedBytes += file.size;
+                fileList.unshift({
+                    id: response.fileId,
+                    name: response.name,
+                    size: response.size,
+                    sizeFormatted: formatSize(response.size),
+                    downloadUrl: response.downloadUrl
+                });
+                toast('✅ ' + file.name + ' uploaded!', 'success');
+            } else {
+                toast('❌ ' + file.name + ' failed: ' + (response.error || 'Unknown'), 'error');
+            }
+            
+        } catch (error) {
+            console.error('Upload error:', error);
+            toast('❌ ' + file.name + ' failed: ' + error.message, 'error');
+        }
+    }
+    
+    setTimeout(() => {
+        progress.classList.remove('active');
+        document.getElementById('progressFill').style.width = '0%';
+        document.getElementById('progressPct').textContent = '0%';
+    }, 1000);
+    
+    if (uploaded > 0) {
+        renderFiles();
+        saveFiles();
+    }
+}
 
-            // ===== ENTER KEY =====
+// ============================================================
+// RENDER FILES
+// ============================================================
+function renderFiles() {
+    const container = document.getElementById('fileList');
+    
+    if (fileList.length === 0) {
+        container.innerHTML = `
+            <div class="no-files">
+                <i class="fas fa-cloud"></i>
+                <p>No files uploaded yet</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = fileList.map(f => `
+        <div class="file-item">
+            <div>
+                <div class="name"><i class="fas ${getFileIcon(f.name)}" style="color:#7c3aed;margin-right:8px;"></i>${f.name}</div>
+                <div class="size">📦 ${f.sizeFormatted}</div>
+            </div>
+            <div class="actions">
+                <button class="btn-download" onclick="downloadFile('${f.id}')"><i class="fas fa-download"></i></button>
+                <button class="btn-share" onclick="shareFile('${f.downloadUrl}', '${f.name}')"><i class="fas fa-share"></i></button>
+                <button class="btn-delete" onclick="deleteFile('${f.id}')"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+    `).join('');
+}
 
-            document.getElementById('loginPass').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') handleLogin();
-            });
-            document.getElementById('regConfirm').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') handleRegister();
-            });
+// ============================================================
+// DOWNLOAD
+// ============================================================
+function downloadFile(fileId) {
+    const file = fileList.find(f => f.id === fileId);
+    if (!file) { toast('❌ File not found', 'error'); return; }
+    window.open(file.downloadUrl, '_blank');
+    toast('⬇ Downloading...', 'success');
+}
 
-            // ===== MODAL CLOSE =====
+// ============================================================
+// SHARE
+// ============================================================
+function shareFile(url, name) {
+    if (navigator.share) {
+        navigator.share({ title: name, text: '📁 ' + name + ' - JOD MODS Cloud', url: url })
+            .catch(() => {});
+    } else {
+        copyToClipboard(url);
+        toast('📋 Link copied!', 'success');
+    }
+}
 
-            document.getElementById('authModal').addEventListener('click', function(e) {
-                if (e.target === this) closeModal();
-            });
+function copyToClipboard(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+    } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    }
+}
 
-            console.log('🚀 JOD MODS Cloud Ready!');
-            console.log('📁 Total files:', fileList.length);
-            console.log('👤 User:', currentUser ? currentUser.name : 'Guest');
-        });
+// ============================================================
+// DELETE
+// ============================================================
+function deleteFile(fileId) {
+    if (!confirm('Delete this file?')) return;
+    fileList = fileList.filter(f => f.id !== fileId);
+    renderFiles();
+    saveFiles();
+    toast('🗑️ File deleted', 'success');
+}
 
-        // ===== GLOBAL FUNCTIONS =====
+// ============================================================
+// SAVE / LOAD
+// ============================================================
+function saveFiles() {
+    try { localStorage.setItem('jod_files', JSON.stringify(fileList)); } catch(e) {}
+}
 
-        window.openModal = openModal;
-        window.closeModal = closeModal;
-        window.switchTab = switchTab;
-        window.handleLogin = handleLogin;
-        window.handleRegister = handleRegister;
-        window.handleLogout = handleLogout;
-        window.downloadFile = downloadFile;
-        window.shareFile = shareFile;
-        window.deleteFile = deleteFile;
-        window.copyLink = copyLink;
-        window.refreshFiles = refreshFiles;
-        window.showStats = showStats;
-        window.showStorageInfo = showStorageInfo;
-        window.showFileStats = showFileStats;
-        window.goHome = goHome;
-        window.toast = toast;
-    </script>
+function loadSavedFiles() {
+    try {
+        const saved = localStorage.getItem('jod_files');
+        if (saved) {
+            fileList = JSON.parse(saved);
+            renderFiles();
+        }
+    } catch(e) {}
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+    loadSavedFiles();
+    
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    
+    uploadArea.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', function() {
+        if (this.files.length) {
+            uploadFiles(this.files);
+            this.value = '';
+        }
+    });
+    
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = '#7c3aed';
+        uploadArea.style.background = 'rgba(124,58,237,0.08)';
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = 'rgba(124,58,237,0.3)';
+        uploadArea.style.background = 'transparent';
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = 'rgba(124,58,237,0.3)';
+        uploadArea.style.background = 'transparent';
+        if (e.dataTransfer.files.length) {
+            uploadFiles(e.dataTransfer.files);
+        }
+    });
+});
+
+console.log('🚀 JOD MODS Cloud Ready!');
+console.log('📁 API URL:', API_URL);
+</script>
 </body>
 </html>
