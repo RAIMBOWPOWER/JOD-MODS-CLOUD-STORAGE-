@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOD MODS CLOUD - Telegram Storage</title>
+    <title>JOD MODS CLOUD - Direct Download</title>
     <!-- Copy Protect -->
     <script>
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
@@ -467,7 +467,7 @@
         .guest-banner .login-link { background: var(--white); color: var(--primary); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; border: none; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
         .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: var(--shadow); }
         
-        /* ===== DOWNLOAD PAGE - FIXED ===== */
+        /* ===== DOWNLOAD PAGE - DIRECT WEBSITE DOWNLOAD ===== */
         .download-page {
             display: none;
             min-height: 100vh;
@@ -564,6 +564,30 @@
             color: var(--gray);
         }
         .download-security i { color: var(--success); }
+        /* Download progress bar */
+        .download-progress {
+            display: none;
+            margin-top: 16px;
+        }
+        .download-progress.active { display: block; }
+        .download-progress .progress-bar {
+            height: 8px;
+            background: var(--gray-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .download-progress .progress-bar .fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .download-progress .progress-text {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 6px;
+        }
         
         .footer {
             background: var(--white);
@@ -833,12 +857,12 @@
         </div>
     </div>
     
-    <!-- DOWNLOAD PAGE -->
+    <!-- DOWNLOAD PAGE - DIRECT DOWNLOAD -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-bolt"></i></div>
             <h2 id="downloadFileName">File Name</h2>
-            <p class="subtitle">⚡ Direct Download from Telegram</p>
+            <p class="subtitle">⚡ Direct Download from Website</p>
             
             <div class="download-info">
                 <div class="download-info-item">
@@ -866,6 +890,13 @@
             <button class="download-btn" id="downloadBtn">
                 <i class="fas fa-download"></i> Download Now
             </button>
+            
+            <div class="download-progress" id="downloadProgress">
+                <div class="progress-bar">
+                    <div class="fill" id="downloadProgressFill"></div>
+                </div>
+                <div class="progress-text" id="downloadProgressText">Downloading... 0%</div>
+            </div>
             
             <div class="download-speed">
                 <i class="fas fa-rocket"></i>
@@ -915,7 +946,7 @@
 
     <script>
         // ============================================================
-        // TELEGRAM STORAGE - DIRECT DOWNLOAD FIX
+        // TELEGRAM STORAGE - DIRECT WEBSITE DOWNLOAD
         // ============================================================
         
         // ✅ YOUR CONFIGURATION
@@ -1002,6 +1033,76 @@
                 }
             } catch (error) {
                 console.error('Error getting file from Telegram:', error);
+                throw error;
+            }
+        }
+        
+        // === DOWNLOAD FILE FROM TELEGRAM TO WEBSITE ===
+        async function downloadFileFromTelegram(fileId, fileName) {
+            try {
+                // Get file URL from Telegram
+                const fileUrl = await getTelegramFileUrl(fileId);
+                
+                // Fetch file from Telegram
+                const response = await fetch(fileUrl);
+                if (!response.ok) throw new Error('Failed to fetch file from Telegram');
+                
+                // Get file size
+                const contentLength = response.headers.get('content-length');
+                const totalSize = contentLength ? parseInt(contentLength) : 0;
+                
+                // Read file as blob with progress
+                const reader = response.body.getReader();
+                const chunks = [];
+                let loadedSize = 0;
+                
+                // Show progress
+                const progressEl = document.getElementById('downloadProgress');
+                const progressFill = document.getElementById('downloadProgressFill');
+                const progressText = document.getElementById('downloadProgressText');
+                progressEl.classList.add('active');
+                
+                while (true) {
+                    const {done, value} = await reader.read();
+                    if (done) break;
+                    
+                    chunks.push(value);
+                    loadedSize += value.length;
+                    
+                    if (totalSize > 0) {
+                        const percent = Math.round((loadedSize / totalSize) * 100);
+                        progressFill.style.width = percent + '%';
+                        progressText.textContent = `Downloading... ${percent}% (${formatSize(loadedSize)} / ${formatSize(totalSize)})`;
+                    } else {
+                        progressText.textContent = `Downloading... ${formatSize(loadedSize)}`;
+                    }
+                }
+                
+                // Combine chunks
+                const blob = new Blob(chunks);
+                
+                // Create download link
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Clean up
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+                
+                // Hide progress
+                setTimeout(() => {
+                    progressEl.classList.remove('active');
+                    progressFill.style.width = '0%';
+                    progressText.textContent = 'Downloading... 0%';
+                }, 2000);
+                
+                return true;
+            } catch (error) {
+                console.error('Download error:', error);
                 throw error;
             }
         }
@@ -1216,7 +1317,7 @@
             document.getElementById('storageFill').style.width = pct + '%';
         }
         
-        // === DOWNLOAD - DIRECT FROM TELEGRAM ===
+        // === DOWNLOAD - DIRECT WEBSITE DOWNLOAD ===
         async function downloadFile(id) {
             const file = files.find(f => f.id === id);
             if (!file) {
@@ -1224,23 +1325,35 @@
                 return;
             }
             
-            try {
-                // Get direct download URL from Telegram
-                const fileUrl = await getTelegramFileUrl(file.id);
-                
-                // Open in new tab for download
-                window.open(fileUrl, '_blank');
-                
-                // Increment download count
-                file.downloadCount++;
-                saveFilesToStorage(loadFilesFromStorage());
-                updateStats();
-                
-                showToast(`Downloading ${file.name} from Telegram...`, 'success');
-            } catch (error) {
-                showToast('Error downloading file from Telegram', 'error');
-                console.error(error);
-            }
+            // Show download page
+            showDownloadPage(file);
+        }
+        
+        function showDownloadPage(file) {
+            document.getElementById('mainApp').style.display = 'none';
+            document.getElementById('downloadPage').classList.add('active');
+            
+            document.getElementById('downloadFileName').textContent = file.name;
+            document.getElementById('dFileName').textContent = file.name;
+            document.getElementById('dFileSize').textContent = file.sizeFormatted;
+            document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
+            document.getElementById('dFileDate').textContent = file.uploadDate;
+            document.getElementById('dFileDownloads').textContent = file.downloadCount;
+            
+            downloadFileId = file.id;
+            window._downloadFile = file;
+            
+            // Reset progress
+            document.getElementById('downloadProgress').classList.remove('active');
+            document.getElementById('downloadProgressFill').style.width = '0%';
+            document.getElementById('downloadProgressText').textContent = 'Downloading... 0%';
+        }
+        
+        function goBack() {
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('downloadPage').classList.remove('active');
+            downloadFileId = null;
+            window._downloadFile = null;
         }
         
         // === SHARE ===
@@ -1448,6 +1561,7 @@
                 const file = allFiles.find(f => f.id === fileId);
                 
                 if (file) {
+                    // Show download page
                     document.getElementById('mainApp').style.display = 'none';
                     document.getElementById('downloadPage').classList.add('active');
                     
@@ -1481,30 +1595,45 @@
             }
         }
         
-        // === DOWNLOAD BUTTON - DIRECT DOWNLOAD ===
+        // === DOWNLOAD BUTTON - DIRECT WEBSITE DOWNLOAD ===
         document.getElementById('downloadBtn').addEventListener('click', async function() {
-            if (window._downloadFile) {
-                try {
-                    // Get direct download URL from Telegram
-                    const fileUrl = await getTelegramFileUrl(window._downloadFile.id);
-                    
-                    // Increment download count
-                    window._downloadFile.downloadCount++;
-                    const allFiles = loadFilesFromStorage();
-                    const fileIndex = allFiles.findIndex(f => f.id === window._downloadFile.id);
-                    if (fileIndex !== -1) {
-                        allFiles[fileIndex].downloadCount = window._downloadFile.downloadCount;
-                        saveFilesToStorage(allFiles);
-                    }
-                    
-                    // Open in new tab for download
-                    window.open(fileUrl, '_blank');
-                    showToast(`Downloading ${window._downloadFile.name} from Telegram...`, 'success');
-                } catch (error) {
-                    showToast('Error downloading file from Telegram', 'error');
-                }
-            } else {
+            if (!window._downloadFile) {
                 showToast('Download link not available', 'error');
+                return;
+            }
+            
+            const btn = this;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
+            btn.disabled = true;
+            
+            try {
+                // Download file from Telegram to website
+                await downloadFileFromTelegram(window._downloadFile.id, window._downloadFile.name);
+                
+                // Increment download count
+                window._downloadFile.downloadCount++;
+                const allFiles = loadFilesFromStorage();
+                const fileIndex = allFiles.findIndex(f => f.id === window._downloadFile.id);
+                if (fileIndex !== -1) {
+                    allFiles[fileIndex].downloadCount = window._downloadFile.downloadCount;
+                    saveFilesToStorage(allFiles);
+                }
+                updateStats();
+                
+                showToast(`✅ Downloaded ${window._downloadFile.name}`, 'success');
+                
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Downloaded!';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                showToast('Error downloading file', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
         });
         
@@ -1608,7 +1737,8 @@
                 if (e.target === this) { closeAuth(); }
             });
             
-            console.log('✅ Telegram Storage ready! Bot Token:', TELEGRAM_BOT_TOKEN ? 'Set' : 'Not Set');
+            console.log('✅ Telegram Storage ready!');
+            console.log('✅ Bot Token:', TELEGRAM_BOT_TOKEN ? 'Set ✓' : 'Not Set ✗');
             console.log('✅ Channel ID:', TELEGRAM_CHANNEL_ID);
         });
         
