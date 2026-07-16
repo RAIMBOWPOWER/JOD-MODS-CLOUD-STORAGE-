@@ -245,7 +245,6 @@
         .upload-area h3 { margin: 10px 0 4px; font-size: 1.1rem; color: var(--dark); }
         .upload-area p { color: var(--gray); font-size: 0.9rem; }
         
-        /* REAL-TIME PROGRESS */
         .progress-container {
             margin-top: 16px;
             display: none;
@@ -386,7 +385,6 @@
         .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4); }
         .upload-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         
-        /* FILE INPUT - WORKING */
         #fileInput {
             position: absolute;
             opacity: 0;
@@ -655,7 +653,7 @@
                     <p>Unlimited • Any file type</p>
                 </div>
                 
-                <!-- REAL-TIME PROGRESS -->
+                <!-- Progress -->
                 <div class="progress-container" id="progressContainer">
                     <div class="progress-header">
                         <span class="title"><i class="fas fa-upload" style="color:var(--primary);"></i> <span id="progressFileName">Uploading...</span></span>
@@ -694,9 +692,7 @@
                     </div>
                 </div>
                 
-                <!-- FILE INPUT -->
                 <input type="file" id="fileInput" multiple accept="*/*">
-                
                 <button class="upload-btn" id="uploadBtn"><i class="fas fa-upload"></i> Upload</button>
             </section>
             
@@ -741,15 +737,17 @@
 
     <script>
         // ============================================================
-        // COMPLETE WORKING - REAL-TIME PROGRESS + MBPS
+        // COMPLETE FIX - LARGE FILE SUPPORT WITH DISPLAY
         // ============================================================
         
         // === CONSTANTS ===
         const DB_NAME = 'JODMods_Main';
-        const DB_VERSION = 1;
-        const STORE_NAME = 'cloud_data';
+        const DB_VERSION = 2;
+        const STORE_NAME = 'files_meta';
+        const CHUNK_STORE_NAME = 'file_chunks';
         const USERS_KEY = 'jodmods_users';
         const CURRENT_USER_KEY = 'jodmods_currentUser';
+        const CHUNK_SIZE = 1024 * 1024 * 5; // 5MB chunks
         
         // === STATE ===
         let db = null;
@@ -773,14 +771,21 @@
             updateGuestBanner();
         }
         
-        // === DATABASE ===
+        // === DATABASE WITH CHUNK STORAGE ===
         function openDB() {
             return new Promise((resolve, reject) => {
                 const request = indexedDB.open(DB_NAME, DB_VERSION);
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
+                    // Meta store for file info
                     if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                        const metaStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                        metaStore.createIndex('userId', 'userId', { unique: false });
+                    }
+                    // Chunk store for large file data
+                    if (!db.objectStoreNames.contains(CHUNK_STORE_NAME)) {
+                        const chunkStore = db.createObjectStore(CHUNK_STORE_NAME, { keyPath: 'id' });
+                        chunkStore.createIndex('fileId', 'fileId', { unique: false });
                     }
                 };
                 request.onsuccess = (e) => { db = e.target.result; resolve(db); };
@@ -788,18 +793,18 @@
             });
         }
         
-        // === CRUD ===
-        function saveToDB(data) {
+        // === CRUD FOR META ===
+        function saveMeta(meta) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([STORE_NAME], 'readwrite');
                 const store = transaction.objectStore(STORE_NAME);
-                const request = store.add({ ...data, type: 'file' });
+                const request = store.add(meta);
                 request.onsuccess = () => resolve(true);
                 request.onerror = () => reject(request.error);
             });
         }
         
-        function getAllFromDB() {
+        function getAllMeta() {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([STORE_NAME], 'readonly');
                 const store = transaction.objectStore(STORE_NAME);
@@ -809,7 +814,7 @@
             });
         }
         
-        function getById(id) {
+        function getMetaById(id) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([STORE_NAME], 'readonly');
                 const store = transaction.objectStore(STORE_NAME);
@@ -819,22 +824,67 @@
             });
         }
         
-        function updateInDB(data) {
+        function updateMeta(meta) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([STORE_NAME], 'readwrite');
                 const store = transaction.objectStore(STORE_NAME);
-                const request = store.put({ ...data, type: 'file' });
+                const request = store.put(meta);
                 request.onsuccess = () => resolve(true);
                 request.onerror = () => reject(request.error);
             });
         }
         
-        function deleteFromDB(id) {
+        function deleteMeta(id) {
             return new Promise((resolve, reject) => {
                 const transaction = db.transaction([STORE_NAME], 'readwrite');
                 const store = transaction.objectStore(STORE_NAME);
                 const request = store.delete(id);
                 request.onsuccess = () => resolve(true);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        // === CRUD FOR CHUNKS ===
+        function saveChunk(chunk) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([CHUNK_STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(CHUNK_STORE_NAME);
+                const request = store.add(chunk);
+                request.onsuccess = () => resolve(true);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        function getChunksByFileId(fileId) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([CHUNK_STORE_NAME], 'readonly');
+                const store = transaction.objectStore(CHUNK_STORE_NAME);
+                const index = store.index('fileId');
+                const request = index.getAll(fileId);
+                request.onsuccess = () => resolve(request.result || []);
+                request.onerror = () => reject(request.error);
+            });
+        }
+        
+        function deleteChunksByFileId(fileId) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction([CHUNK_STORE_NAME], 'readwrite');
+                const store = transaction.objectStore(CHUNK_STORE_NAME);
+                const index = store.index('fileId');
+                const request = index.getAll(fileId);
+                request.onsuccess = () => {
+                    const chunks = request.result;
+                    let deleted = 0;
+                    if (chunks.length === 0) { resolve(true); return; }
+                    chunks.forEach(chunk => {
+                        const delReq = store.delete(chunk.id);
+                        delReq.onsuccess = () => {
+                            deleted++;
+                            if (deleted === chunks.length) resolve(true);
+                        };
+                        delReq.onerror = () => reject(delReq.error);
+                    });
+                };
                 request.onerror = () => reject(request.error);
             });
         }
@@ -969,14 +1019,12 @@
             else { banner.classList.add('active'); }
         }
         
-        // === UPLOAD WITH REAL-TIME PROGRESS ===
+        // === UPLOAD WITH CHUNKS ===
         let uploadSpeed = 0;
         let speedInterval = null;
         let lastUploadedSize = 0;
         let lastTime = 0;
         let startTime = 0;
-        let currentFileIndex = 0;
-        let totalFiles = 0;
         let totalSizeAll = 0;
         let uploadedAll = 0;
         
@@ -997,20 +1045,16 @@
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
             btn.disabled = true;
             
-            // Setup progress
             const progressContainer = document.getElementById('progressContainer');
             progressContainer.classList.add('active');
             
             let uploaded = 0;
             const total = fileList.length;
-            totalFiles = total;
-            currentFileIndex = 0;
             totalSizeAll = 0;
             uploadedAll = 0;
             
             for (let file of fileList) { totalSizeAll += file.size; }
             
-            // Speed tracking
             lastUploadedSize = 0;
             lastTime = Date.now();
             startTime = Date.now();
@@ -1019,44 +1063,62 @@
             speedInterval = setInterval(updateRealTimeSpeed, 500);
             
             for (let file of fileList) {
-                currentFileIndex++;
                 const fileName = file.name;
                 document.getElementById('currentFileName').textContent = truncateName(fileName, 30);
                 document.getElementById('progressFileName').textContent = truncateName(fileName, 25);
                 
                 try {
-                    const fileData = await readFileInChunks(file, fileName);
-                    const id = generateId();
-                    const fileObj = {
-                        id: id,
+                    const fileId = generateId();
+                    const meta = {
+                        id: fileId,
                         userId: currentUser.id,
                         userName: currentUser.name,
                         name: file.name,
                         size: file.size,
                         sizeFormatted: formatSize(file.size),
-                        type: file.type || 'application/octet-stream',
-                        data: fileData,
+                        type: getFileType(file.name),
                         uploadDate: new Date().toISOString().split('T')[0],
                         downloadCount: 0,
-                        shareLink: `${window.location.origin}${window.location.pathname}?file=${id}`
+                        shareLink: `${window.location.origin}${window.location.pathname}?file=${fileId}`,
+                        chunkCount: 0
                     };
                     
-                    await saveToDB(fileObj);
+                    // Save meta first
+                    await saveMeta(meta);
+                    
+                    // Upload in chunks
+                    const chunks = await splitFileIntoChunks(file);
+                    meta.chunkCount = chunks.length;
+                    
+                    // Save each chunk
+                    for (let i = 0; i < chunks.length; i++) {
+                        const chunkData = chunks[i];
+                        const chunkId = fileId + '_chunk_' + i;
+                        await saveChunk({
+                            id: chunkId,
+                            fileId: fileId,
+                            index: i,
+                            data: chunkData
+                        });
+                        
+                        uploadedAll += chunkData.byteLength;
+                        const percent = Math.round((uploadedAll / totalSizeAll) * 100);
+                        const remaining = totalSizeAll - uploadedAll;
+                        
+                        document.getElementById('progressFill').style.width = percent + '%';
+                        document.getElementById('progressFillText').textContent = percent + '%';
+                        document.getElementById('progressPercent').textContent = percent + '%';
+                        document.getElementById('uploadedMB').textContent = formatSize(uploadedAll);
+                        document.getElementById('remainingMB').textContent = formatSize(remaining);
+                        document.getElementById('progressFiles').textContent = (uploaded + 1) + '/' + total;
+                        
+                        lastUploadedSize = uploadedAll;
+                        lastTime = Date.now();
+                    }
+                    
+                    // Update meta with chunk count
+                    await updateMeta(meta);
                     uploaded++;
-                    uploadedAll += file.size;
-                    
-                    const percent = Math.round((uploadedAll / totalSizeAll) * 100);
-                    const remaining = totalSizeAll - uploadedAll;
-                    
-                    document.getElementById('progressFill').style.width = percent + '%';
-                    document.getElementById('progressFillText').textContent = percent + '%';
-                    document.getElementById('progressPercent').textContent = percent + '%';
-                    document.getElementById('uploadedMB').textContent = formatSize(uploadedAll);
-                    document.getElementById('remainingMB').textContent = formatSize(remaining);
-                    document.getElementById('progressFiles').textContent = uploaded + '/' + total;
-                    
-                    lastUploadedSize = uploadedAll;
-                    lastTime = Date.now();
                     
                 } catch (error) {
                     console.error('Upload error:', error);
@@ -1085,81 +1147,67 @@
             }
         }
         
-        function updateRealTimeSpeed() {
-            const now = Date.now();
-            const timeDiff = (now - lastTime) / 1000;
-            if (timeDiff > 0) {
-                const speedBytes = (lastUploadedSize - (lastUploadedSize - (uploadedAll || 0))) / timeDiff;
-                const speedMB = speedBytes / (1024 * 1024);
-                uploadSpeed = Math.round(speedMB * 10) / 10;
-                document.getElementById('uploadSpeed').textContent = uploadSpeed.toFixed(1) + ' MB/s';
-                
-                // Calculate time left
-                const remaining = totalSizeAll - uploadedAll;
-                if (uploadSpeed > 0) {
-                    const secondsLeft = remaining / (uploadSpeed * 1024 * 1024);
-                    document.getElementById('timeLeft').textContent = formatTime(secondsLeft);
-                }
-            }
+        function getFileType(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const types = {
+                'jpg': 'image', 'jpeg': 'image', 'png': 'image', 'gif': 'image',
+                'mp4': 'video', 'avi': 'video', 'mov': 'video',
+                'mp3': 'audio', 'wav': 'audio',
+                'pdf': 'pdf',
+                'doc': 'word', 'docx': 'word',
+                'xls': 'excel', 'xlsx': 'excel',
+                'ppt': 'powerpoint', 'pptx': 'powerpoint',
+                'zip': 'archive', 'rar': 'archive'
+            };
+            return types[ext] || 'file';
         }
         
-        function readFileInChunks(file, fileName) {
+        function splitFileIntoChunks(file) {
             return new Promise((resolve, reject) => {
-                const reader = new FileReader();
                 const chunks = [];
                 let offset = 0;
                 const fileSize = file.size;
-                let lastUpdateTime = Date.now();
                 
                 function readNextChunk() {
-                    const chunkSize = fileSize > 1024 * 1024 * 50 ? 1024 * 1024 * 2 : 1024 * 1024 * 5;
-                    const slice = file.slice(offset, Math.min(offset + chunkSize, fileSize));
-                    const chunkReader = new FileReader();
-                    
-                    chunkReader.onload = (e) => {
+                    const slice = file.slice(offset, Math.min(offset + CHUNK_SIZE, fileSize));
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
                         chunks.push(e.target.result);
-                        offset += chunkSize;
-                        
-                        // Update progress during chunk reading
-                        const now = Date.now();
-                        if (now - lastUpdateTime > 100) {
-                            const percent = Math.round((offset / fileSize) * 100);
-                            const totalPercent = Math.round(((uploadedAll + offset) / totalSizeAll) * 100);
-                            document.getElementById('progressFill').style.width = totalPercent + '%';
-                            document.getElementById('progressFillText').textContent = totalPercent + '%';
-                            document.getElementById('progressPercent').textContent = totalPercent + '%';
-                            document.getElementById('uploadedMB').textContent = formatSize(uploadedAll + offset);
-                            const remaining = totalSizeAll - (uploadedAll + offset);
-                            document.getElementById('remainingMB').textContent = formatSize(remaining);
-                            lastUpdateTime = now;
-                        }
-                        
+                        offset += CHUNK_SIZE;
                         if (offset < fileSize) {
                             setTimeout(readNextChunk, 5);
                         } else {
-                            const combined = new Uint8Array(fileSize);
-                            let position = 0;
-                            for (const chunk of chunks) {
-                                combined.set(new Uint8Array(chunk), position);
-                                position += chunk.byteLength;
-                            }
-                            resolve(combined.buffer);
+                            resolve(chunks);
                         }
                     };
-                    chunkReader.onerror = reject;
-                    chunkReader.readAsArrayBuffer(slice);
+                    reader.onerror = reject;
+                    reader.readAsArrayBuffer(slice);
                 }
                 readNextChunk();
             });
         }
         
+        function updateRealTimeSpeed() {
+            const now = Date.now();
+            const timeDiff = (now - lastTime) / 1000;
+            if (timeDiff > 0) {
+                const speedMB = (uploadedAll - (uploadedAll - (lastUploadedSize || 0))) / (1024 * 1024 * timeDiff);
+                document.getElementById('uploadSpeed').textContent = Math.abs(speedMB).toFixed(1) + ' MB/s';
+                
+                const remaining = totalSizeAll - uploadedAll;
+                if (speedMB > 0) {
+                    const secondsLeft = remaining / (speedMB * 1024 * 1024);
+                    document.getElementById('timeLeft').textContent = formatTime(secondsLeft);
+                }
+            }
+        }
+        
         // === LOAD FILES ===
         async function loadFiles() {
             try {
-                const allData = await getAllFromDB();
-                const allFiles = allData.filter(item => item.type === 'file' || !item.type);
+                const allMeta = await getAllMeta();
                 if (currentUser) {
-                    files = allFiles.filter(f => f.userId === currentUser.id);
+                    files = allMeta.filter(f => f.userId === currentUser.id);
                 } else {
                     files = [];
                 }
@@ -1265,75 +1313,59 @@
         
         // === DOWNLOAD ===
         async function downloadFile(id) {
-            const file = await getById(id);
-            if (!file) { showToast('File not found', 'error'); return; }
-            if (currentUser && file.userId !== currentUser.id) {
+            const meta = await getMetaById(id);
+            if (!meta) { showToast('File not found', 'error'); return; }
+            if (currentUser && meta.userId !== currentUser.id) {
                 showToast('Permission denied', 'error');
                 return;
             }
-            showDownloadPage(file);
-        }
-        
-        function showDownloadPage(file) {
-            document.getElementById('mainApp').style.display = 'none';
-            document.getElementById('downloadPage').classList.add('active');
-            document.getElementById('downloadFileName').textContent = file.name;
-            document.getElementById('dFileName').textContent = file.name;
-            document.getElementById('dFileSize').textContent = file.sizeFormatted;
-            document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
-            document.getElementById('dFileDate').textContent = file.uploadDate;
-            document.getElementById('dFileDownloads').textContent = file.downloadCount;
-            downloadFileId = file.id;
-        }
-        
-        function goBack() {
-            document.getElementById('mainApp').style.display = 'block';
-            document.getElementById('downloadPage').classList.remove('active');
-            downloadFileId = null;
-        }
-        
-        document.getElementById('downloadBtn').addEventListener('click', async function() {
-            if (!downloadFileId) return;
-            const btn = this;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
-            btn.disabled = true;
             
-            const file = await getById(downloadFileId);
-            if (!file) { showToast('File not found', 'error'); btn.innerHTML = originalText; btn.disabled = false; return; }
-            
-            file.downloadCount++;
-            await updateInDB(file);
-            
-            try {
-                const blob = new Blob([file.data], { type: file.type });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = file.name;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                setTimeout(() => URL.revokeObjectURL(url), 100);
-                showToast(`✅ Downloaded ${file.name}`, 'success');
-                await loadFiles();
-                btn.innerHTML = '<i class="fas fa-check-circle"></i> Downloaded!';
-                setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 1500);
-            } catch (error) {
-                showToast('Error downloading file', 'error');
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+            // Get chunks and combine
+            const chunks = await getChunksByFileId(id);
+            if (!chunks || chunks.length === 0) {
+                showToast('File data not found', 'error');
+                return;
             }
-        });
+            
+            // Sort chunks by index
+            chunks.sort((a, b) => a.index - b.index);
+            
+            // Combine chunks
+            const totalSize = chunks.reduce((sum, c) => sum + c.data.byteLength, 0);
+            const combined = new Uint8Array(totalSize);
+            let position = 0;
+            for (const chunk of chunks) {
+                combined.set(new Uint8Array(chunk.data), position);
+                position += chunk.data.byteLength;
+            }
+            
+            // Increment download count
+            meta.downloadCount++;
+            await updateMeta(meta);
+            
+            // Download
+            const blob = new Blob([combined.buffer], { type: meta.type || 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = meta.name;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            
+            showToast(`✅ Downloaded ${meta.name} (${meta.sizeFormatted})`, 'success');
+            await loadFiles();
+        }
         
         // === SHARE ===
         async function shareFile(id) {
-            const file = await getById(id);
-            if (!file) return;
+            const meta = await getMetaById(id);
+            if (!meta) return;
             if (navigator.share) {
-                navigator.share({ title: file.name, text: `Download ${file.name} from JOD MODS`, url: file.shareLink }).catch(() => {});
+                navigator.share({ title: meta.name, text: `Download ${meta.name} from JOD MODS`, url: meta.shareLink }).catch(() => {});
             } else {
-                copyLink(file.shareLink);
+                copyLink(meta.shareLink);
             }
         }
         
@@ -1356,7 +1388,8 @@
         async function deleteFile(id) {
             if (!confirm('Delete this file permanently?')) return;
             try {
-                await deleteFromDB(id);
+                await deleteMeta(id);
+                await deleteChunksByFileId(id);
                 files = files.filter(f => f.id !== id);
                 displayFiles();
                 updateStats();
@@ -1386,17 +1419,12 @@
             const params = new URLSearchParams(window.location.search);
             const fileId = params.get('file');
             if (fileId) {
-                const file = await getById(fileId);
-                if (file) {
-                    document.getElementById('mainApp').style.display = 'none';
-                    document.getElementById('downloadPage').classList.add('active');
-                    document.getElementById('downloadFileName').textContent = file.name;
-                    document.getElementById('dFileName').textContent = file.name;
-                    document.getElementById('dFileSize').textContent = file.sizeFormatted;
-                    document.getElementById('dFileUser').textContent = file.userName || 'Unknown';
-                    document.getElementById('dFileDate').textContent = file.uploadDate;
-                    document.getElementById('dFileDownloads').textContent = file.downloadCount;
-                    downloadFileId = file.id;
+                const meta = await getMetaById(fileId);
+                if (meta) {
+                    // Download directly
+                    await downloadFile(fileId);
+                    // Clean URL
+                    window.history.replaceState({}, document.title, window.location.pathname);
                 }
             }
         }
@@ -1426,7 +1454,6 @@
             const uploadBtn = document.getElementById('uploadBtn');
             const addFileBtn = document.getElementById('addFileBtn');
             
-            // === OPEN FILE EXPLORER ===
             function openFileExplorer(e) {
                 if (e) {
                     e.preventDefault();
@@ -1444,7 +1471,6 @@
             addFileBtn.addEventListener('click', openFileExplorer);
             uploadArea.addEventListener('click', openFileExplorer);
             
-            // === FILE INPUT CHANGE ===
             fileInput.addEventListener('change', function(e) {
                 if (this.files.length > 0) {
                     uploadFiles(this.files);
@@ -1452,7 +1478,6 @@
                 this.value = '';
             });
             
-            // === DRAG & DROP ===
             uploadArea.addEventListener('dragover', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
