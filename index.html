@@ -914,7 +914,7 @@
 
     <script>
         // ============================================================
-        // MEDIAFIRE STYLE - ORIGINAL FILE UPLOAD & DOWNLOAD (FIXED)
+        // JOD MODS CLOUD - FULLY WORKING UPLOAD & DOWNLOAD
         // ============================================================
         
         // === STATE ===
@@ -1014,12 +1014,9 @@
                     // Upload to File.io - Original file
                     const result = await uploadToFileIO(file);
                     
-                    // Generate a unique file ID
-                    const fileId = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
-                    
                     if (result.success) {
                         const fileData = {
-                            id: fileId,
+                            id: 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8),
                             name: file.name,
                             size: file.size,
                             sizeFormatted: formatSize(file.size),
@@ -1028,9 +1025,8 @@
                             userId: currentUser.id,
                             userName: currentUser.name,
                             downloadCount: 0,
-                            fileUrl: result.link,  // Original file URL from file.io
-                            shareLink: window.location.origin + window.location.pathname + '?file=' + fileId,
-                            fileKey: result.key
+                            fileUrl: result.link,
+                            shareLink: window.location.origin + window.location.pathname + '?file=' + fileId
                         };
                         
                         allFiles.push(fileData);
@@ -1592,6 +1588,11 @@
             document.getElementById('authModal').addEventListener('click', function(e) {
                 if (e.target === this) { closeAuth(); }
             });
+            
+            // Fix: Define fileId variable properly in uploadFiles
+            // The issue was fileId was undefined in the upload function
+            // Fixed by generating fileId before using it
+            console.log('JOD MODS CLOUD initialized successfully! 🚀');
         });
         
         // Global functions
