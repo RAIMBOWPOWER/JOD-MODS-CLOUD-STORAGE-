@@ -1096,7 +1096,7 @@
 
     <script>
         // ============================================================
-        // COMPLETE - PERSONAL STORAGE + COPY PROTECT + SOCIAL MEDIA
+        // COMPLETE - WITH PROPER SHARE LINK SYSTEM
         // ============================================================
         
         // === COPY PROTECT - Only copy button works ===
@@ -1116,6 +1116,7 @@
         let files = [];
         let currentUser = null;
         let downloadFileId = null;
+        let isDownloadPageOpen = false;
         
         // === AUTH ===
         function loadUsers() {
@@ -1604,7 +1605,6 @@
             
             noFiles.style.display = 'none';
             
-            // FIXED: Share link with proper ?file= parameter
             grid.innerHTML = files.map(file => `
                 <div class="file-card">
                     <div class="file-top">
@@ -1673,7 +1673,10 @@
         // === DOWNLOAD ===
         async function downloadFile(id) {
             const meta = await getMetaById(id);
-            if (!meta) { showToast('File not found', 'error'); return; }
+            if (!meta) { 
+                showToast('File not found', 'error'); 
+                return; 
+            }
             // Personal storage check
             if (currentUser && meta.userId !== currentUser.id) {
                 showToast('Permission denied', 'error');
@@ -1686,6 +1689,7 @@
         function showDownloadPage(file) {
             document.getElementById('mainApp').style.display = 'none';
             document.getElementById('downloadPage').classList.add('active');
+            isDownloadPageOpen = true;
             
             document.getElementById('downloadFileName').textContent = file.name;
             document.getElementById('dFileName').textContent = file.name;
@@ -1700,6 +1704,7 @@
         function goBack() {
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('downloadPage').classList.remove('active');
+            isDownloadPageOpen = false;
             downloadFileId = null;
         }
         
@@ -1761,7 +1766,7 @@
             }, 1500);
         });
         
-        // === SHARE - Only copy via button ===
+        // === SHARE - FIXED: Opens download page directly ===
         async function shareFile(id) {
             const meta = await getMetaById(id);
             if (!meta) return;
@@ -1773,11 +1778,11 @@
                 try {
                     await navigator.share({
                         title: meta.name,
-                        text: `Download ${meta.name} from JOD MODS CLOUD`,
+                        text: `📁 Download "${meta.name}" from JOD MODS CLOUD\nFile Size: ${meta.sizeFormatted}`,
                         url: shareLink
                     });
                 } catch (e) {
-                    // User cancelled or error
+                    // User cancelled or error - copy link instead
                     copyLink(shareLink);
                 }
             } else {
@@ -1785,11 +1790,12 @@
             }
         }
         
-        // === COPY LINK - Only this works ===
+        // === COPY LINK - FIXED ===
         function copyLink(link) {
+            // Copy full link with file ID
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(link)
-                    .then(() => showToast('Link copied! 📋', 'success'))
+                    .then(() => showToast('Link copied! 📋 Share this link with anyone', 'success'))
                     .catch(() => {
                         // Fallback
                         const ta = document.createElement('textarea');
@@ -1800,7 +1806,7 @@
                         ta.select();
                         try {
                             document.execCommand('copy');
-                            showToast('Link copied! 📋', 'success');
+                            showToast('Link copied! 📋 Share this link with anyone', 'success');
                         } catch (e) {
                             showToast('Failed to copy', 'error');
                         }
@@ -1815,7 +1821,7 @@
                 ta.select();
                 try {
                     document.execCommand('copy');
-                    showToast('Link copied! 📋', 'success');
+                    showToast('Link copied! 📋 Share this link with anyone', 'success');
                 } catch (e) {
                     showToast('Failed to copy', 'error');
                 }
@@ -1853,7 +1859,7 @@
             toast._timer = setTimeout(() => toast.style.display = 'none', 3000);
         }
         
-        // === CHECK SHARE LINK ===
+        // === CHECK SHARE LINK - FIXED ===
         async function checkShareLink() {
             const params = new URLSearchParams(window.location.search);
             const fileId = params.get('file');
@@ -1864,6 +1870,7 @@
                     // Show download page directly
                     document.getElementById('mainApp').style.display = 'none';
                     document.getElementById('downloadPage').classList.add('active');
+                    isDownloadPageOpen = true;
                     
                     document.getElementById('downloadFileName').textContent = meta.name;
                     document.getElementById('dFileName').textContent = meta.name;
@@ -1877,8 +1884,22 @@
                     // Clean URL
                     window.history.replaceState({}, document.title, window.location.pathname);
                 } else {
-                    // File not found - show message
-                    showToast('File not found or has been deleted', 'error');
+                    // File not found - but still show download page with error
+                    document.getElementById('mainApp').style.display = 'none';
+                    document.getElementById('downloadPage').classList.add('active');
+                    isDownloadPageOpen = true;
+                    
+                    document.getElementById('downloadFileName').textContent = 'File Not Found';
+                    document.getElementById('dFileName').textContent = 'File Not Found';
+                    document.getElementById('dFileSize').textContent = '-';
+                    document.getElementById('dFileUser').textContent = '-';
+                    document.getElementById('dFileDate').textContent = '-';
+                    document.getElementById('dFileDownloads').textContent = '0';
+                    
+                    document.getElementById('downloadBtn').disabled = true;
+                    document.getElementById('downloadBtn').innerHTML = '<i class="fas fa-times-circle"></i> File Not Available';
+                    
+                    showToast('⚠️ File not found or has been deleted', 'error');
                 }
             }
         }
@@ -1900,6 +1921,7 @@
                 updateStats();
             }
             
+            // Check for share link after DB is ready
             await checkShareLink();
             
             // === ELEMENTS ===
