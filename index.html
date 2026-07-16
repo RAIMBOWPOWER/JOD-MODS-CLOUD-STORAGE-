@@ -11,7 +11,6 @@
         body { font-family: 'Inter', sans-serif; background: #0b0a1a; color: #fff; min-height: 100vh; }
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
 
-        /* ===== NAVBAR ===== */
         .navbar {
             background: rgba(11, 10, 26, 0.92);
             backdrop-filter: blur(16px);
@@ -135,7 +134,6 @@
         }
         .auth-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(124,58,237,0.3); }
 
-        /* ===== HERO ===== */
         .hero { text-align: center; padding: 40px 0 20px; }
         .hero h1 {
             font-size: 42px;
@@ -147,7 +145,6 @@
         .hero p { color: #777; font-size: 17px; margin-top: 8px; }
         .hero .sub { color: #555; font-size: 14px; margin-top: 4px; }
 
-        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -164,7 +161,6 @@
         .stat-card .num { font-size: 26px; font-weight: 800; color: #7c3aed; }
         .stat-card .label { color: #666; font-size: 13px; margin-top: 4px; }
 
-        /* ===== STORAGE BAR ===== */
         .storage-bar-container {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.05);
@@ -194,7 +190,6 @@
             transition: width 0.6s ease;
         }
 
-        /* ===== UPLOAD ===== */
         .upload-section {
             background: rgba(255,255,255,0.03);
             border: 2px dashed rgba(124,58,237,0.2);
@@ -220,7 +215,6 @@
             margin-top: 8px;
         }
 
-        /* ===== PROGRESS ===== */
         .progress-container {
             display: none;
             background: rgba(255,255,255,0.04);
@@ -263,7 +257,6 @@
         }
         .progress-bottom i { color: #7c3aed; }
 
-        /* ===== FILES ===== */
         .files-header {
             display: flex;
             justify-content: space-between;
@@ -380,7 +373,6 @@
         .loading-spinner i { font-size: 28px; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* ===== GUEST BANNER ===== */
         .guest-banner {
             display: none;
             background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(109,40,217,0.06));
@@ -417,7 +409,6 @@
         }
         .guest-banner .login-link:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(124,58,237,0.3); }
 
-        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -513,7 +504,6 @@
         }
         .modal-btn:hover { transform: scale(1.02); box-shadow: 0 0 40px rgba(124,58,237,0.25); }
 
-        /* ===== DOWNLOAD PAGE ===== */
         .download-page {
             display: none;
             min-height: 80vh;
@@ -607,7 +597,6 @@
         }
         .download-security i { color: #10b981; }
 
-        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -629,7 +618,6 @@
         .toast.error { border-color: #ef4444; }
         .toast.warning { border-color: #f59e0b; }
 
-        /* ===== FOOTER ===== */
         .footer {
             text-align: center;
             padding: 30px 0 20px;
@@ -662,7 +650,6 @@
 </head>
 <body>
 
-    <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
         <div class="container nav-content">
             <div class="brand" onclick="goHome()">
@@ -698,18 +685,15 @@
         </div>
     </nav>
 
-    <!-- ===== MAIN APP ===== -->
     <div id="mainApp">
         <div class="container">
 
-            <!-- Hero -->
             <div class="hero">
                 <h1>☁️ Free Cloud Storage</h1>
                 <p>Upload any file • 2GB limit • 100% free</p>
                 <div class="sub">🔒 Secure • Fast • Anonymous</div>
             </div>
 
-            <!-- Guest Banner -->
             <div class="guest-banner" id="guestBanner">
                 <div class="text">
                     <i class="fas fa-info-circle"></i>
@@ -718,14 +702,12 @@
                 <button class="login-link" onclick="openModal()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
             </div>
 
-            <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card"><div class="num" id="statFiles">0</div><div class="label">📁 Files</div></div>
                 <div class="stat-card"><div class="num" id="statSize">0 MB</div><div class="label">📦 Storage</div></div>
                 <div class="stat-card"><div class="num" id="statDownloads">0</div><div class="label">⬇ Downloads</div></div>
             </div>
 
-            <!-- Storage Bar -->
             <div class="storage-bar-container">
                 <div class="storage-bar-label">
                     <span><i class="fas fa-hdd"></i> Storage</span>
@@ -734,7 +716,6 @@
                 <div class="storage-bar"><div class="storage-bar-fill" id="storageFill"></div></div>
             </div>
 
-            <!-- Upload -->
             <div class="upload-section" id="uploadArea">
                 <i class="fas fa-cloud-upload-alt"></i>
                 <h3>📁 Click or Drop Files Here</h3>
@@ -743,7 +724,6 @@
                 <input type="file" id="fileInput" multiple style="display:none;">
             </div>
 
-            <!-- Progress -->
             <div class="progress-container" id="progressContainer">
                 <div class="progress-top">
                     <span class="name" id="progressName">Uploading...</span>
@@ -757,7 +737,6 @@
                 </div>
             </div>
 
-            <!-- Files -->
             <div class="files-header">
                 <h2><i class="fas fa-folder"></i> My Files</h2>
                 <div class="actions">
@@ -772,7 +751,6 @@
         </div>
     </div>
 
-    <!-- ===== DOWNLOAD PAGE ===== -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-bolt"></i></div>
@@ -791,7 +769,6 @@
         </div>
     </div>
 
-    <!-- ===== AUTH MODAL ===== -->
     <div class="modal" id="authModal">
         <div class="modal-box">
             <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
@@ -815,22 +792,17 @@
         </div>
     </div>
 
-    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
-    <!-- ===== FOOTER ===== -->
     <div class="footer">
         <p>JOD MODS Cloud &bull; Powered by Google Drive &bull; 100% Free</p>
     </div>
 
-    <!-- ========================================================== -->
-    <!-- JAVASCRIPT - COMPLETE (All Features)                       -->
-    <!-- ========================================================== -->
     <script>
         // ==========================================================
-        // ✅ APNA SCRIPT URL YAHAN DAALO
+        // ✅ NAYA WORKING API URL (Already Deployed)
         // ==========================================================
-        const API_URL = 'https://script.google.com/macros/s/AKfycbz7G6n8pVV6QgX6y3XIvW9jyJjfNE-hlWv_8CCqL1dMQeey0VWrT-azv7jZLY85K__ILA/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwCZlCn3p7tP9dQI5rHX8R2hehRzDBzbeVONIDqCFbGZ6mQ32RNRFFYVhYOmI9-bGsB/exec';
 
         // ==========================================================
         // STATE
@@ -1574,7 +1546,6 @@
             await loadFiles();
             await checkShareLink();
 
-            // ===== UPLOAD EVENTS =====
             const uploadArea = document.getElementById('uploadArea');
             const fileInput = document.getElementById('fileInput');
 
@@ -1616,7 +1587,6 @@
                 }
             });
 
-            // ===== PROFILE DROPDOWN =====
             const profileBtn = document.getElementById('profileBtn');
             const profileDropdown = document.getElementById('profileDropdown');
 
@@ -1629,7 +1599,6 @@
                 profileDropdown.classList.remove('active');
             });
 
-            // ===== KEYBOARD SHORTCUTS =====
             document.addEventListener('keydown', (e) => {
                 if (e.ctrlKey && e.key === 'u') {
                     e.preventDefault();
@@ -1646,7 +1615,6 @@
                 }
             });
 
-            // ===== ENTER KEY =====
             document.getElementById('loginPass').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') handleLogin();
             });
@@ -1654,7 +1622,6 @@
                 if (e.key === 'Enter') handleRegister();
             });
 
-            // ===== MODAL CLOSE =====
             document.getElementById('authModal').addEventListener('click', function(e) {
                 if (e.target === this) closeModal();
             });
@@ -1665,7 +1632,6 @@
             console.log('🔗 API URL:', API_URL);
         });
 
-        // ===== GLOBAL FUNCTIONS =====
         window.openModal = openModal;
         window.closeModal = closeModal;
         window.switchTab = switchTab;
