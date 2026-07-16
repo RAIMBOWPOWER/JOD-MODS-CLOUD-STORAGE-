@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOD MODS CLOUD - Ultra Fast Cloud Storage</title>
+    <title>JOD MODS CLOUD - Real File Storage</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -772,7 +772,46 @@
             margin-bottom: 6px;
         }
         
-        /* ===== DOWNLOAD PAGE - ULTRA FAST ===== */
+        /* ===== GUEST BANNER ===== */
+        .guest-banner {
+            background: linear-gradient(135deg, var(--warning), #fbbf24);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 24px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .guest-banner.active {
+            display: flex;
+        }
+        
+        .guest-banner i {
+            font-size: 1.2rem;
+        }
+        
+        .guest-banner .login-link {
+            background: white;
+            color: var(--warning);
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .guest-banner .login-link:hover {
+            transform: scale(1.05);
+        }
+        
+        /* ===== DOWNLOAD PAGE ===== */
         .download-page {
             display: none;
             min-height: 100vh;
@@ -813,9 +852,8 @@
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
         }
         
         .download-card h2 {
@@ -874,26 +912,11 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            position: relative;
-            overflow: hidden;
         }
         
         .download-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
-        }
-        
-        .download-btn .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            pointer-events: none;
-        }
-        
-        @keyframes ripple {
-            to { transform: scale(4); opacity: 0; }
         }
         
         .download-speed {
@@ -908,11 +931,6 @@
         
         .download-speed i {
             color: var(--secondary);
-        }
-        
-        .download-speed .highlight {
-            color: var(--primary);
-            font-weight: 600;
         }
         
         .download-back {
@@ -971,45 +989,6 @@
         .toast.success { background: var(--secondary); }
         .toast.error { background: var(--danger); }
         .toast.warning { background: var(--warning); }
-        
-        /* ===== GUEST MODE BANNER ===== */
-        .guest-banner {
-            background: linear-gradient(135deg, var(--warning), #fbbf24);
-            color: white;
-            padding: 12px 20px;
-            border-radius: var(--radius);
-            text-align: center;
-            margin-bottom: 24px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .guest-banner.active {
-            display: flex;
-        }
-        
-        .guest-banner i {
-            font-size: 1.2rem;
-        }
-        
-        .guest-banner .login-link {
-            background: white;
-            color: var(--warning);
-            padding: 6px 20px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
-        }
-        
-        .guest-banner .login-link:hover {
-            transform: scale(1.05);
-        }
         
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
@@ -1186,7 +1165,7 @@
                 </div>
             </div>
             
-            <!-- Storage Bar - UNLIMITED -->
+            <!-- Storage Bar -->
             <div class="storage-bar-container">
                 <div class="storage-bar-label">
                     <span><i class="fas fa-hdd"></i> Storage Usage</span>
@@ -1247,12 +1226,12 @@
         </div>
     </div>
     
-    <!-- ===== DOWNLOAD PAGE - ULTRA FAST ===== -->
+    <!-- ===== DOWNLOAD PAGE ===== -->
     <div class="download-page" id="downloadPage">
         <div class="download-card">
             <div class="download-icon"><i class="fas fa-bolt"></i></div>
             <h2 id="downloadFileName">File Name</h2>
-            <p class="subtitle">⚡ Ultra-fast download from JOD MODS CLOUD</p>
+            <p class="subtitle">⚡ Real file download with exact size</p>
             
             <div class="download-info">
                 <div class="download-info-item">
@@ -1278,12 +1257,12 @@
             </div>
             
             <button class="download-btn" id="downloadBtn">
-                <i class="fas fa-download"></i> Download Now ⚡
+                <i class="fas fa-download"></i> Download Real File ⚡
             </button>
             
             <div class="download-speed">
                 <i class="fas fa-rocket"></i>
-                <span>Ultra-fast download · <span class="highlight">Streaming</span> enabled</span>
+                <span>Exact file size • <span class="highlight">No compression</span></span>
             </div>
             
             <span class="download-back" onclick="goBack()">
@@ -1302,7 +1281,7 @@
 
     <script>
         // =============================================
-        // ULTRA FAST CLOUD STORAGE - PERSONAL ACCOUNTS
+        // REAL FILE STORAGE - NO BASE64 CONVERSION
         // =============================================
         
         let db = null;
@@ -1485,12 +1464,12 @@
         }
         
         // =============================================
-        // INDEXEDDB - FILE STORAGE
+        // INDEXEDDB - FILE STORAGE (Using ArrayBuffer)
         // =============================================
         
         function openDB() {
             return new Promise((resolve, reject) => {
-                const request = indexedDB.open('JODModsDB', 2);
+                const request = indexedDB.open('JODModsDB_Real', 1);
                 
                 request.onupgradeneeded = (e) => {
                     const db = e.target.result;
@@ -1568,7 +1547,7 @@
         }
         
         // =============================================
-        // FILE OPERATIONS - ULTRA FAST
+        // FILE OPERATIONS - USING ARRAYBUFFER (NO BASE64)
         // =============================================
         
         function generateId() {
@@ -1616,7 +1595,7 @@
             return name.length > max ? name.substring(0, max) + '...' : name;
         }
         
-        // ===== UPLOAD WITH PROGRESS =====
+        // ===== UPLOAD - REAL FILE (ArrayBuffer) =====
         async function uploadFiles(fileList) {
             if (!currentUser) {
                 showToast('Please sign in to upload files', 'warning');
@@ -1643,9 +1622,9 @@
             
             for (let file of fileList) {
                 try {
-                    const reader = new FileReader();
-                    
+                    // READ AS ARRAYBUFFER - REAL FILE DATA
                     const fileData = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
                         reader.onload = (e) => {
                             const id = generateId();
                             resolve({
@@ -1656,14 +1635,14 @@
                                 size: file.size,
                                 sizeFormatted: formatSize(file.size),
                                 type: file.type || 'application/octet-stream',
-                                data: e.target.result,
+                                data: e.target.result, // ArrayBuffer
                                 uploadDate: new Date().toISOString().split('T')[0],
                                 downloadCount: 0,
                                 shareLink: `${window.location.origin}${window.location.pathname}?file=${id}`
                             });
                         };
                         reader.onerror = reject;
-                        reader.readAsDataURL(file);
+                        reader.readAsArrayBuffer(file); // REAL FILE - NO BASE64
                     });
                     
                     await saveFileToDB(fileData);
@@ -1811,7 +1790,7 @@
             document.getElementById('storageFill').style.width = pct + '%';
         }
         
-        // ===== ULTRA FAST DOWNLOAD =====
+        // ===== REAL FILE DOWNLOAD =====
         async function downloadFile(id) {
             const file = await getFileById(id);
             if (!file) {
@@ -1847,7 +1826,7 @@
             downloadFileId = null;
         }
         
-        // ===== ULTRA FAST DOWNLOAD BUTTON =====
+        // ===== REAL FILE DOWNLOAD - EXACT SIZE =====
         document.getElementById('downloadBtn').addEventListener('click', async function() {
             if (!downloadFileId) return;
             
@@ -1868,11 +1847,9 @@
             file.downloadCount++;
             await updateFileInDB(file);
             
-            // ULTRA FAST DOWNLOAD - Using streaming approach
             try {
-                // Create blob URL for fast download
-                const response = await fetch(file.data);
-                const blob = await response.blob();
+                // Create blob from ArrayBuffer - EXACT SIZE
+                const blob = new Blob([file.data], { type: file.type });
                 const url = URL.createObjectURL(blob);
                 
                 const link = document.createElement('a');
@@ -1885,7 +1862,7 @@
                 // Clean up
                 setTimeout(() => URL.revokeObjectURL(url), 100);
                 
-                showToast(`⚡ Downloading ${file.name} at ultra speed!`, 'success');
+                showToast(`✅ Downloaded ${file.name} (${file.sizeFormatted})`, 'success');
                 loadFiles();
                 
                 btn.innerHTML = '<i class="fas fa-check-circle"></i> Downloaded!';
